@@ -1,36 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/02/24 18:50:51 by dwianni          ###   ########.fr       */
+/*   Created: 2025/02/24 17:33:44 by dwianni           #+#    #+#             */
+/*   Updated: 2025/02/24 17:38:59 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /******************************************************************************
-Main
+Duplicate a string between first and last
 ******************************************************************************/
-int	main()
+char	*ft_strndup(char const *src, int first, int last)
 {
-	char *input;
-	t_list	*data;
+	char	*dest;
+	int		i;
 
-	input = readline("minishell $");
-	if (input != NULL)
+	dest = (char *) malloc(sizeof(char) * (last - first + 2));
+	if (dest == NULL)
+		return (NULL);
+	i = 0;
+	while (i < (last - first + 1))
 	{
-		printf("%s\n", input);
-		printf("check quote : %d\n", check_quote(input));
+		dest[i] = src[first + i];
+		i++;
 	}
-	data = parse_cmd(input);
-	while (data != NULL)
-	{
-		printf("parse : %s\n", (char *)data->content);
-		data = data->next;
-	}
-	return (0);
+	dest[i] = '\0';
+	return (dest);
 }

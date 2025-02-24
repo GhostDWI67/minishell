@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/02/24 16:04:42 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/02/24 18:50:13 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@
 /* main.c */
 
 /* check.c */
-int	check_quote (char *s);
+int		check_quote (char *s);
+
+/* parsing.c */
+t_list	*parse_cmd(char *s);
+
+/* utils.c */
+char	*ft_strndup(char const *src, int first, int last);
 
 #endif

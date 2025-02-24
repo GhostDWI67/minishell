@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/02/24 15:22:59 by dwianni          ###   ########.fr        #
+#    Updated: 2025/02/24 18:09:12 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,9 @@ INC_DIR = include
 
 # Source files and object files
 SRC =	$(SRC_DIR)/main.c \
-		$(SRC_DIR)/check.c
+		$(SRC_DIR)/check.c \
+		$(SRC_DIR)/utils.c \
+		$(SRC_DIR)/parsing.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

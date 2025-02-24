@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:05:48 by dwianni           #+#    #+#             */
-/*   Updated: 2025/02/24 16:07:02 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/02/24 16:17:29 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,32 +18,29 @@ Return : 0 = OK, other value NOK
 ******************************************************************************/
 int	check_quote(char *s)
 {
-	int	count1;
-	int	count2;
+	int	count;
 
-	count1 = 0;
-	count2 = 0;
 	while (*s != 0)
 	{
 		if (*s == '"')
 		{
-			count1++;
+			count = 1;
 			s++;
 			while (*s != '"' && *s != 0)
 				s++;
 			if (*s == '"')
-				count1++;
+				count = 0;
 		}
 		if (*s == 39)
 		{
-			count2++;
+			count = 1;
 			s++;
 			while (*s != 39 && *s != 0)
 				s++;
 			if (*s == 39)
-				count2++;
+				count = 0;
 		}
 		s++;
 	}
-	return (count1 % 2 + count2 % 2);
+	return (count);
 }
