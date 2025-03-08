@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 17:33:44 by dwianni           #+#    #+#             */
-/*   Updated: 2025/02/24 17:38:59 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/08 17:47:44 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /******************************************************************************
 Duplicate a string between first and last
+Return : 1 string
 ******************************************************************************/
 char	*ft_strndup(char const *src, int first, int last)
 {
@@ -31,4 +32,15 @@ char	*ft_strndup(char const *src, int first, int last)
 	}
 	dest[i] = '\0';
 	return (dest);
+}
+
+/******************************************************************************
+Is white space
+Return : 1 true , 0 = false
+******************************************************************************/
+int	ft_is_white_space(char c)
+{
+	if ((c >= 9 && c <= 13) || c == ' ')
+		return (1);
+	return (0);
 }
