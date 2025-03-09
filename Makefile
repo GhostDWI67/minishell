@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/02/24 18:09:12 by dwianni          ###   ########.fr        #
+#    Updated: 2025/03/09 17:53:38 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = minishell
 
 # Compiler and compiling flags
 CC = cc
+#CFLAGS = -Wall
 CFLAGS = -Wall -Wextra -Werror 
 
 # Directories

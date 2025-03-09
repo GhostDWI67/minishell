@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/08 17:30:09 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/09 18:26:16 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_command {
 int		check_quote (char *s);
 
 /* parsing.c */
-char	*clean_space(char *s);
+void	clean_space(char *s);
 t_list	*parse_cmd(char *s);
 t_list	*parse_token(char *s);
 

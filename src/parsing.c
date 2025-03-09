@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:40 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/08 19:03:54 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/09 19:21:48 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /******************************************************************************
 Skip "" and ''
-Return the value of the position of the end of quote
+Return the value of the position + 1 of the end of quote
 ******************************************************************************/
 static int	skip_quote(int i, char *s)
 {
@@ -40,76 +40,87 @@ static int	skip_quote(int i, char *s)
 }
 
 /******************************************************************************
-Check if inside quote
-Return : cleaned string
-******************************************************************************/
-
-
-/******************************************************************************
 Clean unnecessary space before redirection
 Return : cleaned string
 ******************************************************************************/
-char	*clean_space(char *s)
+static void	sub_clean_space(char *s, int i, int skip, int dec)
 {
-	char	*res;
-	int		i;
-	int		dec;
-
-	res = (char *)malloc(sizeof(char) * (strlen(s) + 1));
-	if (res == NULL)
-		return (free(s), NULL);
-	i = 0;
-	dec = 0;
 	while (s[i] != 0)
 	{
-		res[i - dec] = s[i];
-		if (s[i] == '"')
+		if (s[i] == '"' || s[i] == 39)
 		{
-			printf("double quote\n");
-			i++;
-			res[i - dec] = s[i];
-			while (s[i] != '"' && s[i] != 0)
+			skip = skip_quote(i, s);
+			while (i < skip)
 			{
+				s[i - dec] = s[i];
 				i++;
-				res[i - dec] = s[i];
 			}
-			i++;
-			res[i - dec] = s[i];
 		}
-		else if (s[i] == 39)
+		if (s[i] == '<' || s[i] == '>')
 		{
-			printf("simple quote\n");
-			i++;
-			res[i - dec] = s[i];
-			while (s[i] != 39 && s[i] != 0)
-			{
-				i++;
-				res[i - dec] = s[i];
-			}
-			i++;
-			res[i - dec] = s[i];
-		}
-		if ((s[i] == '<' && ft_is_white_space(s[i + 1]) == 1)
-			|| (s[i] == '>' && ft_is_white_space(s[i + 1]) == 1))
-		{
-			printf("toto\n");
-			res[i - dec] = s[i];
 			i++;
 			while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
 			{
 				i++;
 				dec++;
-				printf("titi dec %d\n", dec);
 			}
 		}
 		else
 			i++;
+		s[i - dec] = s[i];
 	}
-	res[i - dec] = '\0';
-	printf("end i %d dec %d\n", i, dec);
-	free(s);
-	return (res);
+	s[i - dec] = s[i];
 }
+
+void	clean_space(char *s)
+{
+	int		i;
+	int		skip;
+	int		dec;
+
+	i = 0;
+	dec = 0;
+	skip = 0;
+	sub_clean_space(s, i, skip, dec);
+}
+
+/*
+void	clean_space(char *s)
+{
+	int		i;
+	int		skip;
+	int		dec;
+
+	i = 0;
+	dec = 0;
+	skip = 0;
+	while (s[i] != 0)
+	{
+		if (s[i] == '"' || s[i] == 39)
+		{
+			skip = skip_quote(i, s);
+			while (i < skip)
+			{
+				s[i - dec] = s[i];
+				i++;
+			}
+		}
+		if (s[i] == '<' || s[i] == '>')
+		{
+			i++;
+			while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
+			{
+				i++;
+				dec++;
+			}
+		}
+		else
+			i++;
+		s[i - dec] = s[i];
+	}
+	s[i - dec] = s[i];
+}
+*/
 
 /******************************************************************************
 Generate a list of elemetary commamd
@@ -127,14 +138,17 @@ t_list	*parse_cmd(char *s)
 	while (s[i] != 0)
 	{
 		start = i;
-		while (s[i] != '|' && s[i] != 0)
+		while (s[i] != '|' && s[i] != '\0')
 		{
 			i = skip_quote(i, s);
 			i++;
 		}
 		tmp = ft_strndup(s, start, i);
-		printf("tmp %s***\n", tmp);
+		if (tmp == NULL)
+			return (NULL);
 		ft_lstadd_back(&res, ft_lstnew(tmp));
+		if (s[i] == '\0')
+			return (res);
 		i++;
 	}
 	return (res);
@@ -144,6 +158,46 @@ t_list	*parse_cmd(char *s)
 Generate a list of token
 Return : pointer to the start of the list
 ******************************************************************************/
+static t_list	*sub_parse_token(char *s, int i, int start, char *tmp)
+{
+	t_list	*res;
+	
+	while (s[i] != 0)
+	{
+		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
+			i++;
+		start = i;
+		while (ft_is_white_space(s[i]) == 0 && s[i] != '\0' && s[i] != '|')
+		{
+			if (s[i] == 39 || s[i] == '"')
+				i = skip_quote(i, s) - 1;
+			i++;
+		}
+		tmp = ft_strndup(s, start, i - 1);
+		if (tmp[0] != 0)
+			ft_lstadd_back(&res, ft_lstnew(tmp));
+		if (s[i] == '|')
+			ft_lstadd_back(&res, ft_lstnew(ft_strndup(s, i, i)));
+		else if (s[i] == '\0')
+			break ;
+		i++;
+	}
+	return (res);
+}
+
+t_list	*parse_token(char *s)
+{
+	int		i;
+	int		start;
+	char	*tmp;
+
+	i = 0;
+	start = 0;
+	tmp = NULL;
+	return (sub_parse_token(s, i, start, tmp));
+}
+
+/*
 t_list	*parse_token(char *s)
 {
 	t_list	*res;
@@ -155,17 +209,31 @@ t_list	*parse_token(char *s)
 	res = NULL;
 	while (s[i] != 0)
 	{
-		while (ft_is_white_space(s[i]) == 1 && s[i] != 0)
+		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
 			i++;
 		start = i;
-		while (ft_is_white_space(s[i]) == 0 && s[i] != 0 && s[i]!='|')
+		while (ft_is_white_space(s[i]) == 0 && s[i] != '\0' && s[i] != '|')
 		{
-			i = skip_quote(i, s);
+			if (s[i] == 39 || s[i] == '"')
+				i = skip_quote(i, s) - 1;
 			i++;
 		}
 		tmp = ft_strndup(s, start, i - 1);
-		ft_lstadd_back(&res, ft_lstnew(tmp));
+		if (tmp == NULL)
+			return (NULL);
+		if (tmp[0] != 0)
+			ft_lstadd_back(&res, ft_lstnew(tmp));
+		if (s[i] == '|')
+		{
+			tmp = ft_strndup(s, i, i);
+			if (tmp == NULL)
+				return (NULL);
+			ft_lstadd_back(&res, ft_lstnew(tmp));
+		}
+		else if (s[i] == '\0')
+			break ;
 		i++;
 	}
 	return (res);
 }
+*/

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/08 18:58:20 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/09 19:15:01 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,27 @@
 /******************************************************************************
 Main
 
-cat out1 out2 out3 | grep out
-test >t1 > t2 >>t3 >> t4 <t5 <   t6 <<t7 <<     t8 "<<   t8"
-echo " | " 		| grep ' |	 ' | 	echo " | " | grep ' | ' ||
-test1|test2 est NOK
+cat out1 out2 out3 | grep out           est OK
+    >   t1    test >t1 >   t2 >>t3 >>    t4 <t5 <   t6 <<t7     <<     t8     "<<   t8"    est OK
+echo " | " 		| grep ' |	 ' | 	echo " | " | grep ' | ' ||   est OK
+test1|test2 est OK
+cat out1 out2 out3 | grep out|    >   t1    test >t1 >   t2 >>t3 >>    t4 <t5 <   t6 <<t7     <<     t8     "<<   t8"  |test1|test2 |echo " | " 		| grep ' |	 ' | 	echo " | " | grep ' | ' ||   
+ligme sans rien    test??
 
 ******************************************************************************/
 int	main(void)
 {
 	char	*input;
-	char	*input2;
 	t_list	*cmd;
 	t_list	*token;
 	t_list	*tmp;
 
-	input2 = readline("minishell $");
-	input = NULL;
-	if (input2 != NULL)
+	input = readline("minishell $");
+	if (input != NULL)
 	{
-		printf("%s\n", input2);
-		printf("check quote : %d\n", check_quote(input2));
-		input = clean_space(input2);
+		printf("original input : %s***\n", input);
+		printf("check quote : %d\n", check_quote(input));
+		clean_space(input);
 	}
 	
 	printf("clean input : %s***\n", input);
@@ -44,16 +44,21 @@ int	main(void)
 	tmp = cmd;
 	while (tmp != NULL)
 	{
-		printf("parse : %s***\n", (char *)tmp->content);
+		printf("parse in simple cmd: %s***\n", (char *)tmp->content);
 		tmp = tmp->next;
 	}
-	tmp = cmd;
-	token = parse_token((char *)tmp->content);
-	tmp = token;
-	while (tmp != NULL)
+	
+	while (cmd != NULL)
 	{
-		printf("token : %s***\n", ((char *)tmp->content));
-		tmp = tmp->next;
+		token = parse_token((char *)cmd->content);
+		tmp = token;
+		while (tmp != NULL)
+		{
+			printf("token :%s***\n", ((char *)tmp->content));
+			tmp = tmp->next;
+		}
+		cmd = cmd->next;
 	}
+	
 	return (0);
 }
