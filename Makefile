@@ -31,6 +31,8 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/check.c \
 		$(SRC_DIR)/utils.c \
 		$(SRC_DIR)/parsing.c \
+		$(SRC_DIR)/parsing_utils.c \
+		$(SRC_DIR)/lexer.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

@@ -35,6 +35,31 @@
 # define ARG		7	
 
 typedef struct s_command {
+	t_list *args;
+	t_list *redirection;
+	int pipe;
+}	t_command;
+
+typedef struct s_cmd_line {
+	t_command	*tab_cmd;
+
+}	t_cmd_line;
+
+
+/*
+A faire / Ajouter
+Dans command : 
+input et output de la commande
+voir comment on traite la liste des redirection
+
+
+Dans cmd_line
+nb de commande simple : vien tla taille de la liste des commande simple au départ
+environnement
+path sous forme de tableau
+*/
+
+typedef struct s_toto {
 	char *cmd;
 	t_list *args;
 	char **env;
@@ -45,7 +70,7 @@ typedef struct s_command {
 	t_list *heredoc;
 	t_list *append;
 	int pipe;
-}	t_command;
+}	t_toto;
 
 
 
@@ -54,10 +79,16 @@ typedef struct s_command {
 /* check.c */
 int		check_quote (char *s);
 
+/* lexer.c */
+t_command	lexer(t_list *token);
+
 /* parsing.c */
-void	clean_space(char *s);
 t_list	*parse_cmd(char *s);
 t_list	*parse_token(char *s);
+
+/* parsing_utils.c */
+int		skip_quote(int i, char *s);
+void	clean_space(char *s);
 
 /* utils.c */
 char	*ft_strndup(char const *src, int first, int last);
