@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/03/09 17:53:38 by dwianni          ###   ########.fr        #
+#    Updated: 2025/03/15 15:51:33 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = minishell
 # Compiler and compiling flags
 CC = cc
 #CFLAGS = -Wall
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror -g
 
 # Directories
 SRC_DIR = src
@@ -33,6 +33,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/parsing.c \
 		$(SRC_DIR)/parsing_utils.c \
 		$(SRC_DIR)/lexer.c \
+		$(SRC_DIR)/exec.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

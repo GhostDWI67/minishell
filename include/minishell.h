@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/09 18:26:16 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/15 20:08:06 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 typedef struct s_command {
 	t_list *args;
 	t_list *redirection;
+	char	**tab_args;
 	int pipe;
 }	t_command;
 
@@ -79,8 +80,13 @@ typedef struct s_toto {
 /* check.c */
 int		check_quote (char *s);
 
+/* exec.c */
+char	*get_path(char **tab_path, char *fexec);
+int		f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ);
+
 /* lexer.c */
 t_command	lexer(t_list *token);
+char		**args_to_tab(t_list *args);
 
 /* parsing.c */
 t_list	*parse_cmd(char *s);

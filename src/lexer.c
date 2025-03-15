@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: admin <admin@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/03/11 22:48:24 by admin            ###   ########.fr       */
+/*   Updated: 2025/03/15 17:40:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ t_command	lexer(t_list *token)
 	res.args = NULL;
 	res.redirection = NULL;
 	res.pipe = 0;
-	while(token != NULL)
+	while (token != NULL)
 	{
-		if (((char *)token->content)[0] == '>' || ((char *)token->content)[0] == '>'
-			|| (((char *)token->content)[0] == '>' &&
-			((char *)token->content)[1] == '>') || (((char *)token->content)[0] == '<'
+		if (((char *)token->content)[0] == '>' ||
+			((char *)token->content)[0] == '>' ||
+			(((char *)token->content)[0] == '>' &&
+			((char *)token->content)[1] == '>')
+			|| (((char *)token->content)[0] == '<'
 			&& ((char *)token->content)[1] == '<'))
 			ft_lstadd_back(&res.redirection, ft_lstnew(token->content));
 		else if (((char *)token->content)[0] == '|')
@@ -35,14 +37,27 @@ t_command	lexer(t_list *token)
 			ft_lstadd_back(&res.args, ft_lstnew(token->content));
 		token = token->next;
 	}
-	return(res);
+	return (res);
 }
 
-char	**tab_args(t_list args)
+char	**args_to_tab(t_list *args)
 {
 	char	**res;
-	t_list	temp;
+	t_list	*tmp;
+	int		i;
 
-	temp = args;
-		
+	tmp = args;
+	res = (char **)malloc(sizeof(char *) * (ft_lstsize(tmp)+ 1));
+	if (res == NULL)
+		return (NULL);
+	tmp = args;
+	i = 0;
+	while (tmp != NULL)
+	{
+		res[i] = tmp-> content;
+		i++;
+		tmp = tmp->next;
+	}
+	res[i] = NULL;
+	return (res);
 }
