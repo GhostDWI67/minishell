@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/15 20:08:06 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/16 11:54:17 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,11 @@ typedef struct s_command {
 }	t_command;
 
 typedef struct s_cmd_line {
+	char		*input;
+	t_list		*simple_cmd;
+	int			nb_simple_cmd;
 	t_command	*tab_cmd;
-
+	char		**tab_path;
 }	t_cmd_line;
 
 
@@ -55,7 +58,7 @@ voir comment on traite la liste des redirection
 
 
 Dans cmd_line
-nb de commande simple : vien tla taille de la liste des commande simple au départ
+nb de commande simple : vient de la taille de la liste des commande simple au départ
 environnement
 path sous forme de tableau
 */
@@ -78,26 +81,26 @@ typedef struct s_toto {
 /* main.c */
 
 /* check.c */
-int		check_quote (char *s);
+int			check_quote (char *s);
 
 /* exec.c */
-char	*get_path(char **tab_path, char *fexec);
-int		f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ);
+char		*get_path(char **tab_path, char *fexec);
+int			f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ);
 
 /* lexer.c */
 t_command	lexer(t_list *token);
 char		**args_to_tab(t_list *args);
 
 /* parsing.c */
-t_list	*parse_cmd(char *s);
-t_list	*parse_token(char *s);
+t_list		*parse_cmd(char *s);
+t_list		*parse_token(char *s);
 
 /* parsing_utils.c */
-int		skip_quote(int i, char *s);
-void	clean_space(char *s);
+int			skip_quote(int i, char *s);
+void		clean_space(char *s);
 
 /* utils.c */
-char	*ft_strndup(char const *src, int first, int last);
-int		ft_is_white_space(char c);
+char		*ft_strndup(char const *src, int first, int last);
+int			ft_is_white_space(char c);
 
 #endif

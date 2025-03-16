@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/03/15 21:00:14 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/16 11:59:09 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,12 @@ int	f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ)
 
 	if (pipe(fd) == -1)
 		return (1);
-	printf("Debut fd0 %d fd1 %d\n", fd[0], fd[1]);
 	pid1 = fork();
 	if (pid1 < 0)
 		return (2);
 	if (pid1 == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
-		printf("pid 1 fd0 %d fd1 %d\n", fd[0], fd[1]);
 		close(fd[0]);
 		close(fd[1]);
 		if (execve(path1, exec1, environ) == -1)
@@ -97,7 +95,6 @@ int	f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ)
 	if (pid2 == 0)
 	{
 		dup2(fd[0], STDIN_FILENO);
-		printf("pid 2 fd0 %d fd1 %d\n", fd[0], fd[1]);
 		close(fd[0]);
 		close(fd[1]);
 		if (execve(path2, exec2, environ) == -1)
@@ -106,7 +103,6 @@ int	f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ)
 			return (3);
 		}
 	}
-	printf("Fin fd0 %d fd1 %d\n", fd[0], fd[1]);
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(pid1, NULL, 0);
