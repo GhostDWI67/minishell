@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/03/16 11:59:09 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/16 15:27:14 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,68 @@ char	*get_path(char **tab_path, char *fexec)
 /******************************************************************************
 
 ******************************************************************************/
-/*static int	sub_pipe(int *fd, char *path, char **exec, char **environ)
+int	f_pipe(t_cmd_line *cmd, char **environ)
 {
-	int pid;
-	
-	pid = fork();
-	if (pid <0)
-		return (2);
-	if (pid ==0)
+	int		fd[2];
+	int		i;
+	pid_t	pid;
+
+	if (pipe(fd) == -1)
+		return (1);
+	i = 0;
+	while(i < cmd->nb_simple_cmd)
 	{
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[0]);
-		close(fd[1]);
-		if (execve(path, exec, environ) == -1)
+		pid = fork();
+		if (pid == -1)
 		{
-			perror("execve failed");
-			return (3);
+			perror("Fork failed");
+			return (1);
 		}
+		else if (pid == 0)
+		{
+			printf("Processus fils %d cree\n", i);
+			if (i != 0)
+			{
+				if (dup2(fd[0], STDIN_FILENO) == -1)
+				{
+					perror("dup2 failed");
+					return(2);
+				}	
+			}
+			if (i != cmd->nb_simple_cmd - 1)
+			{
+				if (dup2(fd[1], STDOUT_FILENO) == -1)
+				{
+					perror("dup2 failed");
+					return(2);
+				}
+			}
+			close(fd[0]);
+			close(fd[1]);
+			if (execve(get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0]),
+				cmd->tab_cmd[i].tab_args, environ) == -1)
+			{
+				perror("execve failed");
+				return (3);
+			}	
+			exit(0);
+		}
+		else
+		{
+		}
+		i++;
 	}
-	return (0);
+	i = 0;
+	while (i < cmd->nb_simple_cmd)
+	{
+		waitpid(pid, NULL, 0);
+		i++;
+	}
+	printf("Le processus parent a temine.\n");
+	return 0;
 }
-*/
+
+/*
 int	f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ)
 {
 	int	fd[2];
@@ -80,9 +121,15 @@ int	f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ)
 		return (2);
 	if (pid1 == 0)
 	{
-		dup2(fd[1], STDOUT_FILENO);
+		//printf("dans PID1\n");
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2 failed");
+			return(3);
+		}
 		close(fd[0]);
 		close(fd[1]);
+		printf("dans PID1 %d\n", STDOUT_FILENO);
 		if (execve(path1, exec1, environ) == -1)
 		{
 			perror("execve failed");
@@ -94,7 +141,12 @@ int	f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ)
 		return (2);
 	if (pid2 == 0)
 	{
-		dup2(fd[0], STDIN_FILENO);
+		//printf("dans PID2 toto\n");
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2 failed");
+			return(3);
+		}
 		close(fd[0]);
 		close(fd[1]);
 		if (execve(path2, exec2, environ) == -1)
@@ -109,3 +161,4 @@ int	f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ)
 	waitpid(pid2, NULL, 0);
 	return (0);
 }
+*/

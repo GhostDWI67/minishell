@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/16 11:54:17 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/16 15:19:13 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int			check_quote (char *s);
 
 /* exec.c */
 char		*get_path(char **tab_path, char *fexec);
-int			f_pipe(char *path1, char **exec1, char *path2, char **exec2, char **environ);
+int			f_pipe(t_cmd_line *cmd, char **environ);
 
 /* lexer.c */
 t_command	lexer(t_list *token);
