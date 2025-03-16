@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/03/16 15:27:14 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/16 17:06:52 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,29 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 {
 	int		fd[2];
 	int		i;
-	pid_t	pid;
+	char	*path;
+	pid_t	pid[10];
 
 	if (pipe(fd) == -1)
 		return (1);
 	i = 0;
 	while(i < cmd->nb_simple_cmd)
 	{
-		pid = fork();
-		if (pid == -1)
+		pid[i] = fork();
+		if (pid[i] == -1)
 		{
 			perror("Fork failed");
 			return (1);
 		}
-		else if (pid == 0)
+		else if (pid[i] == 0)
 		{
-			printf("Processus fils %d cree\n", i);
+			path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0]);
+			if (path == NULL)
+			{
+				perror(cmd->tab_cmd[i].tab_args[0]);
+				return (3);	
+			}
+			printf("Enfant %d PID %d PATH %s\n", i, getpid(), path);
 			if (i != 0)
 			{
 				if (dup2(fd[0], STDIN_FILENO) == -1)
@@ -84,23 +91,25 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 			}
 			close(fd[0]);
 			close(fd[1]);
-			if (execve(get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0]),
-				cmd->tab_cmd[i].tab_args, environ) == -1)
+			execve(path, cmd->tab_cmd[i].tab_args, environ);
+			if (execve(path, cmd->tab_cmd[i].tab_args, environ) == -1)
 			{
 				perror("execve failed");
 				return (3);
-			}	
-			exit(0);
+			}
 		}
 		else
 		{
 		}
 		i++;
 	}
+	close(fd[0]);
+	close(fd[1]);
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
-		waitpid(pid, NULL, 0);
+		//waitpid(pid[i], NULL, 0);
+		wait(NULL);
 		i++;
 	}
 	printf("Le processus parent a temine.\n");

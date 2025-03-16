@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/16 15:19:40 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/16 17:07:15 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ test1|test2
 ligme sans rien    test??
 ping -c 5 google.com | grep rrt
 cat        out1              out2 |        grep               Out
+ls -l | cat out1 | grep Out
+ls -l |ls -l |ls -l |ls -l |ls -l |cat out1 | grep Out
+cat out1 | grep Out |wc -l | ls -la
+ls | ls -l | grep out
 
 1) on lit la ligne de commande => A FAIRE : free la ligne, 
 	utiliser GNL à la place ?
