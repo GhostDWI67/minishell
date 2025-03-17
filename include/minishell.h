@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/16 15:19:13 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/17 19:11:29 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@
 # define ARG		7	
 
 typedef struct s_command {
-	t_list *args;
-	t_list *redirection;
+	t_list	*args;
+	t_list	*redirection;
 	char	**tab_args;
-	int pipe;
+	int 	pipe;
 }	t_command;
 
 typedef struct s_cmd_line {
@@ -47,6 +47,11 @@ typedef struct s_cmd_line {
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
 	char		**tab_path;
+	int			fd_in;
+	int			fd_out;
+	int			old_fd[2];
+	int			new_fd[2];
+	int			cmd_step;
 }	t_cmd_line;
 
 
@@ -62,19 +67,6 @@ nb de commande simple : vient de la taille de la liste des commande simple au dÃ
 environnement
 path sous forme de tableau
 */
-
-typedef struct s_toto {
-	char *cmd;
-	t_list *args;
-	char **env;
-	char *input_redirect;
-	char *output_redirect;
-	t_list *input;
-	t_list *output;
-	t_list *heredoc;
-	t_list *append;
-	int pipe;
-}	t_toto;
 
 
 

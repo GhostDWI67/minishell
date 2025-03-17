@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/16 17:07:15 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/17 19:30:49 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 /******************************************************************************
 A FAIRE :
 - expend ; ls et "ls" doit idem et pas "ls "
-- pipe multiple
+- creer une fonction pour la gestion des erreurs => passe en para le texte et
+	la valeur du return
 - historique + rappel
 - gerer les $ dans les quotes '$qwe' ne fait rien mais "$qwe" met le contenu de
 	qwe
 - differentes redirections
-- gestion des variables d'environne;emt
+- gestion des variables d'environnememt
 - gestion de $?
 - signaux ctrl +c, ctrl + d, ctrl + \ (rien)
 - traiter la ligne de commande vide
