@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/17 19:30:49 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/20 11:59:07 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 /******************************************************************************
 A FAIRE :
@@ -78,6 +78,7 @@ static void	init(t_cmd_line	*cmd)
 	cmd->input = readline("minishell $");
 	if (cmd->input != NULL)
 	{
+		add_history(cmd->input);
 		printf("original input : %s***\n", cmd->input);
 		printf("check quote : %d\n", check_quote(cmd->input));
 		clean_space(cmd->input);
@@ -108,7 +109,6 @@ int	main(void)
 	if (cmd == NULL)
 		return (1);
 	init(cmd);
-
 	cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 	if (cmd->tab_cmd == NULL)
 		return (0);
@@ -123,5 +123,6 @@ int	main(void)
 	}
 	cmd->tab_path = ft_split(getenv("PATH"), ':');
 	f_pipe(cmd, environ);
+	rl_clear_history();
 	return (0);
 }
