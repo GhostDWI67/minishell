@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:40 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/09 19:21:48 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/21 16:15:25 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_list	*parse_cmd(char *s)
 		tmp = ft_strndup(s, start, i);
 		if (tmp == NULL)
 			return (NULL);
-		ft_lstadd_back(&res, ft_lstnew(tmp));
+		ft_lstadd_back(&res, ft_lstnew(tmp)); // FREE PB
 		if (s[i] == '\0')
 			return (res);
 		i++;
@@ -80,9 +80,12 @@ t_list	*parse_token(char *s)
 		if (tmp == NULL)
 			return (NULL);
 		if (tmp[0] != 0)
-			ft_lstadd_back(&res, ft_lstnew(tmp));
+			ft_lstadd_back(&res, ft_lstnew(tmp)); //FREE PB
 		if (s[i] == '|')
+		{
 			ft_lstadd_back(&res, ft_lstnew(ft_strndup(s, i, i)));
+			free(tmp);
+		}
 		else if (s[i] == '\0')
 			break ;
 		i++;

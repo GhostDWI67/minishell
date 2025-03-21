@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/21 11:49:32 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/21 12:39:59 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,15 @@ int			f_pipe(t_cmd_line *cmd, char **environ);
 
 /* exec_utils.c */
 char		*get_path(char **tab_path, char *fexec);
+void 		close_fd(int *fd, int nb_fd);
 
 /* free_utils.c */
-
+int			free_tab_char(char	**tab);
+int			free_command(t_command cmd);
+int			free_cmd_line(t_cmd_line *cmd);
 
 /* error_mgt */
-int	msg_error(char *err_msg, int err_nb);
+int			msg_error(char *err_msg, int err_nb);
 
 /* lexer.c */
 t_command	lexer(t_list *token);

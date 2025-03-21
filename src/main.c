@@ -3,43 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/20 11:59:07 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/03/21 16:11:40 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//#include "../include/minishell.h"
 #include "../include/minishell.h"
 
 /******************************************************************************
-A FAIRE :
+---- A FAIRE ---- :
 - expend ; ls et "ls" doit idem et pas "ls "
-- creer une fonction pour la gestion des erreurs => passe en para le texte et
-	la valeur du return
-- historique + rappel
 - gerer les $ dans les quotes '$qwe' ne fait rien mais "$qwe" met le contenu de
 	qwe
-- differentes redirections
-- gestion des variables d'environnememt
+DWI - differentes redirections
+DWI - free des structures
+MAX - gestion des variables d'environnememt
 - gestion de $?
 - signaux ctrl +c, ctrl + d, ctrl + \ (rien)
 - traiter la ligne de commande vide
+- leak memory et free
 - mode intercatif ?
 - cat out1 et cat out1 <out2
-- built in :
+MAX - built in :
 	- echo avec -n
-	- cd reltif et absolue path
+	- cd relatif et absolue path
 	- pwd
 	- export
 	- unset
 	- env
 	- exit
-- gerer les erreurs possibles quand une fonction decone
+- gerer les erreurs possibles quand une fonction decone + Tester
 
-A FAIRE EN DETAIL :
-- fonction f_pipe a mette a la norme
+A FAIRE EN DETAIL // point bloquant actuel // a finir :
 - agglomerer le main
+- nettoyer des white space avec les redirection <   < out1 est NOK
 
 ******************************************************************************/
 
@@ -53,23 +53,28 @@ cat out1 out2 out3 | grep out
 echo " | " 		| grep ' |	 ' | 	echo " | " | grep ' | ' ||
 test1|test2
 ligme sans rien    test??
-ping -c 5 google.com | grep rrt
+ping -c 5 google.com | grep rtt
 cat        out1              out2 |        grep               Out
 ls -l | cat out1 | grep Out
 ls -l |ls -l |ls -l |ls -l |ls -l |cat out1 | grep Out
 cat out1 | grep Out |wc -l | ls -la
 ls | ls -l | grep out
 
+---- FAIT ----
 1) on lit la ligne de commande => A FAIRE : free la ligne, 
 	utiliser GNL à la place ?
-2) check les quote
-3) clean les espaces devant les redirections
-4) parse la ligne de commande en commande simple => A FAIRE : penser à free
-5) chaque commande simple est parsée en token => A FAIRE : penser à free
+2) check les quote : OK
+3) clean les espaces devant les redirections : OK?, tester cat <   <  out1
+	==> A RETRAVAILLER car genere cat <<out1
+4) parse la ligne de commande en commande simple : OK
+5) chaque commande simple est parsée en token : OK
 6) on transforme les listes de token vers un tableau de commande et de
-	redirection + pipe dans une struct command
-7) A FAIRE :
-	- PIPEX et traitements des redirections ??
+	redirection + pipe dans une struct command : OK
+7) Pipe mutliple : OK
+8) creer une fonction pour la gestion des erreurs => passe en para le texte et
+	la valeur du return : OK ??, a voir pour ajouter du free ??
+9) historique et rappel : OK
+10) commande simple OK
 ******************************************************************************/
 static void	init(t_cmd_line	*cmd)
 {
@@ -78,13 +83,14 @@ static void	init(t_cmd_line	*cmd)
 	cmd->input = readline("minishell $");
 	if (cmd->input != NULL)
 	{
-		add_history(cmd->input);
+		if (cmd->input[0] != '\0')
+			add_history(cmd->input);
 		printf("original input : %s***\n", cmd->input);
 		printf("check quote : %d\n", check_quote(cmd->input));
 		clean_space(cmd->input);
 	}
 	printf("clean input : %s***\n", cmd->input);
-	cmd->simple_cmd = parse_cmd(cmd->input);
+	cmd->simple_cmd = parse_cmd(cmd->input); //FREE PB
 	tmp = cmd->simple_cmd;
 	while (tmp != NULL)
 	{
@@ -98,6 +104,7 @@ static void	init(t_cmd_line	*cmd)
 	printf("*************************************\n\n\n");
 }
 
+
 int	main(void)
 {
 	int			i;
@@ -105,11 +112,13 @@ int	main(void)
 	extern char	**environ;
 	t_cmd_line	*cmd;
 
+	//while(1) 
+	{
 	cmd = malloc(sizeof(t_cmd_line) * 1);
 	if (cmd == NULL)
 		return (1);
-	init(cmd);
-	cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
+	init(cmd); // FEE PB
+	cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd); 
 	if (cmd->tab_cmd == NULL)
 		return (0);
 	i = 0;
@@ -123,6 +132,9 @@ int	main(void)
 	}
 	cmd->tab_path = ft_split(getenv("PATH"), ':');
 	f_pipe(cmd, environ);
+	free_cmd_line(cmd);
+	free(token);
+	}
 	rl_clear_history();
 	return (0);
 }

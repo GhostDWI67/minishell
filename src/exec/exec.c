@@ -6,26 +6,11 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/03/21 11:52:20 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:29:03 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/******************************************************************************
-Function closing fd
-******************************************************************************/
-static void close_fd(int *fd, int nb_fd)
-{
-	int	i;
-
-	i = 0;
-	while(i < nb_fd)
-	{
-		close(fd[i]);
-		i++;
-	}
-}
 
 /******************************************************************************
 Function manage the child redirection + execution of the command
@@ -71,6 +56,27 @@ static void	parent(t_cmd_line *cmd)
 	}
 }
 
+static void	f_pipe_init(t_cmd_line *cmd)
+{
+	cmd->fd_in = 0;
+	cmd->fd_out = 1;
+	cmd->old_fd[0] = STDIN_FILENO;
+	cmd->old_fd[1] = STDOUT_FILENO;
+	cmd->cmd_step = 0;
+}
+
+static void	f_pipe_wait(t_cmd_line *cmd)
+{
+	int status;
+
+	cmd->cmd_step = 0;
+	while (cmd->cmd_step < cmd->nb_simple_cmd)
+	{
+		wait(&status);
+		cmd->cmd_step++;
+	}
+}
+
 /******************************************************************************
 Function manage the mutiple pipe command
 Return : 0 if OK other vlue mean NOK
@@ -79,11 +85,7 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 {
 	pid_t	pid;
 
-	cmd->fd_in = 0;
-	cmd->fd_out = 1;
-	cmd->old_fd[0] = STDIN_FILENO;
-	cmd->old_fd[1] = STDOUT_FILENO;
-	cmd->cmd_step = 0;
+	f_pipe_init(cmd);
 	while (cmd->cmd_step < cmd->nb_simple_cmd)
 	{
 		if (cmd->cmd_step < cmd->nb_simple_cmd - 1)
@@ -100,14 +102,9 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 			parent(cmd);
 		cmd->cmd_step++;
 	}
-	if (cmd->cmd_step != 0)
+	if (cmd->cmd_step > 1)
 		close_fd(cmd->old_fd, 2);
-	cmd->cmd_step = 0;
-	while (cmd->cmd_step < cmd->nb_simple_cmd)
-	{
-		waitpid(pid, NULL, 0);
-		cmd->cmd_step++;
-	}
-	printf("Le processus parent a temine.\n");
+	f_pipe_wait(cmd);
+	printf("\n------------------------------\nLe processus parent a temine.\n");
 	return (0);
 }
