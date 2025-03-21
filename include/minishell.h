@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/17 19:11:29 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/21 11:49:32 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@
 # define CMD		6	
 # define ARG		7	
 
+/* Standard Value Definition */
+# define ERM_DUP2	"dup2 failed"	
+# define ERN_DUP2	10
+# define ERM_EXECVE	"execve failed"	
+# define ERN_EXECVE	11
+# define ERM_FORK	"fork failed"	
+# define ERN_FORK	12
+# define ERM_PIPE	"pipe failed"	
+# define ERN_PIPE	13
+
+	
 typedef struct s_command {
 	t_list	*args;
 	t_list	*redirection;
@@ -76,8 +87,16 @@ path sous forme de tableau
 int			check_quote (char *s);
 
 /* exec.c */
-char		*get_path(char **tab_path, char *fexec);
 int			f_pipe(t_cmd_line *cmd, char **environ);
+
+/* exec_utils.c */
+char		*get_path(char **tab_path, char *fexec);
+
+/* free_utils.c */
+
+
+/* error_mgt */
+int	msg_error(char *err_msg, int err_nb);
 
 /* lexer.c */
 t_command	lexer(t_list *token);

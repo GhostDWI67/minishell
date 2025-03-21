@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/03/15 15:51:33 by dwianni          ###   ########.fr        #
+#    Updated: 2025/03/21 11:56:12 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,12 +28,15 @@ INC_DIR = include
 
 # Source files and object files
 SRC =	$(SRC_DIR)/main.c \
-		$(SRC_DIR)/check.c \
-		$(SRC_DIR)/utils.c \
-		$(SRC_DIR)/parsing.c \
-		$(SRC_DIR)/parsing_utils.c \
-		$(SRC_DIR)/lexer.c \
-		$(SRC_DIR)/exec.c \
+		$(SRC_DIR)/utils/check.c \
+		$(SRC_DIR)/utils/utils.c \
+		$(SRC_DIR)/parsing/parsing.c \
+		$(SRC_DIR)/parsing/parsing_utils.c \
+		$(SRC_DIR)/lexer/lexer.c \
+		$(SRC_DIR)/exec/exec.c \
+		$(SRC_DIR)/exec/exec_utils.c \
+		$(SRC_DIR)/error/error_mgt.c \
+		$(SRC_DIR)/utils/free_utils.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
