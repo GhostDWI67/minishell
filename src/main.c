@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/21 16:11:40 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/21 17:39:33 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,17 +111,19 @@ int	main(void)
 	t_list		*token;
 	extern char	**environ;
 	t_cmd_line	*cmd;
+	t_list		*tmp;//test
 
 	//while(1) 
 	{
 	cmd = malloc(sizeof(t_cmd_line) * 1);
 	if (cmd == NULL)
 		return (1);
-	init(cmd); // FEE PB
+	init(cmd);
 	cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd); 
 	if (cmd->tab_cmd == NULL)
 		return (0);
 	i = 0;
+	tmp = cmd->simple_cmd;//test
 	while (i < cmd->nb_simple_cmd)
 	{
 		token = parse_token((char *)cmd->simple_cmd->content);
@@ -130,6 +132,7 @@ int	main(void)
 		i++;
 		cmd->simple_cmd = cmd->simple_cmd->next;
 	}
+	cmd->simple_cmd = tmp;//test
 	cmd->tab_path = ft_split(getenv("PATH"), ':');
 	f_pipe(cmd, environ);
 	free_cmd_line(cmd);
@@ -138,3 +141,55 @@ int	main(void)
 	rl_clear_history();
 	return (0);
 }
+
+/*
+int	main(void)
+{
+	//t_list	*test1;
+	//t_list	*test2;
+	//t_list	*test3;
+	t_list	*start;
+	t_list	*tmp;
+
+	//test1 = ft_lstnew(ft_strndup("test1",1 , 4));
+	//test2 = ft_lstnew(ft_strndup("test2",1 , 4));
+	//test3 = ft_lstnew(ft_strndup("test3",1 , 4));
+	start = NULL;
+	ft_lstadd_back(&start, ft_lstnew(ft_strndup("test2",1 , 4)));
+	ft_lstadd_back(&start, ft_lstnew(ft_strndup("test2",1 , 4)));
+	ft_lstadd_back(&start, ft_lstnew(ft_strndup("test3",1 , 4)));
+	tmp = start;
+	while (tmp != NULL)
+	{
+		printf("%s\n",(char *)tmp->content);
+		tmp = tmp->next;
+	}
+	ft_lstclear(&start,free);
+	return (0);
+}
+*/
+
+/*
+int	main(void)
+{
+	t_list	*test1;
+	t_list	*test2;
+	t_list	*test3;
+	t_list	*start;
+	
+	test1 = ft_lstnew(ft_strndup("test1",1 , 4));
+	test2 = ft_lstnew(ft_strndup("test2",1 , 4));
+	test3 = ft_lstnew(ft_strndup("test3",1 , 4));
+	start = test1;
+	ft_lstadd_back(&start, test2);
+	ft_lstadd_back(&start, test3);
+	start = test1;
+	while (start != NULL)
+	{
+		printf("%s\n",(char *)start->content);
+		start = start->next;
+	}
+	ft_lstclear(&test1,free);
+	return (0);
+}
+*/

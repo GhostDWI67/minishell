@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/03/16 17:13:19 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/21 17:39:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,26 @@ Sort the token list into a command structure
 t_command	lexer(t_list *token)
 {
 	t_command	res;
+	t_list		*tmp;
 
 	res.args = NULL;
 	res.redirection = NULL;
 	res.pipe = 0;
-	while (token != NULL)
+	tmp = token;
+	while (tmp != NULL)
 	{
-		if (((char *)token->content)[0] == '>' ||
-			((char *)token->content)[0] == '>' ||
-			(((char *)token->content)[0] == '>' &&
-			((char *)token->content)[1] == '>')
-			|| (((char *)token->content)[0] == '<'
-			&& ((char *)token->content)[1] == '<'))
-			ft_lstadd_back(&res.redirection, ft_lstnew(token->content));
-		else if (((char *)token->content)[0] == '|')
+		if (((char *)tmp->content)[0] == '>' ||
+			((char *)tmp->content)[0] == '>' ||
+			(((char *)tmp->content)[0] == '>' &&
+			((char *)tmp->content)[1] == '>')
+			|| (((char *)tmp->content)[0] == '<'
+			&& ((char *)tmp->content)[1] == '<'))
+			ft_lstadd_back(&res.redirection, ft_lstnew(tmp->content));
+		else if (((char *)tmp->content)[0] == '|')
 			res.pipe = 1;
 		else
-			ft_lstadd_back(&res.args, ft_lstnew(token->content));
-		token = token->next;
+			ft_lstadd_back(&res.args, ft_lstnew(tmp->content));
+		tmp = tmp->next;
 	}
 	return (res);
 }

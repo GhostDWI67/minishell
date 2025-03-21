@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:40 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/21 16:15:25 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/21 17:36:11 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_list	*parse_cmd(char *s)
 		tmp = ft_strndup(s, start, i);
 		if (tmp == NULL)
 			return (NULL);
-		ft_lstadd_back(&res, ft_lstnew(tmp)); // FREE PB
+		ft_lstadd_back(&res, ft_lstnew(tmp));
 		if (s[i] == '\0')
 			return (res);
 		i++;
@@ -92,44 +92,3 @@ t_list	*parse_token(char *s)
 	}
 	return (res);
 }
-
-/*
-t_list	*parse_token(char *s)
-{
-	t_list	*res;
-	int		i;
-	int		start;
-	char	*tmp;
-
-	i = 0;
-	res = NULL;
-	while (s[i] != 0)
-	{
-		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
-			i++;
-		start = i;
-		while (ft_is_white_space(s[i]) == 0 && s[i] != '\0' && s[i] != '|')
-		{
-			if (s[i] == 39 || s[i] == '"')
-				i = skip_quote(i, s) - 1;
-			i++;
-		}
-		tmp = ft_strndup(s, start, i - 1);
-		if (tmp == NULL)
-			return (NULL);
-		if (tmp[0] != 0)
-			ft_lstadd_back(&res, ft_lstnew(tmp));
-		if (s[i] == '|')
-		{
-			tmp = ft_strndup(s, i, i);
-			if (tmp == NULL)
-				return (NULL);
-			ft_lstadd_back(&res, ft_lstnew(tmp));
-		}
-		else if (s[i] == '\0')
-			break ;
-		i++;
-	}
-	return (res);
-}
-*/
