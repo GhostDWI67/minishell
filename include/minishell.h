@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/21 12:39:59 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/23 18:02:12 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,18 @@
 # define ARG		7	
 
 /* Standard Value Definition */
-# define ERM_DUP2	"dup2 failed"	
-# define ERN_DUP2	10
-# define ERM_EXECVE	"execve failed"	
-# define ERN_EXECVE	11
-# define ERM_FORK	"fork failed"	
-# define ERN_FORK	12
-# define ERM_PIPE	"pipe failed"	
-# define ERN_PIPE	13
+# define ERM_DUP2		"dup2 failed"	
+# define ERN_DUP2		10
+# define ERM_EXECVE		"execve failed"	
+# define ERN_EXECVE		11
+# define ERM_FORK		"fork failed"	
+# define ERN_FORK		12
+# define ERM_PIPE		"pipe failed"	
+# define ERN_PIPE		13
+# define ERM_STRNDUP	"strndup failed"	
+# define ERN_STRNDUP	14
+# define ERM_FILE		"file failed to open : "	
+# define ERN_FILE	15
 
 	
 typedef struct s_command {
@@ -50,6 +54,10 @@ typedef struct s_command {
 	t_list	*redirection;
 	char	**tab_args;
 	int 	pipe;
+	int		fd_infile;
+	int		fd_outfile;
+	char	*infile;
+	char	*outfile;
 }	t_command;
 
 typedef struct s_cmd_line {
@@ -64,22 +72,6 @@ typedef struct s_cmd_line {
 	int			new_fd[2];
 	int			cmd_step;
 }	t_cmd_line;
-
-
-/*
-A faire / Ajouter
-Dans command : 
-input et output de la commande
-voir comment on traite la liste des redirection
-
-
-Dans cmd_line
-nb de commande simple : vient de la taille de la liste des commande simple au départ
-environnement
-path sous forme de tableau
-*/
-
-
 
 /* main.c */
 
@@ -112,6 +104,12 @@ t_list		*parse_token(char *s);
 /* parsing_utils.c */
 int			skip_quote(int i, char *s);
 void		clean_space(char *s);
+
+/* redirection.c */
+int			redir_mgt(t_cmd_line *cmd);
+int			redir_infile(t_cmd_line *cmd, char *s, int i);
+int			redir_outfile(t_cmd_line *cmd, char *s, int i);
+int			redir_appfile(t_cmd_line *cmd, char *s, int i);
 
 /* utils.c */
 char		*ft_strndup(char const *src, int first, int last);

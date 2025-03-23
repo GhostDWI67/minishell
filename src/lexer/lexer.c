@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/03/21 17:39:00 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/23 16:56:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,15 @@ t_command	lexer(t_list *token)
 	res.args = NULL;
 	res.redirection = NULL;
 	res.pipe = 0;
+	res.infile = NULL;
+	res.outfile = NULL;
+	res.fd_infile = STDIN_FILENO;
+	res.fd_outfile = STDOUT_FILENO;
 	tmp = token;
 	while (tmp != NULL)
 	{
 		if (((char *)tmp->content)[0] == '>' ||
-			((char *)tmp->content)[0] == '>' ||
+			((char *)tmp->content)[0] == '<' ||
 			(((char *)tmp->content)[0] == '>' &&
 			((char *)tmp->content)[1] == '>')
 			|| (((char *)tmp->content)[0] == '<'
