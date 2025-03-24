@@ -3,27 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:55:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/03/21 16:00:05 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/24 16:14:18 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdbool.h>
+#include "../../include/minishell.h"
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
-
+/******************************************************************************
+check l'option n et normalement toute les variations du type:
+-n, ---n, -nn, -nnnnnnnn, - n, -, n 
+Return 0 sans l'option et 1 avec l'option; 
+******************************************************************************/
 static int	check_n(char *str)
 {
 	int	i;
@@ -40,6 +33,10 @@ static int	check_n(char *str)
 	return (0);
 }
 
+/******************************************************************************
+la fonction qui ecrit dans le terminal
+Aucun return 
+******************************************************************************/
 static void	echo_core(char **args, bool n, int i, int count)
 {
 	while (args[i] && check_n(args[i]))
@@ -59,10 +56,13 @@ static void	echo_core(char **args, bool n, int i, int count)
 }
 
 /******************************************************************************
-
-Return ; 
+la fonction echo avec l'option -n ou non qui affiche le text passé en arg 
+dans le terminal.
+si -n alors il n'y a pas de "\n" a la fin, sans -n alors il y a un "\n" a la fin
+pour l'instant il faut lui passer un char ** en argument mais ca peut etre
+changer si besoin
+Return 0; 
 ******************************************************************************/
-
 int	echo(char **args)
 {
 	bool	n;

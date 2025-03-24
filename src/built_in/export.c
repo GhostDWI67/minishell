@@ -1,40 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 12:25:22 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/03/24 16:29:30 by mpalisse         ###   ########.fr       */
+/*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
+/*   Updated: 2025/03/24 16:30:04 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-/******************************************************************************
-pwd affiche le repertoire courant dans le terminal
-Return 0 si reussis et 1 si erreur
-******************************************************************************/
-int	pwd(void)
-{
-	char	cwd[PATH_MAX];
-
-	if (getcwd(cwd, PATH_MAX))
-	{
-		printf("%s\n", cwd);
-		return (0);
-	}
-	else
-	{
-		perror("pwd failed");
-		return (1);
-	}
-}
 /*
-int	main(void)
+int	export(char **args, t_list **env)
 {
-	pwd();
-	return (0);
+	
 }
 */

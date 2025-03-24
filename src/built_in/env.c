@@ -1,40 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 12:25:22 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/03/24 16:29:30 by mpalisse         ###   ########.fr       */
+/*   Created: 2025/03/23 12:33:34 by mpalisse          #+#    #+#             */
+/*   Updated: 2025/03/24 16:27:06 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-pwd affiche le repertoire courant dans le terminal
-Return 0 si reussis et 1 si erreur
+env traverse la variable d'env et affiche chaque node qui contien un "=" 
+(normalement toute les variables d'env on un "=" donc je vois pas trop le but
+de check mais la fonction est decrite comme ca)
+Return 0;
 ******************************************************************************/
-int	pwd(void)
+int	env(t_list *env)
 {
-	char	cwd[PATH_MAX];
+	t_list	*tmp;
 
-	if (getcwd(cwd, PATH_MAX))
+	tmp = env;
+	while (tmp != NULL)
 	{
-		printf("%s\n", cwd);
-		return (0);
+		if (ft_strchr((char *)tmp->content, '='))
+			printf("%s\n", (char *)tmp->content);
+		tmp = tmp->next;
 	}
-	else
-	{
-		perror("pwd failed");
-		return (1);
-	}
-}
-/*
-int	main(void)
-{
-	pwd();
 	return (0);
 }
-*/
