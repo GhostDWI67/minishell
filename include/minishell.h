@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/23 18:02:12 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/24 16:29:47 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
+# include <linux/limits.h>
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft.h"
-# include "ft_printf.h"
+# include "../lib/libft/include/libft.h"
+# include "../lib/printf/include/ft_printf.h"
 
 # define INPUT		1	//"<"
 # define HEREDOC	2	//"<<"
@@ -63,6 +64,7 @@ typedef struct s_command {
 typedef struct s_cmd_line {
 	char		*input;
 	t_list		*simple_cmd;
+	t_list		*env;
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
 	char		**tab_path;
@@ -110,6 +112,12 @@ int			redir_mgt(t_cmd_line *cmd);
 int			redir_infile(t_cmd_line *cmd, char *s, int i);
 int			redir_outfile(t_cmd_line *cmd, char *s, int i);
 int			redir_appfile(t_cmd_line *cmd, char *s, int i);
+
+/* built-ins */
+int			echo(char **args);
+int			env(t_list *env);
+//int			export(char **args, t_list **env); pas fini
+int			pwd(void);
 
 /* utils.c */
 char		*ft_strndup(char const *src, int first, int last);
