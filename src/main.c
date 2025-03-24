@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/23 18:55:54 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/24 16:23:55 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,41 @@ ls | ls -l | grep out
 9) historique et rappel : OK
 10) commande simple OK
 ******************************************************************************/
+
+/******************************************************************************
+fait une copie de la variable d'env dans la structure t_cmd_line cmd sous forme
+de liste chainée t_list, chaque chainon de la liste contient une variable d'env
+qui est char * (il faut cast en char * car la variable de la t_list est void *)
+on accède a l'env comme ceci: cmd->env pour la première node
+cmd->env->content pour la première variable
+cmd->env->next pour la prochaine node
+Return 0 si la copie est bien faite sinon 1; 
+******************************************************************************/
+static int	init_env(t_cmd_line *cmd, char **env)
+{
+	int		i;
+	char	*tmp;
+	t_list	*list;
+
+	if (!(*env))
+		return (1);
+	i = 0;
+	list = NULL;
+	while (env[i])
+	{
+		tmp = ft_strdup(env[i]);
+		if (!tmp)
+		{
+			ft_lstclear(&list, free);
+			return (1);
+		}
+		ft_lstadd_back(&list, ft_lstnew(tmp));
+		i++;
+	}
+	cmd->env = list;
+	return (0);
+}
+
 static void	init(t_cmd_line	*cmd)
 {
 	t_list		*tmp;
@@ -126,6 +161,7 @@ int	main(void)
 		cmd = malloc(sizeof(t_cmd_line) * 1);
 		if (cmd == NULL)
 			return (1);
+		init_env(cmd, environ);
 		init(cmd);
 		write(2, &"hello world1!\n", 14);
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd); 
