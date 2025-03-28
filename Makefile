@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/03/24 16:31:04 by mpalisse         ###   ########.fr        #
+#    Updated: 2025/03/28 13:50:01 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = minishell
 # Compiler and compiling flags
 CC = cc
 #CFLAGS = -Wall
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 # Directories
 SRC_DIR = src
@@ -34,14 +34,12 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/parsing/parsing_utils.c \
 		$(SRC_DIR)/lexer/lexer.c \
 		$(SRC_DIR)/exec/exec.c \
+		$(SRC_DIR)/exec/exec_child.c \
 		$(SRC_DIR)/exec/exec_utils.c \
 		$(SRC_DIR)/error/error_mgt.c \
 		$(SRC_DIR)/utils/free_utils.c \
 		$(SRC_DIR)/redirection/redirection.c \
-		$(SRC_DIR)/built_in/echo.c \
-		$(SRC_DIR)/built_in/env.c \
-		$(SRC_DIR)/built_in/export.c \
-		$(SRC_DIR)/built_in/pwd.c \
+		$(SRC_DIR)/redirection/heredoc.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

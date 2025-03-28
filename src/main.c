@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/24 16:23:55 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:39:14 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //#include "../include/minishell.h"
 #include "../include/minishell.h"
+
+/******************************************************************************
+---- A FAIRE DWI ce jour---- :
+- verifier si leaks avec quote ouverte
+- pb a debugger avec le clean space idem que pour le check quote
+- gerer le HEREDOC
+et ca sera deja tres bien )))!
+******************************************************************************/
 
 /******************************************************************************
 ---- A FAIRE ---- :
@@ -28,17 +36,16 @@ MAX - gestion des variables d'environnememt
 - mode intercatif ?
 - cat out1 et cat out1 <out2
 MAX - built in :
-	- echo avec -n
+	X echo avec -n
 	- cd relatif et absolue path
-	- pwd
-	- export
+	X pwd
+	X export
 	- unset
-	- env
+	X env
 	- exit
 - gerer les erreurs possibles quand une fonction decone + Tester
 
 A FAIRE EN DETAIL // point bloquant actuel // a finir :
-- agglomerer le main
 - nettoyer des white space avec les redirection <   < out1 est NOK
 - gerer ligne vide ou ligne de commande avec que de wspace
 
@@ -64,6 +71,8 @@ ls -l | cat out1 | grep Out
 ls -l |ls -l |ls -l |ls -l |ls -l |cat out1 | grep Out
 cat out1 | grep Out |wc -l | ls -la
 ls | ls -l | grep out
+tester un executqble qvec un che;in relatif => tester de base avec le chemin
+	avant le PATH
 
 ---- FAIT ----
 1) on lit la ligne de commande => A FAIRE : free la ligne, 
@@ -81,95 +90,56 @@ ls | ls -l | grep out
 9) historique et rappel : OK
 10) commande simple OK
 ******************************************************************************/
-
-/******************************************************************************
-fait une copie de la variable d'env dans la structure t_cmd_line cmd sous forme
-de liste chainée t_list, chaque chainon de la liste contient une variable d'env
-qui est char * (il faut cast en char * car la variable de la t_list est void *)
-on accède a l'env comme ceci: cmd->env pour la première node
-cmd->env->content pour la première variable
-cmd->env->next pour la prochaine node
-Return 0 si la copie est bien faite sinon 1; 
-******************************************************************************/
-static int	init_env(t_cmd_line *cmd, char **env)
+static void	main_init(t_cmd_line	*cmd)
 {
-	int		i;
-	char	*tmp;
-	t_list	*list;
-
-	if (!(*env))
-		return (1);
-	i = 0;
-	list = NULL;
-	while (env[i])
-	{
-		tmp = ft_strdup(env[i]);
-		if (!tmp)
-		{
-			ft_lstclear(&list, free);
-			return (1);
-		}
-		ft_lstadd_back(&list, ft_lstnew(tmp));
-		i++;
-	}
-	cmd->env = list;
-	return (0);
+	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
+	if (cmd->fd_saved_stdout == -1)
+		msg_error(ERM_STD, ERN_STD);
+	cmd->fd_saved_stdin = dup(STDIN_FILENO);
+	if (cmd->fd_saved_stdin == -1)
+		msg_error(ERM_STD, ERN_STD);
+	cmd->err_nb = 0;
 }
 
-static void	init(t_cmd_line	*cmd)
+static void	main_input_mgt(t_cmd_line	*cmd)
 {
 	t_list		*tmp;
 
-	write(2, &"hello world00!\n", 15);
 	cmd->input = readline("minishell$");
-	write(2, &"hello world01!\n", 15);
 	if (cmd->input != NULL)
 	{
-		if (cmd->input[0] != '\0')
+		if (cmd->input[0] != '\0' || ws_check(cmd->input) != 0)
 			add_history(cmd->input);
-		printf("original input : %s***\n", cmd->input);
-		//printf("check quote : %d\n", check_quote(cmd->input));
-		write(2, &"hello world02!\n", 15);
-		clean_space(cmd->input);
-		write(2, &"hello world03!\n", 15);
+		if (check_quote(cmd->input) != 0)
+			cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
+		if (ws_check(cmd->input) != 0 && cmd->err_nb == 0)
+		{
+			clean_space(cmd->input);
+			printf("clean input : %s***\n", cmd->input);//a retirer
+			cmd->simple_cmd = parse_cmd(cmd->input);
+			tmp = cmd->simple_cmd;
+			cmd->nb_simple_cmd = ft_lstsize(tmp);
+			printf("*************************************\n\n\n");//a retirer
+		}
 	}
-	printf("clean input : %s***\n", cmd->input);
-	cmd->simple_cmd = parse_cmd(cmd->input);
-	tmp = cmd->simple_cmd;
-	while (tmp != NULL)
+	else
 	{
-		//printf("parse in simple cmd: %s***\n", (char *)tmp->content);
-		tmp = tmp->next;
+		cmd->err_nb = msg_inf(ERM_INPUT_NULL, ERN_INPUT_NULL);
 	}
-	tmp = cmd->simple_cmd;
-	cmd->nb_simple_cmd = ft_lstsize(tmp);
-	//printf("nb simple cmd %d\n", cmd->nb_simple_cmd);
-	//printf("FIN DE L'INIT\nResultat de la ligne de commande\n");
-	printf("*************************************\n\n\n");
 }
 
-int	main(void)
+static int	main_exec_mgt(t_cmd_line *cmd, t_list *token, char **environ)
 {
-	int			i;
-	t_list		*token;
-	extern char	**environ;
-	t_cmd_line	*cmd;
-	t_list		*tmp;
+	int		i;
+	t_list	*tmp;
 
-	while(1) 
+	if (cmd->input != NULL)
 	{
-		cmd = malloc(sizeof(t_cmd_line) * 1);
-		if (cmd == NULL)
-			return (1);
-		init_env(cmd, environ);
-		init(cmd);
-		write(2, &"hello world1!\n", 14);
-		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd); 
+		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 		if (cmd->tab_cmd == NULL)
-			return (0);//voir ce qu'il faudrait faire si malloc echoue, on doit rester 
+			return (1); //voir ce qu'il faudrait faire si malloc echoue??
 		i = 0;
 		tmp = cmd->simple_cmd;
-		/* ----------------   lexing et tab_args ---------------------------*/
 		while (i < cmd->nb_simple_cmd)
 		{
 			token = parse_token((char *)cmd->simple_cmd->content);
@@ -180,71 +150,59 @@ int	main(void)
 		}
 		cmd->simple_cmd = tmp;
 		cmd->tab_path = ft_split(getenv("PATH"), ':');
-		//write(2, &"hello world2!\n", 14);
 		redir_mgt(cmd);
-		//write(2, &"hello world3!\n", 14);
+		//(void) environ;
 		f_pipe(cmd, environ);
-		//write(2, &"hello world40!\n", 15);
+	}
+	return (0);
+}
+
+static void	main_free_mgt(t_cmd_line *cmd, t_list *token)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd->nb_simple_cmd)
+	{
+		ft_close(cmd->tab_cmd[i].fd_infile);
+		ft_close(cmd->tab_cmd[i].fd_outfile);
+		i++;
+	}
+	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
+		msg_error(ERM_STD, ERN_STD);
+	close(cmd->fd_saved_stdout);
+	if (dup2(cmd->fd_saved_stdin, STDIN_FILENO) == -1)
+		msg_error(ERM_STD, ERN_STD);
+	close(cmd->fd_saved_stdin);
+	if (cmd->input != NULL)
+	{
 		free_cmd_line(cmd);
 		cmd = NULL;
 		free(token);
 		token = NULL;
-		ft_putnbr_fd(STDOUT_FILENO,2);
-		write(2, &"\n", 1);
-		write(2, &"hello world50!\n", 15);
+	}
+}
+
+int	main(void)
+{
+	t_list		*token;
+	extern char	**environ;
+	t_cmd_line	*cmd;
+
+	token = NULL;
+	while (1)
+	{
+		cmd = malloc(sizeof(t_cmd_line) * 1);
+		if (cmd == NULL)
+			return (1);
+		main_init(cmd);
+		main_input_mgt(cmd);
+		if (cmd->err_nb == 0)
+		{
+			main_exec_mgt(cmd, token, environ);
+			main_free_mgt(cmd, token);
+		}
 	}
 	rl_clear_history();
 	return (0);
 }
-
-/*
-int	main(void)
-{
-	//t_list	*test1;
-	//t_list	*test2;
-	//t_list	*test3;
-	t_list	*start;
-	t_list	*tmp;
-
-	//test1 = ft_lstnew(ft_strndup("test1",1 , 4));
-	//test2 = ft_lstnew(ft_strndup("test2",1 , 4));
-	//test3 = ft_lstnew(ft_strndup("test3",1 , 4));
-	start = NULL;
-	ft_lstadd_back(&start, ft_lstnew(ft_strndup("test2",1 , 4)));
-	ft_lstadd_back(&start, ft_lstnew(ft_strndup("test2",1 , 4)));
-	ft_lstadd_back(&start, ft_lstnew(ft_strndup("test3",1 , 4)));
-	tmp = start;
-	while (tmp != NULL)
-	{
-		printf("%s\n",(char *)tmp->content);
-		tmp = tmp->next;
-	}
-	ft_lstclear(&start,free);
-	return (0);
-}
-*/
-
-/*
-int	main(void)
-{
-	t_list	*test1;
-	t_list	*test2;
-	t_list	*test3;
-	t_list	*start;
-	
-	test1 = ft_lstnew(ft_strndup("test1",1 , 4));
-	test2 = ft_lstnew(ft_strndup("test2",1 , 4));
-	test3 = ft_lstnew(ft_strndup("test3",1 , 4));
-	start = test1;
-	ft_lstadd_back(&start, test2);
-	ft_lstadd_back(&start, test3);
-	start = test1;
-	while (start != NULL)
-	{
-		printf("%s\n",(char *)start->content);
-		start = start->next;
-	}
-	ft_lstclear(&test1,free);
-	return (0);
-}
-*/

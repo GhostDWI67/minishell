@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:05:48 by dwianni           #+#    #+#             */
-/*   Updated: 2025/02/24 16:17:29 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/28 12:38:54 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@
 Double and simple quote check
 Return : 0 = OK, other value NOK
 ******************************************************************************/
-int	check_quote(char *s)
+static int	int_check_quote(char *s, int count)
 {
-	int	count;
-
 	while (*s != 0)
 	{
 		if (*s == '"')
@@ -40,7 +38,36 @@ int	check_quote(char *s)
 			if (*s == 39)
 				count = 0;
 		}
-		s++;
+		if (*s != 0)
+			s++;
 	}
 	return (count);
+}
+
+int	check_quote(char *s)
+{
+	int	count;
+
+	count = 0;
+	return (int_check_quote(s, count));
+}
+
+/******************************************************************************
+Only white space check
+Return : 0 = OK, other value NOK
+******************************************************************************/
+int	ws_check(char *s)
+{
+	int	i;
+	int	res;
+
+	i = 0;
+	res = 0;
+	while (s[i] != '\0')
+	{
+		if (ft_is_white_space(s[i]) == 0)
+			res++;
+		i++;
+	}
+	return (res);
 }

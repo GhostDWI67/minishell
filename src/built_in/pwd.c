@@ -6,16 +6,14 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:25:22 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/03/24 16:29:30 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:34:30 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include <unistd.h>
+#include <stdio.h>
+#include <linux/limits.h>
 
-/******************************************************************************
-pwd affiche le repertoire courant dans le terminal
-Return 0 si reussis et 1 si erreur
-******************************************************************************/
 int	pwd(void)
 {
 	char	cwd[PATH_MAX];

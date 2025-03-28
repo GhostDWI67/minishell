@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 11:59:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/23 18:31:47 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/28 12:48:44 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	redir_mgt(t_cmd_line *cmd)
 		cmd->tab_cmd[i].fd_outfile = 1;
 		while (tmp != NULL)
 		{
-			if (((char *)tmp->content)[0] == '<')
+			if (((char *)tmp->content)[0] == '<' &&
+				((char *)tmp->content)[1] == '<')
+				res = redir_heredoc(cmd, (char *)tmp->content, i);
+			else if (((char *)tmp->content)[0] == '<')
 				res = redir_infile(cmd, (char *)tmp->content, i);
 			else if (((char *)tmp->content)[0] == '>' &&
 				((char *)tmp->content)[1] == '>')
@@ -42,7 +45,7 @@ int	redir_mgt(t_cmd_line *cmd)
 		}
 		i++;
 	}
-	return (0);	
+	return (0);
 }
 
 /******************************************************************************
@@ -59,10 +62,10 @@ int	redir_infile(t_cmd_line *cmd, char *s, int i)
 	if (cmd->tab_cmd[i].infile == NULL)
 	{
 		msg_error(ERM_STRNDUP, ERN_STRNDUP);
-		return (-1) ;
+		return (-1);
 	}
 	cmd->tab_cmd[i].fd_infile = open(cmd->tab_cmd[i].infile, O_RDONLY);
-	return(cmd->tab_cmd[i].fd_infile);
+	return (cmd->tab_cmd[i].fd_infile);
 }
 
 /******************************************************************************
@@ -79,11 +82,11 @@ int	redir_outfile(t_cmd_line *cmd, char *s, int i)
 	if (cmd->tab_cmd[i].outfile == NULL)
 	{
 		msg_error(ERM_STRNDUP, ERN_STRNDUP);
-		return (-1) ;
+		return (-1);
 	}
 	cmd->tab_cmd[i].fd_outfile = open(cmd->tab_cmd[i].outfile,
-		O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	return(cmd->tab_cmd[i].fd_infile);
+			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	return (cmd->tab_cmd[i].fd_infile);
 }
 
 /******************************************************************************
@@ -100,9 +103,9 @@ int	redir_appfile(t_cmd_line *cmd, char *s, int i)
 	if (cmd->tab_cmd[i].outfile == NULL)
 	{
 		msg_error(ERM_STRNDUP, ERN_STRNDUP);
-		return (-1) ;
+		return (-1);
 	}
 	cmd->tab_cmd[i].fd_outfile = open(cmd->tab_cmd[i].outfile,
-		O_WRONLY | O_APPEND);
-	return(cmd->tab_cmd[i].fd_outfile);
+			O_WRONLY | O_CREAT | O_APPEND, 0644);
+	return (cmd->tab_cmd[i].fd_outfile);
 }
