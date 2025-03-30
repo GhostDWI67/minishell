@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/28 16:39:14 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/30 19:50:21 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,16 @@
 /******************************************************************************
 ---- A FAIRE DWI ce jour---- :
 - verifier si leaks avec quote ouverte
-- pb a debugger avec le clean space idem que pour le check quote
-- gerer le HEREDOC
-et ca sera deja tres bien )))!
+- pb a debugger avec le clean space idem que pour le check quote ??
+- cat <out <out1 ne doit pas s'executer quand out n'existe pas => integrer
+	les valeurs de defaut
+- wait gerer par rapport au numero de PID pour afficher le bon message en cas
+	de pb
+- nettoyer des white space avec les redirection <   < out1 est NOK
+- melange des < et << ca deconne PB de dup2 A revcoir suite a la mise a la
+	norme ca deconne voir redir mgt
+- tous les free a revoir
+et ca sera deja tres bien :)))!
 ******************************************************************************/
 
 /******************************************************************************
@@ -31,10 +38,9 @@ DWI - free des structures
 MAX - gestion des variables d'environnememt
 - gestion de $?
 - signaux ctrl +c, ctrl + d, ctrl + \ (rien)
-- traiter la ligne de commande vide
+DWI OK- traiter la ligne de commande vide
 - leak memory et free
 - mode intercatif ?
-- cat out1 et cat out1 <out2
 MAX - built in :
 	X echo avec -n
 	- cd relatif et absolue path
@@ -47,7 +53,6 @@ MAX - built in :
 
 A FAIRE EN DETAIL // point bloquant actuel // a finir :
 - nettoyer des white space avec les redirection <   < out1 est NOK
-- gerer ligne vide ou ligne de commande avec que de wspace
 
 ******************************************************************************/
 
@@ -57,7 +62,6 @@ en francais  construire en pseudo code un lexer, un parser, un AST
 et un interpreteur d'AST pour un shell
 
 Main
-
 
 Test a faire :
 cat out1 out2 out3 | grep out
@@ -71,7 +75,11 @@ ls -l | cat out1 | grep Out
 ls -l |ls -l |ls -l |ls -l |ls -l |cat out1 | grep Out
 cat out1 | grep Out |wc -l | ls -la
 ls | ls -l | grep out
-tester un executqble qvec un che;in relatif => tester de base avec le chemin
+
+cat <out1 <out2 <<EOF >t1 >t2   Pas OK
+cat <out1 <<EOF <out2 >t1 >t2	Pas OK
+
+tester un executable qvec un chemin relatif => tester de base avec le chemin
 	avant le PATH
 
 ---- FAIT ----
@@ -89,6 +97,8 @@ tester un executqble qvec un che;in relatif => tester de base avec le chemin
 	la valeur du return : OK ??, a voir pour ajouter du free ??
 9) historique et rappel : OK
 10) commande simple OK
+11) pipe OK
+12) > OK >> OK < OK
 ******************************************************************************/
 static void	main_init(t_cmd_line	*cmd)
 {
@@ -150,8 +160,8 @@ static int	main_exec_mgt(t_cmd_line *cmd, t_list *token, char **environ)
 		}
 		cmd->simple_cmd = tmp;
 		cmd->tab_path = ft_split(getenv("PATH"), ':');
+		build_hd_pipe(cmd);
 		redir_mgt(cmd);
-		//(void) environ;
 		f_pipe(cmd, environ);
 	}
 	return (0);

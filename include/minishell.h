@@ -6,13 +6,14 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/28 14:44:59 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/30 18:29:44 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
@@ -53,6 +54,8 @@
 # define ERN_QUOTE		17
 # define ERM_INPUT_NULL	"NULL input ?!?"	
 # define ERN_INPUT_NULL	18
+# define ERM_MALLOC		"malloc failed"	
+# define ERN_MALLOC		19
 
 	
 typedef struct s_command {
@@ -64,6 +67,9 @@ typedef struct s_command {
 	int		fd_outfile;
 	char	*infile;
 	char	*outfile;
+	int		hd_pipe[2];
+	int		hd_bool;
+	char	*hd_input;
 }	t_command;
 
 typedef struct s_cmd_line {
@@ -72,14 +78,16 @@ typedef struct s_cmd_line {
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
 	char		**tab_path;
-	int			fd_in;
-	int			fd_out;
-	int			old_fd[2];
-	int			new_fd[2];
+	int			fd_in;// a virer ??
+	int			fd_out;// a virer ??
+	int			*tab_fd;
 	int			cmd_step;
-	int			fd_saved_stdin;
-	int			fd_saved_stdout;
+	int			fd_saved_stdin;//a virer ??
+	int			fd_saved_stdout;//a virer ??
 	int			err_nb;
+	//int		hd_pipe[2];
+	//int		hd_bool;
+	//char		hd_input;
 }	t_cmd_line;
 
 /* main.c */
@@ -97,6 +105,8 @@ int			child(t_cmd_line *cmd, char **environ);
 /* exec_utils.c */
 char		*get_path(char **tab_path, char *fexec);
 void 		close_fd(int *fd, int nb_fd);
+void		build_pipe(t_cmd_line *cmd);
+void		close_tab_pipe(t_cmd_line *cmd);
 
 /* error_mgt */
 int			msg_error(char *err_msg, int err_nb);
@@ -110,6 +120,7 @@ int			free_cmd_line(t_cmd_line *cmd);
 /* heredoc.c */
 int			redir_heredoc(t_cmd_line *cmd, char *s, int i);
 char		*build_heredoc_input(char *eof);
+void		build_hd_pipe(t_cmd_line *cmd);
 
 /* lexer.c */
 t_command	lexer(t_list *token);

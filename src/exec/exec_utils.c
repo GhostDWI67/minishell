@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/21 12:15:23 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/30 19:36:05 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*get_path(char **tab_path, char *fexec)
 	char	*p_to_test;
 	int		i;
 
+	if (access(fexec, X_OK) == 0)
+		return (fexec);
 	if (tab_path != NULL)
 	{
 		i = 0;
@@ -54,6 +56,39 @@ void	close_fd(int *fd, int nb_fd)
 	while (i < nb_fd)
 	{
 		close(fd[i]);
+		i++;
+	}
+}
+
+/******************************************************************************
+Function generating pipes
+******************************************************************************/
+void	build_pipe(t_cmd_line *cmd)
+{
+	cmd->tab_fd = malloc(sizeof(int) * (cmd->nb_simple_cmd - 1) * 2);
+	if (cmd->tab_fd == NULL)
+		msg_error(ERM_MALLOC, ERN_MALLOC);
+	cmd->cmd_step = 0;
+	while (cmd->cmd_step < cmd->nb_simple_cmd - 1)
+	{
+		if (pipe(cmd->tab_fd + 2 * cmd->cmd_step) == -1)
+			msg_error(ERM_PIPE, ERN_PIPE);
+		cmd->cmd_step++;
+	}
+	cmd->cmd_step = 0;
+}
+
+/******************************************************************************
+Function generating pipes
+******************************************************************************/
+void	close_tab_pipe(t_cmd_line *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (i < (cmd->nb_simple_cmd - 1) * 2)
+	{
+		close(cmd->tab_fd[i]);
 		i++;
 	}
 }
