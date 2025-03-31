@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:40 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/22 11:11:17 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/31 18:20:23 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ t_list	*parse_token(char *s)
 
 	i = 0;
 	res = NULL;
-	while (s[i] != 0)
+	while (s[i] != 0 || s[i] != '|')
 	{
-		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
+		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0' && s[i] != '|')
 			i++;
 		start = i;
 		i = parse_token_quote(s, i);

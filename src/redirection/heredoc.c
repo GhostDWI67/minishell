@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/30 19:39:15 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/31 15:04:19 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,16 @@ Generate the pipe for HEREDOC
 ******************************************************************************/
 void	build_hd_pipe(t_cmd_line *cmd)
 {
-	cmd->cmd_step = 0;
-	while (cmd->cmd_step < cmd->nb_simple_cmd)
+	int	i;
+
+	i = 0;
+	while (i < cmd->nb_simple_cmd)
 	{
-		if (pipe(cmd->tab_cmd[cmd->cmd_step].hd_pipe) == -1)
+		if (pipe(cmd->tab_cmd[i].hd_pipe) == -1)
 			msg_error(ERM_DUP2, ERN_DUP2);
-		cmd->tab_cmd[cmd->cmd_step].hd_input = NULL;
-		cmd->cmd_step++;
+		cmd->tab_cmd[i].hd_input = NULL;
+		i++;
 	}
-	cmd->cmd_step = 0;
 }
 
 /******************************************************************************
@@ -37,10 +38,8 @@ int	redir_heredoc(t_cmd_line *cmd, char *s, int i)
 	char	*eof;
 
 	cmd->tab_cmd[i].hd_bool = 1;
-	if (cmd->tab_cmd[i].hd_input != NULL)
-		free(cmd->tab_cmd[i].hd_input);
-	if (cmd->tab_cmd[i].infile != NULL)
-		free(cmd->tab_cmd[i].infile);
+	free_null(cmd->tab_cmd[i].hd_input);
+	free_null(cmd->tab_cmd[i].infile);
 	if (cmd->tab_cmd[i].fd_infile != 0)
 		close(cmd->tab_cmd[i].fd_infile);
 	eof = ft_strndup(s, 2, ft_strlen(s));

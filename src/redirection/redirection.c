@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 11:59:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/30 19:47:51 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/31 16:25:07 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,12 @@ int	redir_mgt(t_cmd_line *cmd)
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
+		cmd->tab_cmd[i].redir_test = 1;
 		tmp = cmd->tab_cmd[i].redirection;
 		cmd->tab_cmd[i].fd_infile = 0;
 		cmd->tab_cmd[i].fd_outfile = 1;
-		while (tmp != NULL)
+		cmd->tab_cmd[i].hd_bool = 0;
+		while (tmp != NULL && cmd->tab_cmd[i].redir_test == 1)
 		{
 			if (ft_strncmp((char *)tmp->content, "<<", 2) == 0)
 				redir_heredoc(cmd, (char *)tmp->content, i);
@@ -77,7 +79,6 @@ int	redir_mgt(t_cmd_line *cmd)
 		}
 		i++;
 	}
-	//redir_mgt_heredoc(cmd);
 	return (0);
 }
 
@@ -87,9 +88,10 @@ Return : the fd number of the file // -1 is NOK
 ******************************************************************************/
 int	redir_infile(t_cmd_line *cmd, char *s, int i)
 {
+	char	*msg;
+
 	cmd->tab_cmd[i].hd_bool = 0;
-	if (cmd->tab_cmd[i].infile != NULL)
-		free(cmd->tab_cmd[i].infile);
+	free_null(cmd->tab_cmd[i].infile);
 	if (cmd->tab_cmd[i].fd_infile != 0)
 		close(cmd->tab_cmd[i].fd_infile);
 	cmd->tab_cmd[i].infile = ft_strndup(s, 1, ft_strlen(s));
@@ -99,6 +101,13 @@ int	redir_infile(t_cmd_line *cmd, char *s, int i)
 		return (-1);
 	}
 	cmd->tab_cmd[i].fd_infile = open(cmd->tab_cmd[i].infile, O_RDONLY);
+	if (cmd->tab_cmd[i].fd_infile == -1)
+	{
+		cmd->tab_cmd[i].redir_test = cmd->tab_cmd[i].redir_test * 0;
+		msg = ft_strjoin(ERM_FILE, cmd->tab_cmd[i].infile);
+		msg_error(msg, ERN_FILE);
+		free(msg);
+	}
 	return (cmd->tab_cmd[i].fd_infile);
 }
 
@@ -108,9 +117,10 @@ Return : the fd number of the file // -1 is NOK
 ******************************************************************************/
 int	redir_outfile(t_cmd_line *cmd, char *s, int i)
 {
-	if (cmd->tab_cmd[i].outfile != NULL)
-		free(cmd->tab_cmd[i].outfile);
-	if (cmd->tab_cmd[i].fd_outfile != 0)
+	char	*msg;
+
+	free_null(cmd->tab_cmd[i].outfile);
+	if (cmd->tab_cmd[i].fd_outfile > 2)
 		close(cmd->tab_cmd[i].fd_outfile);
 	cmd->tab_cmd[i].outfile = ft_strndup(s, 1, ft_strlen(s));
 	if (cmd->tab_cmd[i].outfile == NULL)
@@ -120,6 +130,13 @@ int	redir_outfile(t_cmd_line *cmd, char *s, int i)
 	}
 	cmd->tab_cmd[i].fd_outfile = open(cmd->tab_cmd[i].outfile,
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (cmd->tab_cmd[i].fd_outfile == -1)
+	{
+		cmd->tab_cmd[i].redir_test = cmd->tab_cmd[i].redir_test * 0;
+		msg = ft_strjoin(ERM_FILE, cmd->tab_cmd[i].outfile);
+		msg_error(msg, ERN_FILE);
+		free(msg);
+	}
 	return (cmd->tab_cmd[i].fd_outfile);
 }
 
@@ -129,9 +146,10 @@ Return : the fd number of the file // -1 is NOK
 ******************************************************************************/
 int	redir_appfile(t_cmd_line *cmd, char *s, int i)
 {
-	if (cmd->tab_cmd[i].outfile != NULL)
-		free(cmd->tab_cmd[i].outfile);
-	if (cmd->tab_cmd[i].fd_outfile != 0)
+	char	*msg;
+
+	free_null(cmd->tab_cmd[i].outfile);
+	if (cmd->tab_cmd[i].fd_outfile > 2)
 		close(cmd->tab_cmd[i].fd_outfile);
 	cmd->tab_cmd[i].outfile = ft_strndup(s, 2, ft_strlen(s));
 	if (cmd->tab_cmd[i].outfile == NULL)
@@ -141,5 +159,12 @@ int	redir_appfile(t_cmd_line *cmd, char *s, int i)
 	}
 	cmd->tab_cmd[i].fd_outfile = open(cmd->tab_cmd[i].outfile,
 			O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (cmd->tab_cmd[i].fd_outfile == -1)
+	{
+		cmd->tab_cmd[i].redir_test = cmd->tab_cmd[i].redir_test * 0;
+		msg = ft_strjoin(ERM_FILE, cmd->tab_cmd[i].outfile);
+		msg_error(msg, ERN_FILE);
+		free(msg);
+	}
 	return (cmd->tab_cmd[i].fd_outfile);
 }

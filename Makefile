@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/03/30 18:41:48 by dwianni          ###   ########.fr        #
+#    Updated: 2025/03/31 16:19:32 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ NAME = minishell
 # Compiler and compiling flags
 CC = cc
 #CFLAGS = -Wall
-#CFLAGS = -Wall -Wextra -Werror -g3
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3
+#CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 # Directories
 SRC_DIR = src

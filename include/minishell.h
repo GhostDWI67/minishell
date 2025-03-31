@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/30 18:29:44 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/31 15:53:23 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,18 @@
 
 	
 typedef struct s_command {
-	t_list	*args;
-	t_list	*redirection;
-	char	**tab_args;
+	t_list	*args; //free OK
+	t_list	*redirection; //free OK
+	char	**tab_args; //free ?? a revoir ?
 	int 	pipe;
 	int		fd_infile;
 	int		fd_outfile;
-	char	*infile;
-	char	*outfile;
+	char	*infile; //free OK
+	char	*outfile; //free OK
 	int		hd_pipe[2];
 	int		hd_bool;
-	char	*hd_input;
+	char	*hd_input; //free OK
+	int		redir_test;
 }	t_command;
 
 typedef struct s_cmd_line {
@@ -81,13 +82,11 @@ typedef struct s_cmd_line {
 	int			fd_in;// a virer ??
 	int			fd_out;// a virer ??
 	int			*tab_fd;
-	int			cmd_step;
+	int			*tab_pid;
+	//int			cmd_step;//
 	int			fd_saved_stdin;//a virer ??
 	int			fd_saved_stdout;//a virer ??
 	int			err_nb;
-	//int		hd_pipe[2];
-	//int		hd_bool;
-	//char		hd_input;
 }	t_cmd_line;
 
 /* main.c */
@@ -100,7 +99,7 @@ int			ws_check(char *s);
 int			f_pipe(t_cmd_line *cmd, char **environ);
 
 /* exec_child.c */
-int			child(t_cmd_line *cmd, char **environ);
+int			child(t_cmd_line *cmd, char **environ, int i);
 
 /* exec_utils.c */
 char		*get_path(char **tab_path, char *fexec);
@@ -113,6 +112,7 @@ int			msg_error(char *err_msg, int err_nb);
 int			msg_inf(char *err_msg, int err_nb);
 
 /* free_utils.c */
+void		free_null(char *s);
 int			free_tab_char(char	**tab);
 int			free_command(t_command cmd);
 int			free_cmd_line(t_cmd_line *cmd);

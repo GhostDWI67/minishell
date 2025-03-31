@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/30 19:50:21 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/31 18:15:20 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,17 @@
 - wait gerer par rapport au numero de PID pour afficher le bon message en cas
 	de pb
 - nettoyer des white space avec les redirection <   < out1 est NOK
-- melange des < et << ca deconne PB de dup2 A revcoir suite a la mise a la
+- melange des < et << ca deconne PB de dup2 A revoir suite a la mise a la
 	norme ca deconne voir redir mgt
+	voir pour integrer un ctrl sur les redir pour autoriser l'exec
+	cat <out1 OK
+	cat <out1 <out2 OK
+	cat <<EOF OK
+	cat <<EOF <<EOF OK
+	cat <out1 >t1 OK
+	cat <out1 <out2 >t1 OK
+	cat <out1 <out2 >t1 >t2 OK
+	cat <<EOF <<EOF >t1 >t2 OK
 - tous les free a revoir
 et ca sera deja tres bien :)))!
 ******************************************************************************/
@@ -79,6 +88,10 @@ ls | ls -l | grep out
 cat <out1 <out2 <<EOF >t1 >t2   Pas OK
 cat <out1 <<EOF <out2 >t1 >t2	Pas OK
 
+>out20 | >out21 | cat out1
+
+cat <out1|grep Out|wc -l
+
 tester un executable qvec un chemin relatif => tester de base avec le chemin
 	avant le PATH
 
@@ -129,8 +142,16 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 			cmd->simple_cmd = parse_cmd(cmd->input);
 			tmp = cmd->simple_cmd;
 			cmd->nb_simple_cmd = ft_lstsize(tmp);
-			printf("*************************************\n\n\n");//a retirer
+			printf("*************************************\n");//a retirer
 		}
+		tmp = cmd->simple_cmd;
+		printf("CMD SIMPLE *****************************\n");//a retirer
+		while (tmp != NULL)
+		{
+			printf("%s\n", (char *)tmp->content);
+			tmp = tmp->next;
+		}
+		printf("*************************************\n\n\n");//a retirer
 	}
 	else
 	{

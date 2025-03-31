@@ -6,12 +6,22 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/28 10:26:22 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/03/31 13:35:10 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/******************************************************************************
+Free a char tab
+Return ; 0 if OK, else 1
+******************************************************************************/
+void	free_null(char *s)
+{
+	if (s != NULL)
+		free(s);
+	s = NULL;
+}
 /******************************************************************************
 Free a char tab
 Return ; 0 if OK, else 1
@@ -38,10 +48,9 @@ Return ; 0
 ******************************************************************************/
 int	free_command(t_command cmd)
 {
-	free(cmd.infile);
-	cmd.infile = NULL;
-	free(cmd.outfile);
-	cmd.outfile = NULL;
+	free_null(cmd.hd_input);
+	free_null(cmd.infile);
+	free_null(cmd.outfile);
 	if (cmd.args != NULL)
 		ft_lstclear(&cmd.args, free);
 	free(cmd.tab_args);
