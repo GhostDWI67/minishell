@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/31 18:15:20 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/04 14:24:26 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 - pb a debugger avec le clean space idem que pour le check quote ??
 - cat <out <out1 ne doit pas s'executer quand out n'existe pas => integrer
 	les valeurs de defaut
-- wait gerer par rapport au numero de PID pour afficher le bon message en cas
+- waitpid gerer par rapport au numero de PID pour afficher le bon message en cas
 	de pb
 - nettoyer des white space avec les redirection <   < out1 est NOK
 - melange des < et << ca deconne PB de dup2 A revoir suite a la mise a la
@@ -33,7 +33,13 @@
 	cat <out1 <out2 >t1 OK
 	cat <out1 <out2 >t1 >t2 OK
 	cat <<EOF <<EOF >t1 >t2 OK
+	cat <<EOF | cat <<EOF ne marche pas
 - tous les free a revoir
+- revoir le parsing pour les version tout colles et < < out1
+- revoir HEREDOC, ne fonctionne plus ???
+- gerer la remise sur les bons fd en fin de cycle pour ne pas avoir de fd ouvert
+	dans les chils + gerer aussi celui du HEREDOC qui trqine dans les childs
+
 et ca sera deja tres bien :)))!
 ******************************************************************************/
 
