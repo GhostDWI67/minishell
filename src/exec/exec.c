@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/04/04 13:59:42 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/04 15:53:05 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Function init the pipes
 ******************************************************************************/
 static void	f_pipe_init(t_cmd_line *cmd)
 {
-	//cmd->cmd_step = 0;
+	cmd->cmd_step = 0;
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
 	cmd->tab_pid = malloc(sizeof(int) * cmd->nb_simple_cmd);
@@ -64,7 +64,7 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 	f_pipe_init(cmd);
 	build_pipe(cmd);
 	cmd->cmd_step = 0;
-	if(cmd->tab_pid != NULL)
+	if (cmd->tab_pid != NULL)
 	{
 		while (cmd->cmd_step < cmd->nb_simple_cmd)
 		{

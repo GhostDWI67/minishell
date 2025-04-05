@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/04 14:24:26 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/05 17:56:28 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,20 @@
 - waitpid gerer par rapport au numero de PID pour afficher le bon message en cas
 	de pb
 - nettoyer des white space avec les redirection <   < out1 est NOK
-- melange des < et << ca deconne PB de dup2 A revoir suite a la mise a la
-	norme ca deconne voir redir mgt
-	voir pour integrer un ctrl sur les redir pour autoriser l'exec
-	cat <out1 OK
-	cat <out1 <out2 OK
-	cat <<EOF OK
-	cat <<EOF <<EOF OK
-	cat <out1 >t1 OK
-	cat <out1 <out2 >t1 OK
-	cat <out1 <out2 >t1 >t2 OK
-	cat <<EOF <<EOF >t1 >t2 OK
-	cat <<EOF | cat <<EOF ne marche pas
+- cas
+	cmd |			=> ouvre une ligne de commande
+	cmd ||			=> idem mais om mettre nimp ca marche la commande avant
+	cmd | |			=> unexpected token |
+	cmd |||			=> unexpected token ||
+	cmd ||||		=> unexpected token ||
+	cmd ||||..		=> unexpected token ||
+	cat <>  out1	=> affiche out1
+	TAB fait cracher avec plusieurs ENTER
 - tous les free a revoir
 - revoir le parsing pour les version tout colles et < < out1
-- revoir HEREDOC, ne fonctionne plus ???
 - gerer la remise sur les bons fd en fin de cycle pour ne pas avoir de fd ouvert
-	dans les chils + gerer aussi celui du HEREDOC qui trqine dans les childs
-
+	dans les childs + gerer aussi celui du HEREDOC qui traine dans les childs OK
+	mais un peu merdique avec plein de close, voir on peut faire mieux
 et ca sera deja tres bien :)))!
 ******************************************************************************/
 
@@ -53,7 +49,7 @@ DWI - free des structures
 MAX - gestion des variables d'environnememt
 - gestion de $?
 - signaux ctrl +c, ctrl + d, ctrl + \ (rien)
-DWI OK- traiter la ligne de commande vide
+DWI - traiter la ligne de commande vide
 - leak memory et free
 - mode intercatif ?
 MAX - built in :
@@ -137,13 +133,18 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 	cmd->input = readline("minishell$");
 	if (cmd->input != NULL)
 	{
-		if (cmd->input[0] != '\0' || ws_check(cmd->input) != 0)
+		if (cmd->input[0] != '\0' && ws_check(cmd->input) != 0)
 			add_history(cmd->input);
+		else
+		{
+			cmd->err_nb = -1;
+			free(cmd->input);
+		}
 		if (check_quote(cmd->input) != 0)
 			cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
 		if (ws_check(cmd->input) != 0 && cmd->err_nb == 0)
 		{
-			clean_space(cmd->input);
+			//clean_space(cmd->input);
 			printf("clean input : %s***\n", cmd->input);//a retirer
 			cmd->simple_cmd = parse_cmd(cmd->input);
 			tmp = cmd->simple_cmd;
@@ -151,7 +152,7 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 			printf("*************************************\n");//a retirer
 		}
 		tmp = cmd->simple_cmd;
-		printf("CMD SIMPLE *****************************\n");//a retirer
+		printf("CMD SIMPLE *****************************\n");//a retirer pour affichage CMD SIMPLE
 		while (tmp != NULL)
 		{
 			printf("%s\n", (char *)tmp->content);
@@ -165,11 +166,12 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 	}
 }
 
+/*
 static int	main_exec_mgt(t_cmd_line *cmd, t_list *token, char **environ)
 {
 	int		i;
 	t_list	*tmp;
-
+	
 	if (cmd->input != NULL)
 	{
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
@@ -203,6 +205,8 @@ static void	main_free_mgt(t_cmd_line *cmd, t_list *token)
 	{
 		ft_close(cmd->tab_cmd[i].fd_infile);
 		ft_close(cmd->tab_cmd[i].fd_outfile);
+		ft_close(cmd->tab_cmd[i].hd_pipe[0]);
+		ft_close(cmd->tab_cmd[i].hd_pipe[1]);
 		i++;
 	}
 	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
@@ -219,7 +223,9 @@ static void	main_free_mgt(t_cmd_line *cmd, t_list *token)
 		token = NULL;
 	}
 }
+*/
 
+/*
 int	main(void)
 {
 	t_list		*token;
@@ -232,14 +238,64 @@ int	main(void)
 		cmd = malloc(sizeof(t_cmd_line) * 1);
 		if (cmd == NULL)
 			return (1);
-		main_init(cmd);
+		//main_init(cmd);
 		main_input_mgt(cmd);
 		if (cmd->err_nb == 0)
 		{
+			main_init(cmd);
 			main_exec_mgt(cmd, token, environ);
 			main_free_mgt(cmd, token);
 		}
 	}
 	rl_clear_history();
+	return (0);
+}
+*/
+
+static int	main_exec_mgt_IW(t_cmd_line *cmd, t_token *token, char **environ)
+{
+	//int		i;
+	t_token	*tmp;
+	
+	(void) environ;
+	if (cmd->input != NULL)
+	{
+		token = parse_token2(cmd->input);
+		tmp = token;
+		while (tmp != NULL)
+		{
+			printf("Token : %s // %d\n", tmp->content, tmp->type);
+			tmp = tmp->next;
+		}
+	}
+	return (0);
+}
+
+
+int	main(void)
+{
+	t_token		*token;
+	extern char	**environ;
+	t_cmd_line	*cmd;
+
+	token = NULL;
+	/* cat out1 <out1 <<out2 >out3 >out4|ls -l "< > >> << hfbewjh | " 
+	cat out1<out1>out2|
+	*/
+	//while (1)
+	{
+		cmd = malloc(sizeof(t_cmd_line) * 1);
+		if (cmd == NULL)
+			return (1);
+		//main_init(cmd);
+		main_input_mgt(cmd);
+		if (cmd->err_nb == 0)
+		{
+			main_init(cmd);
+			main_exec_mgt_IW(cmd, token, environ);
+			//main_free_mgt(cmd, token);
+		}
+	}
+	//rl_clear_history();
 	return (0);
 }

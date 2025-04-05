@@ -1,85 +1,71 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_utils.c                                       :+:      :+:    :+:   */
+/*   lexer_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/04 15:55:34 by dwianni          ###   ########.fr       */
+/*   Created: 2025/04/05 15:58:08 by dwianni           #+#    #+#             */
+/*   Updated: 2025/04/05 16:09:14 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /******************************************************************************
-Free a char tab
-Return ; 0 if OK, else 1
+Create a new token
 ******************************************************************************/
-void	free_null(char *s)
+t_token	*token_new(char *content, int type)
 {
-	if (s != NULL)
-		free(s);
-	s = NULL;
+	t_token	*res;
+
+	res = (t_token *)malloc(sizeof(t_token));
+	if (res == NULL)
+		return (NULL);
+	res->content = content;
+	res->type = type;
+	res->next = NULL;
+	return (res);
 }
 
 /******************************************************************************
-Free a char tab
-Return ; 0 if OK, else 1
+Point on the last element of the token list
 ******************************************************************************/
-int	free_tab_char(char	**tab)
+t_token	*token_last(t_token *lst)
 {
-	int	i;
+	while (lst != NULL && lst->next != NULL)
+		lst = lst->next;
+	return (lst);
+}
 
-	if (tab == NULL)
-		return (1);
-	i = 0;
-	while (tab [i] != NULL)
+/******************************************************************************
+Add back in the token list 
+******************************************************************************/
+void	token_add_back(t_token **lst, t_token *new)
+{
+	if (lst == NULL || new == NULL)
+		return ;
+	if (*lst != NULL)
+		token_last(*lst)->next = new;
+	else
+		*lst = new;
+}
+
+/******************************************************************************
+Free a token list
+******************************************************************************/
+void	token_clear(t_token **lst)
+{
+	t_token	*next;
+
+	if (*lst == NULL)
+		return ;
+	while (*lst != NULL)
 	{
-		free(tab[i]);
-		i++;
+		next = (*lst)->next;
+		free((*lst)->content);
+		free(*lst);
+		*lst = next;
 	}
-	free(tab);
-	return (0);
-}
-
-/******************************************************************************
-Free a comand structure
-Return ; 0
-******************************************************************************/
-int	free_command(t_command cmd)
-{
-	free_null(cmd.hd_input);
-	free_null(cmd.infile);
-	free_null(cmd.outfile);
-	if (cmd.args != NULL)
-		ft_lstclear(&cmd.args, free);
-	free(cmd.tab_args);
-	if (cmd.redirection != NULL)
-		ft_lstclear(&cmd.redirection, free);
-	return (0);
-}
-
-/******************************************************************************
-Free a comand structure
-Return ; 0 if OK, else 1
-******************************************************************************/
-int	free_cmd_line(t_cmd_line *cmd)
-{
-	int	i;
-
-	if (cmd->simple_cmd != NULL)
-		ft_lstclear(&cmd->simple_cmd, free);
-	free(cmd->input);
-	i = 0;
-	while (i < cmd->nb_simple_cmd)
-	{
-		free_command(cmd->tab_cmd[i]);
-		i++;
-	}
-	free(cmd->tab_cmd);
-	if (cmd->tab_path != NULL)
-		free_tab_char(cmd->tab_path);
-	free(cmd);
-	return (0);
+	*lst = NULL;
 }

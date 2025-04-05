@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/03/31 16:19:32 by dwianni          ###   ########.fr        #
+#    Updated: 2025/04/05 16:41:29 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,8 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/utils/free_utils.c \
 		$(SRC_DIR)/redirection/redirection.c \
 		$(SRC_DIR)/redirection/heredoc.c \
+		$(SRC_DIR)/lexer2/lexer2.c \
+		$(SRC_DIR)/lexer2/lexer_utils2.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

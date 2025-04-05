@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/04 13:59:28 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/05 16:36:56 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,12 @@
 # define ERM_MALLOC		"malloc failed"	
 # define ERN_MALLOC		19
 
+typedef struct s_token
+{
+	char			*content;
+	int				type;
+	struct s_token	*next;
+}				t_token;
 	
 typedef struct s_command {
 	t_list	*args; //free OK
@@ -68,7 +74,6 @@ typedef struct s_command {
 	char	*infile; //free OK
 	char	*outfile; //free OK
 	int		hd_pipe[2];
-	int		hd_bool;
 	char	*hd_input; //free OK
 	int		redir_test;
 }	t_command;
@@ -83,7 +88,7 @@ typedef struct s_cmd_line {
 	int			fd_out;// a virer ??
 	int			*tab_fd;
 	int			*tab_pid;
-	int			cmd_step;//
+	int			cmd_step;
 	int			fd_saved_stdin;//a virer ??
 	int			fd_saved_stdout;//a virer ??
 	int			err_nb;
@@ -125,6 +130,15 @@ void		build_hd_pipe(t_cmd_line *cmd);
 /* lexer.c */
 t_command	lexer(t_list *token);
 char		**args_to_tab(t_list *args);
+
+/* lexer2.c */
+t_token		*parse_token2(char *s);
+
+/* lexer_utils2.c */
+t_token		*token_new(char *content, int type);
+t_token		*token_last(t_token *lst);
+void		token_add_back(t_token **lst, t_token *new);
+void		token_clear(t_token **lst);
 
 /* parsing.c */
 t_list		*parse_cmd(char *s);

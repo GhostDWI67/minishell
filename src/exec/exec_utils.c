@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/31 17:40:16 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/04 15:52:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ Function generating pipes
 void	build_pipe(t_cmd_line *cmd)
 {
 	int	i;
-	
+
 	cmd->tab_fd = malloc(sizeof(int) * (cmd->nb_simple_cmd - 1) * 2);
 	if (cmd->tab_fd == NULL)
 		msg_error(ERM_MALLOC, ERN_MALLOC);
@@ -89,9 +89,6 @@ void	close_tab_pipe(t_cmd_line *cmd)
 	i = 0;
 	while (i < (cmd->nb_simple_cmd - 1) * 2)
 	{
-		//ft_putstr_fd("toto TAB PIPE IN-------\n",2);
-		//ft_putnbr_fd(cmd->tab_fd[i], 2);
-		//ft_putstr_fd("\n",2);
 		close(cmd->tab_fd[i]);
 		i++;
 	}

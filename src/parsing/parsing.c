@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:40 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/31 18:20:23 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/04 16:54:49 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	parse_token_quote(char *s, int i)
 	return (i);
 }
 
-static t_list	*sub_parse_token(t_list *res, char *s, int i, int start)
+static t_list	*sub_parse_token(t_list *res, char *s, int start, int i)
 {
 	char	*tmp;
 
@@ -69,11 +69,13 @@ static t_list	*sub_parse_token(t_list *res, char *s, int i, int start)
 	if (tmp == NULL)
 		return (NULL);
 	if (tmp[0] != 0)
+	{
 		ft_lstadd_back(&res, ft_lstnew(tmp));
+	}
 	if (s[i] == '|')
 	{
 		ft_lstadd_back(&res, ft_lstnew(ft_strndup(s, i, i)));
-		free(tmp);
+		//free(tmp);
 	}
 	return (res);
 }
@@ -88,11 +90,11 @@ t_list	*parse_token(char *s)
 	res = NULL;
 	while (s[i] != 0 || s[i] != '|')
 	{
-		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0' && s[i] != '|')
+		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
 			i++;
 		start = i;
 		i = parse_token_quote(s, i);
-		res = sub_parse_token(res, s, i, start);
+		res = sub_parse_token(res, s, start, i);
 		if (s[i] == '\0')
 			break ;
 		i++;

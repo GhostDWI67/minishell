@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 11:59:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/04 14:55:11 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/04 15:33:41 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,6 @@
 Manage redirections
 Return : 
 ******************************************************************************/
-/*
-static void	redir_mgt_heredoc(t_cmd_line *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (i < cmd->nb_simple_cmd)
-	{
-		if (cmd->tab_cmd[i].hd_bool == 1)
-		{
-			if (dup2(cmd->tab_cmd[i].hd_pipe[0], STDIN_FILENO) == -1)
-				msg_error(ERM_DUP2, ERN_DUP2);
-			close(cmd->tab_cmd[i].hd_pipe[0]);
-			write(cmd->tab_cmd[i].hd_pipe[1], cmd->tab_cmd[i].hd_input,
-				ft_strlen(cmd->tab_cmd[i].hd_input));
-			close(cmd->tab_cmd[i].hd_pipe[1]);
-		}
-		i++;
-	}
-}
-*/
-
 int	redir_mgt(t_cmd_line *cmd)
 {
 	t_list	*tmp;
@@ -50,7 +28,6 @@ int	redir_mgt(t_cmd_line *cmd)
 		tmp = cmd->tab_cmd[i].redirection;
 		cmd->tab_cmd[i].fd_infile = 0;
 		cmd->tab_cmd[i].fd_outfile = 1;
-		cmd->tab_cmd[i].hd_bool = 0;
 		while (tmp != NULL && cmd->tab_cmd[i].redir_test == 1)
 		{
 			if (ft_strncmp((char *)tmp->content, "<<", 2) == 0)
@@ -65,20 +42,6 @@ int	redir_mgt(t_cmd_line *cmd)
 		}
 		i++;
 	}
-	i = 0;
-	while (i < cmd->nb_simple_cmd)
-	{
-		if (cmd->tab_cmd[i].hd_bool == 1)
-		{
-			if (dup2(cmd->tab_cmd[i].hd_pipe[0], STDIN_FILENO) == -1)
-				msg_error(ERM_DUP2, ERN_DUP2);
-			close(cmd->tab_cmd[i].hd_pipe[0]);
-			write(cmd->tab_cmd[i].hd_pipe[1], cmd->tab_cmd[i].hd_input,
-				ft_strlen(cmd->tab_cmd[i].hd_input));
-			close(cmd->tab_cmd[i].hd_pipe[1]);
-		}
-		i++;
-	}
 	return (0);
 }
 
@@ -90,7 +53,6 @@ int	redir_infile(t_cmd_line *cmd, char *s, int i)
 {
 	char	*msg;
 
-	cmd->tab_cmd[i].hd_bool = 0;
 	free_null(cmd->tab_cmd[i].infile);
 	if (cmd->tab_cmd[i].fd_infile != 0)
 		close(cmd->tab_cmd[i].fd_infile);

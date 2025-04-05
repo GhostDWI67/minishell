@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:05:48 by dwianni           #+#    #+#             */
-/*   Updated: 2025/03/28 12:38:54 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/05 14:35:34 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	check_quote(char *s)
 
 /******************************************************************************
 Only white space check
-Return : 0 = OK, other value NOK
+Return : 0 = OK, other value NOK = number of non white space char
 ******************************************************************************/
 int	ws_check(char *s)
 {
