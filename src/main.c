@@ -156,7 +156,7 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 	cmd->input = readline("minishell$");
 	if (cmd->input != NULL)
 	{
-		cmd->token = parse_token2(cmd->input);
+		cmd->token = parse_token(cmd->input);
 		//display_token(cmd);
 		if (check_token(cmd->token) == 1)
 		{
@@ -183,7 +183,7 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 				cmd->input = ft_strjoin(tmp, input);
 				free(tmp);
 				token_clear(&cmd->token);
-				cmd->token = parse_token2(cmd->input);
+				cmd->token = parse_token(cmd->input);
 				if (check_token(cmd->token) == 1)
 				{
 					add_history(cmd->input);
@@ -216,7 +216,7 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 		if (cmd->tab_cmd == NULL)
 			return (1); //voir ce qu'il faudrait faire si malloc echoue??
-		parsing2(cmd);
+		parsing(cmd);
 		i = 0;
 		while (i < cmd->nb_simple_cmd)
 		{

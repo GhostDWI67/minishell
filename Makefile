@@ -31,9 +31,7 @@ INC_DIR = include
 SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/utils/check.c \
 		$(SRC_DIR)/utils/utils.c \
-		$(SRC_DIR)/parsing/parsing.c \
-		$(SRC_DIR)/parsing/parsing_utils.c \
-		$(SRC_DIR)/lexer/lexer.c \
+		$(SRC_DIR)/parsing2/parsing_utils.c \
 		$(SRC_DIR)/exec/exec.c \
 		$(SRC_DIR)/exec/exec_child.c \
 		$(SRC_DIR)/exec/exec_utils.c \
@@ -41,10 +39,10 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/utils/free_utils.c \
 		$(SRC_DIR)/redirection/redirection.c \
 		$(SRC_DIR)/redirection/heredoc.c \
-		$(SRC_DIR)/lexer2/lexer2.c \
-		$(SRC_DIR)/lexer2/lexer_utils2.c \
-		$(SRC_DIR)/lexer2/lexer_check2.c \
-		$(SRC_DIR)/parsing2/parsing2.c \
+		$(SRC_DIR)/lexer/lexer.c \
+		$(SRC_DIR)/lexer/lexer_utils.c \
+		$(SRC_DIR)/lexer/lexer_check.c \
+		$(SRC_DIR)/parsing/parsing.c \
 		$(SRC_DIR)/debug/display.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

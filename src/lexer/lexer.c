@@ -1,69 +1,85 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   lexer2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/03/28 10:59:33 by dwianni          ###   ########.fr       */
+/*   Created: 2025/04/05 15:44:26 by dwianni           #+#    #+#             */
+/*   Updated: 2025/04/05 18:22:21 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /******************************************************************************
-Sort the token list into a command structure
-******************************************************************************/
-t_command	lexer(t_list *token)
-{
-	t_command	res;
-	t_list		*tmp;
+Generate a list of token
+Return : pointer to the start of the token list
 
-	res.args = NULL;
-	res.redirection = NULL;
-	res.pipe = 0;
-	res.infile = NULL;
-	res.outfile = NULL;
-	res.fd_infile = STDIN_FILENO;
-	res.fd_outfile = STDOUT_FILENO;
-	tmp = token;
-	while (tmp != NULL)
-	{
-		if (((char *)tmp->content)[0] == '>' ||
-			((char *)tmp->content)[0] == '<')
-			ft_lstadd_back(&res.redirection, ft_lstnew(tmp->content));
-		else if (((char *)tmp->content)[0] == '|')
-			res.pipe = 1;
-		else
-			ft_lstadd_back(&res.args, ft_lstnew(tmp->content));
-		tmp = tmp->next;
-	}
+To do : en cas de strdup, free la liste ?? // protection malloc strdup ??
+******************************************************************************/
+static t_token	*sub_parse_token2(t_token *res, char *s, int start, int end)
+{
+	char	*tmp;
+
+	tmp = ft_strndup(s, start, end);
+	if (tmp == NULL)
+		return (NULL);
+	if (tmp[0] != 0)
+		token_add_back(&res, token_new(tmp, ARG));
 	return (res);
 }
 
-/******************************************************************************
-Transform a list into a tab of string
-Return : pointer to a tab
-******************************************************************************/
-char	**args_to_tab(t_list *args)
+t_token	*parse_token(char *s)
 {
-	char	**res;
-	t_list	*tmp;
+	t_token	*res;
 	int		i;
+	int		start;
 
-	tmp = args;
-	res = (char **)malloc(sizeof(char *) * (ft_lstsize(tmp)+ 1));
-	if (res == NULL)
-		return (NULL);
-	tmp = args;
 	i = 0;
-	while (tmp != NULL)
+	res = NULL;
+	while (s[i] != 0)
 	{
-		res[i] = tmp-> content;
-		i++;
-		tmp = tmp->next;
+		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
+			i++;
+		if (ft_is_white_space(s[i]) == 0 && s[i] != '|' && s[i] != '>'
+			&& s[i] != '<' && s[i] != '\0')
+		{
+			start = i;
+			while (ft_is_white_space(s[i]) == 0 && s[i] != '|'&& s[i] != '>'
+				&& s[i] != '<' && s[i] != '\0')
+			{
+				if (s[i] == '"' || s[i] == 39)
+					i = skip_quote(i, s);
+				i++;
+			}
+			res = sub_parse_token2(res, s, start, i - 1);
+		}
+		else if (ft_strncmp(s + i, "|", 1) == 0)
+		{
+			token_add_back(&res, token_new(ft_strdup("|"), PIPE));
+			i++;
+		}
+		else if (ft_strncmp(s + i, "<<", 2) == 0)
+		{
+			token_add_back(&res, token_new(ft_strdup("<<"), HEREDOC));
+			i = i + 2;
+		}
+		else if (ft_strncmp(s + i, ">>", 2) == 0)
+		{
+			token_add_back(&res, token_new(ft_strdup(">>"), APPEND));
+			i = i + 2;
+		}
+		else if (s[i] == '<' && s[i + 1] != '<')
+		{
+			token_add_back(&res, token_new(ft_strdup("<"), INPUT));
+			i++;;
+		}
+		else if (s[i] == '>' && s[i + 1] != '>')
+		{
+			token_add_back(&res, token_new(ft_strdup(">"), OUTPUT));
+			i++;
+		}
 	}
-	res[i] = NULL;
 	return (res);
 }

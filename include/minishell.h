@@ -135,34 +135,26 @@ int			redir_heredoc(t_cmd_line *cmd, char *s, int i);
 char		*build_heredoc_input(char *eof);
 void		build_hd_pipe(t_cmd_line *cmd);
 
-/* lexer.c */                        //A VIRER ????
-t_command	lexer(t_list *token);
-char		**args_to_tab(t_list *args);
+/* lexer.c */
+t_token		*parse_token(char *s);
 
-/* lexer_check2.c */
+/* lexer_check.c */
 int			check_token(t_token *token);
 int			check_token_last_pipe(t_token *token);
 int			check_token_nb_cmd(t_token *token);
 
-/* lexer2.c */
-t_token		*parse_token2(char *s);
-
-/* lexer_utils2.c */
+/* lexer_utils.c */
 t_token		*token_new(char *content, int type);
 t_token		*token_last(t_token *lst);
 void		token_add_back(t_token **lst, t_token *new);
 void		token_clear(t_token **lst);
 
-/* parsing.c */                      //A VIRER ?????
-t_list		*parse_cmd(char *s);
-t_list		*parse_token(char *s);
-
-/* parsing2.c */
-void		parsing2(t_cmd_line *cmd);
+/* parsing.c */
+void		parsing(t_cmd_line *cmd);
+char		**args_to_tab(t_list *args);
 
 /* parsing_utils.c */
 int			skip_quote(int i, char *s);
-void		clean_space(char *s);
 
 /* redirection.c */
 int			redir_mgt(t_cmd_line *cmd);

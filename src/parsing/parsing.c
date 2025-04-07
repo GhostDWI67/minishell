@@ -1,137 +1,81 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 16:19:40 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/04 16:54:49 by dwianni          ###   ########.fr       */
+/*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
+/*   Updated: 2025/03/28 10:59:33 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /******************************************************************************
-Generate a list of elemetary commamd
-Return : pointer to the start of the list
+Sort the token list into a command structure
 ******************************************************************************/
-t_list	*parse_cmd(char *s)
+void	parsing(t_cmd_line *cmd)
 {
-	t_list	*res;
-	int		i;
-	int		start;
-	char	*tmp;
+	char		*tmp;
+	int			i;
 
 	i = 0;
-	res = NULL;
-	while (s[i] != 0)
+	while (i < cmd->nb_simple_cmd)
 	{
-		start = i;
-		while (s[i] != '|' && s[i] != '\0')
-		{
-			i = skip_quote(i, s);
-			i++;
-		}
-		tmp = ft_strndup(s, start, i);
-		if (tmp == NULL)
-			return (NULL);
-		ft_lstadd_back(&res, ft_lstnew(tmp));
-		if (s[i] == '\0')
-			return (res);
+		cmd->tab_cmd[i].args = NULL;
+		cmd->tab_cmd[i].redirection = NULL;
+		cmd->tab_cmd[i].pipe = 0;// besoin ??
+		cmd->tab_cmd[i].infile = NULL;
+		cmd->tab_cmd[i].outfile = NULL;
+		cmd->tab_cmd[i].fd_infile = STDIN_FILENO;
+		cmd->tab_cmd[i].fd_outfile = STDOUT_FILENO;
 		i++;
 	}
-	return (res);
+	i = 0;
+	while (cmd->token != NULL)
+	{
+		if ((cmd->token->content)[0] == '>' ||
+			(cmd->token->content)[0] == '<')
+		{
+			tmp = ft_strjoin(cmd->token->content, cmd->token->next->content);
+			if (tmp != NULL)
+			{
+				ft_lstadd_back(&cmd->tab_cmd[i].redirection, ft_lstnew(tmp));
+				cmd->token = cmd->token->next;
+			}
+		}
+		else if ((cmd->token->content)[0] == '|')
+			i++;
+		else if  ((cmd->token->content)[0] != '>' &&
+			(cmd->token->content)[0] != '<')
+			ft_lstadd_back(&cmd->tab_cmd[i].args, ft_lstnew(cmd->token->content));
+		cmd->token = cmd->token->next;
+	}
 }
 
 /******************************************************************************
-Generate a list of token
-Return : pointer to the start of the list
-
-To do : en cas de strdup, free la liste ?? // protection malloc strdup ??
+Transform a list into a tab of string
+Return : pointer to a tab
 ******************************************************************************/
-static int	parse_token_quote(char *s, int i)
+char	**args_to_tab(t_list *args)
 {
-	while (ft_is_white_space(s[i]) == 0 && s[i] != '\0' && s[i] != '|')
-	{
-		if (s[i] == 39 || s[i] == '"')
-			i = skip_quote(i, s) - 1;
-		i++;
-	}
-	return (i);
-}
+	char	**res;
+	t_list	*tmp;
+	int		i;
 
-static t_list	*sub_parse_token(t_list *res, char *s, int start, int i)
-{
-	char	*tmp;
-
-	tmp = ft_strndup(s, start, i - 1);
-	if (tmp == NULL)
+	tmp = args;
+	res = (char **)malloc(sizeof(char *) * (ft_lstsize(tmp)+ 1));
+	if (res == NULL)
 		return (NULL);
-	if (tmp[0] != 0)
-	{
-		ft_lstadd_back(&res, ft_lstnew(tmp));
-	}
-	if (s[i] == '|')
-	{
-		ft_lstadd_back(&res, ft_lstnew(ft_strndup(s, i, i)));
-		//free(tmp);
-	}
-	return (res);
-}
-
-t_list	*parse_token(char *s)
-{
-	t_list	*res;
-	int		i;
-	int		start;
-
+	tmp = args;
 	i = 0;
-	res = NULL;
-	while (s[i] != 0 || s[i] != '|')
+	while (tmp != NULL)
 	{
-		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
-			i++;
-		start = i;
-		i = parse_token_quote(s, i);
-		res = sub_parse_token(res, s, start, i);
-		if (s[i] == '\0')
-			break ;
+		res[i] = tmp-> content;
 		i++;
+		tmp = tmp->next;
 	}
+	res[i] = NULL;
 	return (res);
 }
-
-/*
-t_list	*parse_token(char *s)
-{
-	t_list	*res;
-	int		i;
-	int		start;
-		char	*tmp;
-
-	i = 0;
-	res = NULL;
-	while (s[i] != 0)
-	{
-		while (ft_is_white_space(s[i]) == 1 && s[i] != '\0')
-			i++;
-		start = i;
-		i = parse_token_quote(s, i);
-		tmp = ft_strndup(s, start, i - 1);
-		if (tmp == NULL)
-			return (NULL);
-		if (tmp[0] != 0)
-			ft_lstadd_back(&res, ft_lstnew(tmp));
-		if (s[i] == '|')
-		{
-			ft_lstadd_back(&res, ft_lstnew(ft_strndup(s, i, i)));
-			free(tmp);
-		}
-		else if (s[i] == '\0')
-			break ;
-		i++;
-	}
-	return (res);
-}
-*/
