@@ -44,6 +44,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/lexer/lexer_check.c \
 		$(SRC_DIR)/parsing/parsing.c \
 		$(SRC_DIR)/debug/display.c \
+		$(SRC_DIR)/input/input_mgt.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

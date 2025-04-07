@@ -15,10 +15,9 @@
 /******************************************************************************
 Sort the token list into a command structure
 ******************************************************************************/
-void	parsing(t_cmd_line *cmd)
+static void	parsing_init(t_cmd_line *cmd)
 {
-	char		*tmp;
-	int			i;
+	int	i;
 
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
@@ -31,6 +30,14 @@ void	parsing(t_cmd_line *cmd)
 		cmd->tab_cmd[i].fd_outfile = STDOUT_FILENO;
 		i++;
 	}
+}
+
+void	parsing(t_cmd_line *cmd)
+{
+	char	*tmp;
+	int		i;
+
+	parsing_init(cmd);
 	i = 0;
 	while (cmd->token != NULL)
 	{

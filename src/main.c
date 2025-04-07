@@ -102,7 +102,6 @@ cat out1 out2 out3 | grep out
     >   t1    test >t1 >   t2 >>t3 >>   t4 <t5 <   t6 <<t7   <<   t8  "<<   t8"
 echo " | " 		| grep ' |	 ' | 	echo " | " | grep ' | ' ||
 test1|test2
-ligme sans rien    test??
 ping -c 5 google.com | grep rtt
 cat        out1              out2 |        grep               Out
 ls -l | cat out1 | grep Out
@@ -116,6 +115,10 @@ cat <out1 <<EOF <out2 >t1 >t2	Pas OK
 >out20 | >out21 | cat out1
 
 cat <out1|grep Out|wc -l
+
+CA COINCE : !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+cat <out1 <<EOF >t1    Fais crash
+cqt out1 | grep Out		Fais palnter les dup => 
 
 tester un executable qvec un chemin relatif => tester de base avec le chemin
 	avant le PATH
@@ -147,64 +150,6 @@ static void	main_init(t_cmd_line	*cmd)
 	if (cmd->fd_saved_stdin == -1)
 		msg_error(ERM_STD, ERN_STD);
 	cmd->err_nb = 0;
-}
-
-static void	main_input_mgt(t_cmd_line	*cmd)
-{
-	char	*tmp;
-	char	*input;	
-
-	cmd->input = readline("minishell$");
-	if (cmd->input != NULL)
-	{
-		cmd->token = parse_token(cmd->input);
-		//display_token(cmd);
-		if (check_token(cmd->token) == 1)
-		{
-			add_history(cmd->input);
-			return ;
-		}
-		if (check_quote(cmd->input) != 0)
-		{
-			cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
-			add_history(cmd->input);
-			return ;
-		}
-		while (check_token_last_pipe(cmd->token) == 1)
-		{
-			input = readline("pipe> ");
-			if (input == NULL)
-			{
-				cmd->err_nb = msg_inf(ERM_INPUT_NULL, ERN_INPUT_NULL);
-				break ;
-			}
-			else if (ws_check(input) != 0 && input[0] != '\0')
-			{
-				tmp = cmd->input;
-				cmd->input = ft_strjoin(tmp, input);
-				free(tmp);
-				token_clear(&cmd->token);
-				cmd->token = parse_token(cmd->input);
-				if (check_token(cmd->token) == 1)
-				{
-					add_history(cmd->input);
-					break ;
-				}
-				if (check_quote(cmd->input) != 0)
-				{
-					cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
-					add_history(cmd->input);
-					break ;
-				}
-			}
-		}
-		if (ws_check(cmd->input) != 0 && cmd->input[0] != '\0')
-			add_history(cmd->input);
-	}
-	else
-	{
-		cmd->err_nb = msg_inf(ERM_INPUT_NULL, ERN_INPUT_NULL);
-	}
 }
 
 static int	main_exec_mgt(t_cmd_line *cmd, char **environ)

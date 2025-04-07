@@ -52,17 +52,22 @@ static void	child_redir_mgt_out(t_cmd_line *cmd)
 	}
 }
 
+static void	child_prepare(t_cmd_line *cmd)
+{
+	child_redir_mgt_in(cmd);
+	child_redir_mgt_out(cmd);
+	close_tab_pipe(cmd);
+	close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[0]);
+	close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
+}
+
 int	child(t_cmd_line *cmd, char **environ)
 {
 	char	*path;
 
 	if (cmd->tab_cmd[cmd->cmd_step].redir_test == 1)
 	{
-		child_redir_mgt_in(cmd);
-		child_redir_mgt_out(cmd);
-		close_tab_pipe(cmd);
-		close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[0]);
-		close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
+		child_prepare(cmd);
 		if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
 			close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
 		if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 2)

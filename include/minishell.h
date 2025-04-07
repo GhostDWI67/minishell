@@ -134,6 +134,9 @@ int			redir_heredoc(t_cmd_line *cmd, char *s, int i);
 char		*build_heredoc_input(char *eof);
 void		build_hd_pipe(t_cmd_line *cmd);
 
+/* input_mgt.c*/
+void		main_input_mgt(t_cmd_line *cmd);
+
 /* lexer.c */
 t_token		*parse_token(char *s);
 
