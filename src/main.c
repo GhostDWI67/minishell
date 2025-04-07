@@ -21,21 +21,43 @@
 	les valeurs de defaut
 - waitpid gerer par rapport au numero de PID pour afficher le bon message en cas
 	de pb
-- nettoyer des white space avec les redirection <   < out1 est NOK
 - cas
 	cmd |			=> ouvre une ligne de commande
-	cmd ||			=> idem mais om mettre nimp ca marche la commande avant
+	cmd ||			=> idem mais om mettre nimp ca marche la commande avant NE PAS GERER ?
 	cmd | |			=> unexpected token |
 	cmd |||			=> unexpected token ||
 	cmd ||||		=> unexpected token ||
 	cmd ||||..		=> unexpected token ||
-	cat <>  out1	=> affiche out1
+	cat <>  out1	=> affiche out1 NE PAS GERER ?? mais sinon, c'est assez simple
 	TAB fait cracher avec plusieurs ENTER
 - tous les free a revoir
+
+EN COURS !!!!!!
 - revoir le parsing pour les version tout colles et < < out1
+	- nouveau parsing parse les token : OK
+	- check si on a un | à la fin de la commande => on refait un input 
+		(a l'infini)) : OK
+	- on teste d'abord si le lexing est OK et ensuite on check si besoin de
+		rajouter un input, mais on stock la chaine avec l'input avec le defaut
+		de token
+	A FAIRE :
+		- testeur de token : OK
+		- testeur de | final + intégration nouvelle demande
+		- calcul du nombre de commande
+		- dans l'ordre, on test token si NOK on enregistre la commande sinon, on
+			continue avec nouveau pipe et on boucle ...
+		- integration dans simple cmd pour raccrocher les wagons a l'ancienne
+			version
+		- nettoyer les vestiges
+		- mettre le tout à la norme
+
 - gerer la remise sur les bons fd en fin de cycle pour ne pas avoir de fd ouvert
 	dans les childs + gerer aussi celui du HEREDOC qui traine dans les childs OK
 	mais un peu merdique avec plein de close, voir on peut faire mieux
+
+- EXPAND
+- SIGNAUX
+
 et ca sera deja tres bien :)))!
 ******************************************************************************/
 
@@ -68,7 +90,7 @@ A FAIRE EN DETAIL // point bloquant actuel // a finir :
 ******************************************************************************/
 
 /******************************************************************************
-CHAT : 
+CHATGPT : 
 en francais  construire en pseudo code un lexer, un parser, un AST 
 et un interpreteur d'AST pour un shell
 
@@ -128,37 +150,55 @@ static void	main_init(t_cmd_line	*cmd)
 
 static void	main_input_mgt(t_cmd_line	*cmd)
 {
-	t_list		*tmp;
+	char	*tmp;
+	char	*input;	
 
 	cmd->input = readline("minishell$");
 	if (cmd->input != NULL)
 	{
-		if (cmd->input[0] != '\0' && ws_check(cmd->input) != 0)
-			add_history(cmd->input);
-		else
+		cmd->token = parse_token2(cmd->input);
+		//display_token(cmd);
+		if (check_token(cmd->token) == 1)
 		{
-			cmd->err_nb = -1;
-			free(cmd->input);
+			add_history(cmd->input);
+			return ;
 		}
 		if (check_quote(cmd->input) != 0)
+		{
 			cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
-		if (ws_check(cmd->input) != 0 && cmd->err_nb == 0)
-		{
-			//clean_space(cmd->input);
-			printf("clean input : %s***\n", cmd->input);//a retirer
-			cmd->simple_cmd = parse_cmd(cmd->input);
-			tmp = cmd->simple_cmd;
-			cmd->nb_simple_cmd = ft_lstsize(tmp);
-			printf("*************************************\n");//a retirer
+			add_history(cmd->input);
+			return ;
 		}
-		tmp = cmd->simple_cmd;
-		printf("CMD SIMPLE *****************************\n");//a retirer pour affichage CMD SIMPLE
-		while (tmp != NULL)
+		while(check_token_last_pipe(cmd->token) == 1)
 		{
-			printf("%s\n", (char *)tmp->content);
-			tmp = tmp->next;
+			input = readline("pipe> ");
+			if (input == NULL)
+			{
+				cmd->err_nb = msg_inf(ERM_INPUT_NULL, ERN_INPUT_NULL);
+				break ;
+			}
+			else if (ws_check(input) != 0 && input[0] != '\0')
+			{
+				tmp = cmd->input;
+				cmd->input = ft_strjoin(tmp, input);
+				free(tmp);
+				token_clear(&cmd->token);
+				cmd->token = parse_token2(cmd->input);
+				if (check_token(cmd->token) == 1)
+				{
+					add_history(cmd->input);
+					break ;
+				}
+				if (check_quote(cmd->input) != 0)
+				{
+					cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
+					add_history(cmd->input);
+					break ;
+				}
+			}
 		}
-		printf("*************************************\n\n\n");//a retirer
+		if (ws_check(cmd->input) != 0 && cmd->input[0] != '\0')	
+			add_history(cmd->input);
 	}
 	else
 	{
@@ -166,28 +206,24 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 	}
 }
 
-/*
-static int	main_exec_mgt(t_cmd_line *cmd, t_list *token, char **environ)
+static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 {
 	int		i;
-	t_list	*tmp;
-	
+
 	if (cmd->input != NULL)
 	{
+		cmd->nb_simple_cmd = check_token_nb_cmd(cmd->token);
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 		if (cmd->tab_cmd == NULL)
 			return (1); //voir ce qu'il faudrait faire si malloc echoue??
+		parsing2(cmd);
 		i = 0;
-		tmp = cmd->simple_cmd;
 		while (i < cmd->nb_simple_cmd)
 		{
-			token = parse_token((char *)cmd->simple_cmd->content);
-			cmd->tab_cmd[i] = lexer(token);
 			cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args);
 			i++;
-			cmd->simple_cmd = cmd->simple_cmd->next;
 		}
-		cmd->simple_cmd = tmp;
+		//display_simple_cmd(cmd);
 		cmd->tab_path = ft_split(getenv("PATH"), ':');
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
@@ -196,7 +232,7 @@ static int	main_exec_mgt(t_cmd_line *cmd, t_list *token, char **environ)
 	return (0);
 }
 
-static void	main_free_mgt(t_cmd_line *cmd, t_list *token)
+static void	main_free_mgt(t_cmd_line *cmd)
 {
 	int	i;
 
@@ -219,83 +255,29 @@ static void	main_free_mgt(t_cmd_line *cmd, t_list *token)
 	{
 		free_cmd_line(cmd);
 		cmd = NULL;
-		free(token);
-		token = NULL;
 	}
 }
-*/
 
-/*
 int	main(void)
 {
-	t_list		*token;
 	extern char	**environ;
 	t_cmd_line	*cmd;
 
-	token = NULL;
 	while (1)
 	{
 		cmd = malloc(sizeof(t_cmd_line) * 1);
 		if (cmd == NULL)
 			return (1);
+		cmd->err_nb = 0; // A voir où on l'init
 		//main_init(cmd);
 		main_input_mgt(cmd);
 		if (cmd->err_nb == 0)
 		{
 			main_init(cmd);
-			main_exec_mgt(cmd, token, environ);
-			main_free_mgt(cmd, token);
+			main_exec_mgt(cmd, environ);
+			main_free_mgt(cmd);
 		}
 	}
 	rl_clear_history();
-	return (0);
-}
-*/
-
-static int	main_exec_mgt_IW(t_cmd_line *cmd, t_token *token, char **environ)
-{
-	//int		i;
-	t_token	*tmp;
-	
-	(void) environ;
-	if (cmd->input != NULL)
-	{
-		token = parse_token2(cmd->input);
-		tmp = token;
-		while (tmp != NULL)
-		{
-			printf("Token : %s // %d\n", tmp->content, tmp->type);
-			tmp = tmp->next;
-		}
-	}
-	return (0);
-}
-
-
-int	main(void)
-{
-	t_token		*token;
-	extern char	**environ;
-	t_cmd_line	*cmd;
-
-	token = NULL;
-	/* cat out1 <out1 <<out2 >out3 >out4|ls -l "< > >> << hfbewjh | " 
-	cat out1<out1>out2|
-	*/
-	//while (1)
-	{
-		cmd = malloc(sizeof(t_cmd_line) * 1);
-		if (cmd == NULL)
-			return (1);
-		//main_init(cmd);
-		main_input_mgt(cmd);
-		if (cmd->err_nb == 0)
-		{
-			main_init(cmd);
-			main_exec_mgt_IW(cmd, token, environ);
-			//main_free_mgt(cmd, token);
-		}
-	}
-	//rl_clear_history();
 	return (0);
 }

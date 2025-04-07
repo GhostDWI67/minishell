@@ -16,8 +16,8 @@ NAME = minishell
 # Compiler and compiling flags
 CC = cc
 #CFLAGS = -Wall
-CFLAGS = -Wall -Wextra -Werror -g3
-#CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+#CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 # Directories
 SRC_DIR = src
@@ -43,6 +43,9 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/redirection/heredoc.c \
 		$(SRC_DIR)/lexer2/lexer2.c \
 		$(SRC_DIR)/lexer2/lexer_utils2.c \
+		$(SRC_DIR)/lexer2/lexer_check2.c \
+		$(SRC_DIR)/parsing2/parsing2.c \
+		$(SRC_DIR)/debug/display.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

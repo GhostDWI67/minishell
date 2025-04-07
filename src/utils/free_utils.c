@@ -61,15 +61,15 @@ int	free_command(t_command cmd)
 }
 
 /******************************************************************************
-Free a comand structure
+Free a command structure
 Return ; 0 if OK, else 1
 ******************************************************************************/
 int	free_cmd_line(t_cmd_line *cmd)
 {
 	int	i;
 
-	if (cmd->simple_cmd != NULL)
-		ft_lstclear(&cmd->simple_cmd, free);
+	//if (cmd->simple_cmd != NULL)
+	//	ft_lstclear(&cmd->simple_cmd, free);
 	free(cmd->input);
 	i = 0;
 	while (i < cmd->nb_simple_cmd)

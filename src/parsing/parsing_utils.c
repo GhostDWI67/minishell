@@ -42,6 +42,8 @@ int	skip_quote(int i, char *s)
 /******************************************************************************
 Clean unnecessary space before redirection
 Return : cleaned string
+
+PAS BESOIN A VIRER ????????????????????????????
 ******************************************************************************/
 static void	sub_clean_space(char *s, int i, int skip, int dec)
 {

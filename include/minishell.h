@@ -27,6 +27,7 @@
 # include "libft.h"
 # include "ft_printf.h"
 
+/* Standard Value Definition for token */
 # define INPUT			1	//"<"
 # define HEREDOC		2	//"<<"
 # define OUTPUT			3	//">"
@@ -35,7 +36,7 @@
 # define CMD			6	
 # define ARG			7	
 
-/* Standard Value Definition */
+/* Standard Value Definition for error message*/
 # define ERM_DUP2		"dup2 failed"	
 # define ERN_DUP2		10
 # define ERM_EXECVE		"execve failed"	
@@ -56,6 +57,8 @@
 # define ERN_INPUT_NULL	18
 # define ERM_MALLOC		"malloc failed"	
 # define ERN_MALLOC		19
+# define ERM_TOKEN		"unexpected token : "	
+# define ERN_TOKEN		20
 
 typedef struct s_token
 {
@@ -80,7 +83,8 @@ typedef struct s_command {
 
 typedef struct s_cmd_line {
 	char		*input;
-	t_list		*simple_cmd;
+	t_token		*token;
+	//t_list		*simple_cmd;
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
 	char		**tab_path;
@@ -99,6 +103,10 @@ typedef struct s_cmd_line {
 /* check.c */
 int			check_quote (char *s);
 int			ws_check(char *s);
+
+/* display.c */
+void		display_simple_cmd(t_cmd_line *cmd);
+void		display_token(t_cmd_line *cmd);
 
 /* exec.c */
 int			f_pipe(t_cmd_line *cmd, char **environ);
@@ -127,9 +135,14 @@ int			redir_heredoc(t_cmd_line *cmd, char *s, int i);
 char		*build_heredoc_input(char *eof);
 void		build_hd_pipe(t_cmd_line *cmd);
 
-/* lexer.c */
+/* lexer.c */                        //A VIRER ????
 t_command	lexer(t_list *token);
 char		**args_to_tab(t_list *args);
+
+/* lexer_check2.c */
+int			check_token(t_token *token);
+int			check_token_last_pipe(t_token *token);
+int			check_token_nb_cmd(t_token *token);
 
 /* lexer2.c */
 t_token		*parse_token2(char *s);
@@ -140,9 +153,12 @@ t_token		*token_last(t_token *lst);
 void		token_add_back(t_token **lst, t_token *new);
 void		token_clear(t_token **lst);
 
-/* parsing.c */
+/* parsing.c */                      //A VIRER ?????
 t_list		*parse_cmd(char *s);
 t_list		*parse_token(char *s);
+
+/* parsing2.c */
+void		parsing2(t_cmd_line *cmd);
 
 /* parsing_utils.c */
 int			skip_quote(int i, char *s);
