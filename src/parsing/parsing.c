@@ -25,7 +25,6 @@ void	parsing(t_cmd_line *cmd)
 	{
 		cmd->tab_cmd[i].args = NULL;
 		cmd->tab_cmd[i].redirection = NULL;
-		cmd->tab_cmd[i].pipe = 0;// besoin ??
 		cmd->tab_cmd[i].infile = NULL;
 		cmd->tab_cmd[i].outfile = NULL;
 		cmd->tab_cmd[i].fd_infile = STDIN_FILENO;
@@ -47,9 +46,10 @@ void	parsing(t_cmd_line *cmd)
 		}
 		else if ((cmd->token->content)[0] == '|')
 			i++;
-		else if  ((cmd->token->content)[0] != '>' &&
+		else if ((cmd->token->content)[0] != '>' &&
 			(cmd->token->content)[0] != '<')
-			ft_lstadd_back(&cmd->tab_cmd[i].args, ft_lstnew(cmd->token->content));
+			ft_lstadd_back(&cmd->tab_cmd[i].args,
+				ft_lstnew(cmd->token->content));
 		cmd->token = cmd->token->next;
 	}
 }

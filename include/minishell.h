@@ -71,7 +71,6 @@ typedef struct s_command {
 	t_list	*args; //free OK
 	t_list	*redirection; //free OK
 	char	**tab_args; //free ?? a revoir ?
-	int 	pipe;
 	int		fd_infile;
 	int		fd_outfile;
 	char	*infile; //free OK

@@ -46,7 +46,7 @@ t_token	*parse_token(char *s)
 			&& s[i] != '<' && s[i] != '\0')
 		{
 			start = i;
-			while (ft_is_white_space(s[i]) == 0 && s[i] != '|'&& s[i] != '>'
+			while (ft_is_white_space(s[i]) == 0 && s[i] != '|' && s[i] != '>'
 				&& s[i] != '<' && s[i] != '\0')
 			{
 				if (s[i] == '"' || s[i] == 39)
@@ -73,7 +73,7 @@ t_token	*parse_token(char *s)
 		else if (s[i] == '<' && s[i + 1] != '<')
 		{
 			token_add_back(&res, token_new(ft_strdup("<"), INPUT));
-			i++;;
+			i++;
 		}
 		else if (s[i] == '>' && s[i + 1] != '>')
 		{

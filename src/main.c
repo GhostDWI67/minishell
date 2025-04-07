@@ -23,12 +23,13 @@
 	de pb
 - cas
 	cmd |			=> ouvre une ligne de commande
-	cmd ||			=> idem mais om mettre nimp ca marche la commande avant NE PAS GERER ?
+	cmd ||		=> idem mais mettre nimp ca marche la cmd avant/NE PAS GERER ?
 	cmd | |			=> unexpected token |
 	cmd |||			=> unexpected token ||
 	cmd ||||		=> unexpected token ||
 	cmd ||||..		=> unexpected token ||
-	cat <>  out1	=> affiche out1 NE PAS GERER ?? mais sinon, c'est assez simple
+	cat <>  out1	=> affiche out1 NE PAS GERER ?? mais sinon, c'est 
+		assez simple
 	TAB fait cracher avec plusieurs ENTER
 - tous les free a revoir
 
@@ -169,7 +170,7 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 			add_history(cmd->input);
 			return ;
 		}
-		while(check_token_last_pipe(cmd->token) == 1)
+		while (check_token_last_pipe(cmd->token) == 1)
 		{
 			input = readline("pipe> ");
 			if (input == NULL)
@@ -197,7 +198,7 @@ static void	main_input_mgt(t_cmd_line	*cmd)
 				}
 			}
 		}
-		if (ws_check(cmd->input) != 0 && cmd->input[0] != '\0')	
+		if (ws_check(cmd->input) != 0 && cmd->input[0] != '\0')
 			add_history(cmd->input);
 	}
 	else
@@ -269,7 +270,6 @@ int	main(void)
 		if (cmd == NULL)
 			return (1);
 		cmd->err_nb = 0; // A voir où on l'init
-		//main_init(cmd);
 		main_input_mgt(cmd);
 		if (cmd->err_nb == 0)
 		{

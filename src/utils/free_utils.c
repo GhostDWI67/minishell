@@ -68,8 +68,6 @@ int	free_cmd_line(t_cmd_line *cmd)
 {
 	int	i;
 
-	//if (cmd->simple_cmd != NULL)
-	//	ft_lstclear(&cmd->simple_cmd, free);
 	free(cmd->input);
 	i = 0;
 	while (i < cmd->nb_simple_cmd)

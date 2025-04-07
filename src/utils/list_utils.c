@@ -18,8 +18,8 @@ Return ; 0 if OK, else 1
 ******************************************************************************/
 int	ft_lstaddback_content(t_list **env, char *content)
 {
-	t_list *new;
-	
+	t_list	*new;
+
 	new = ft_lstnew(content);
 	if (!new)
 		return (1);
@@ -76,6 +76,6 @@ void	sort_tab(char **arr, int len)
 			}
 			j++;
 		}
-	i++;
+		i++;
 	}
 }

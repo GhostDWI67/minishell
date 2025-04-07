@@ -31,7 +31,7 @@ INC_DIR = include
 SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/utils/check.c \
 		$(SRC_DIR)/utils/utils.c \
-		$(SRC_DIR)/parsing2/parsing_utils.c \
+		$(SRC_DIR)/parsing/parsing_utils.c \
 		$(SRC_DIR)/exec/exec.c \
 		$(SRC_DIR)/exec/exec_child.c \
 		$(SRC_DIR)/exec/exec_utils.c \
