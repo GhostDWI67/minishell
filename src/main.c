@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/05 17:56:28 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/11 16:56:22 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 	cmd ||||..		=> unexpected token ||
 	cat <>  out1	=> affiche out1 NE PAS GERER ?? mais sinon, c'est 
 		assez simple
-	TAB fait cracher avec plusieurs ENTER
 - tous les free a revoir
 
 EN COURS !!!!!!
@@ -43,14 +42,14 @@ EN COURS !!!!!!
 		de token
 	A FAIRE :
 		- testeur de token : OK
-		- testeur de | final + intégration nouvelle demande
-		- calcul du nombre de commande
+		- testeur de | final + intégration nouvelle demande OK
+		- calcul du nombre de commande OK
 		- dans l'ordre, on test token si NOK on enregistre la commande sinon, on
-			continue avec nouveau pipe et on boucle ...
+			continue avec nouveau pipe et on boucle ... OK
 		- integration dans simple cmd pour raccrocher les wagons a l'ancienne
-			version
-		- nettoyer les vestiges
-		- mettre le tout à la norme
+			version OK
+		- nettoyer les vestiges OK
+		- mettre le tout à la norme OK
 
 - gerer la remise sur les bons fd en fin de cycle pour ne pas avoir de fd ouvert
 	dans les childs + gerer aussi celui du HEREDOC qui traine dans les childs OK
@@ -117,8 +116,9 @@ cat <out1 <<EOF <out2 >t1 >t2	Pas OK
 cat <out1|grep Out|wc -l
 
 CA COINCE : !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-cat <out1 <<EOF >t1    Fais crash
-cqt out1 | grep Out		Fais palnter les dup => 
+cat <out1 <<EOF >t1    Fais crash => OK mais passer par adresse
+cqt out1 | grep Out		Fais palnter les dup => il faut ne pas gerer les 
+	dup si une des fonctions deconne ou gerer avec le resultat des exits
 
 tester un executable qvec un chemin relatif => tester de base avec le chemin
 	avant le PATH
@@ -141,6 +141,7 @@ tester un executable qvec un chemin relatif => tester de base avec le chemin
 11) pipe OK
 12) > OK >> OK < OK
 ******************************************************************************/
+/*
 static void	main_init(t_cmd_line	*cmd)
 {
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
@@ -225,4 +226,25 @@ int	main(void)
 	}
 	rl_clear_history();
 	return (0);
+}
+*/
+
+int	main(void)
+{
+	t_expand	*s;
+	
+	s = malloc(sizeof(t_expand) * 1);
+	s->input = NULL;
+	s->output = NULL;
+	s->env_name = NULL;
+	s->input = readline("minishell$ ");
+	expand(s);
+	printf("OUTPUT :%s\n", s->output);
+	if (s->input != NULL)
+		free(s->input);
+	if (s->output != NULL)
+		free(s->output);
+	if (s->env_name != NULL)
+		free(s->env_name);
+	free(s);
 }

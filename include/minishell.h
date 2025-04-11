@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/05 16:36:56 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:08:25 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,15 @@ typedef struct s_token
 	int				type;
 	struct s_token	*next;
 }				t_token;
-	
+
+typedef struct s_expand
+{
+	char	*input;
+	char	*output;
+	char	*env_name;		
+	int		i;
+}				t_expand;
+
 typedef struct s_command {
 	t_list	*args; //free OK
 	t_list	*redirection; //free OK
@@ -122,6 +130,14 @@ void		close_tab_pipe(t_cmd_line *cmd);
 /* error_mgt */
 int			msg_error(char *err_msg, int err_nb);
 int			msg_inf(char *err_msg, int err_nb);
+
+/* expand.c */
+void		expand(t_expand *s);
+void		mod_no_case(t_expand *s);
+void		get_env_var_name(t_expand *s);
+void		mod_dollar(t_expand *s);
+void		mode_squote(t_expand *s);
+void		mode_dquote(t_expand *s);
 
 /* free_utils.c */
 void		free_null(char *s);

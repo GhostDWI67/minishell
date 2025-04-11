@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/04 15:55:58 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/11 12:02:05 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	redir_heredoc(t_cmd_line *cmd, char *s, int i)
 
 	free_null(cmd->tab_cmd[i].hd_input);
 	free_null(cmd->tab_cmd[i].infile);
+	cmd->tab_cmd[i].hd_input = NULL;// test ??
+	cmd->tab_cmd[i].infile = NULL;//test ??
 	if (cmd->tab_cmd[i].fd_infile != 0)
 		close(cmd->tab_cmd[i].fd_infile);
 	eof = ft_strndup(s, 2, ft_strlen(s));
