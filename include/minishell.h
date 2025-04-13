@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/11 17:08:25 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:40:26 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@
 # define ERN_STRNDUP	14
 # define ERM_FILE		"file failed to open : "	
 # define ERN_FILE		15
-# define ERM_STD		"trouble in STD management"	
+# define ERM_STD		"trouble in STD management  TOTO BORDEL"	
 # define ERN_STD		16
 # define ERM_QUOTE		"opened single and/or double quote"	
 # define ERN_QUOTE		17
@@ -73,6 +73,7 @@ typedef struct s_expand
 	char	*output;
 	char	*env_name;		
 	int		i;
+	int		start;
 }				t_expand;
 
 typedef struct s_command {
@@ -132,11 +133,16 @@ int			msg_error(char *err_msg, int err_nb);
 int			msg_inf(char *err_msg, int err_nb);
 
 /* expand.c */
+char		*s_expand(char *str);
 void		expand(t_expand *s);
+
+/* expand_utils1.c */
 void		mod_no_case(t_expand *s);
 void		get_env_var_name(t_expand *s);
 void		mod_dollar(t_expand *s);
 void		mode_squote(t_expand *s);
+
+/* expand_utils2.c */
 void		mode_dquote(t_expand *s);
 
 /* free_utils.c */

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 11:59:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/11 12:01:24 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:09:04 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	redir_infile(t_cmd_line *cmd, char *s, int i)
 	char	*msg;
 
 	free_null(cmd->tab_cmd[i].infile);
-	cmd->tab_cmd[i].infile = NULL; //test ??
+	cmd->tab_cmd[i].infile = NULL;
 	if (cmd->tab_cmd[i].fd_infile != 0)
 		close(cmd->tab_cmd[i].fd_infile);
 	cmd->tab_cmd[i].infile = ft_strndup(s, 1, ft_strlen(s));

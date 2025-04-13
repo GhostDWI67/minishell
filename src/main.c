@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/11 16:56:22 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:07:12 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 
 /******************************************************************************
 ---- A FAIRE DWI ce jour---- :
+
+POUR MEMOIRE : on fait les redirections quoi qu'il arrive et ensuite on lance
+	les exec (creation des outfile meme si la fonction n'existe pas)
+
 - verifier si leaks avec quote ouverte
-- pb a debugger avec le clean space idem que pour le check quote ??
 - cat <out <out1 ne doit pas s'executer quand out n'existe pas => integrer
 	les valeurs de defaut
 - waitpid gerer par rapport au numero de PID pour afficher le bon message en cas
@@ -33,30 +36,23 @@
 - tous les free a revoir
 
 EN COURS !!!!!!
-- revoir le parsing pour les version tout colles et < < out1
-	- nouveau parsing parse les token : OK
-	- check si on a un | à la fin de la commande => on refait un input 
-		(a l'infini)) : OK
-	- on teste d'abord si le lexing est OK et ensuite on check si besoin de
-		rajouter un input, mais on stock la chaine avec l'input avec le defaut
-		de token
-	A FAIRE :
-		- testeur de token : OK
-		- testeur de | final + intégration nouvelle demande OK
-		- calcul du nombre de commande OK
-		- dans l'ordre, on test token si NOK on enregistre la commande sinon, on
-			continue avec nouveau pipe et on boucle ... OK
-		- integration dans simple cmd pour raccrocher les wagons a l'ancienne
-			version OK
-		- nettoyer les vestiges OK
-		- mettre le tout à la norme OK
-
 - gerer la remise sur les bons fd en fin de cycle pour ne pas avoir de fd ouvert
 	dans les childs + gerer aussi celui du HEREDOC qui traine dans les childs OK
 	mais un peu merdique avec plein de close, voir on peut faire mieux
-
 - EXPAND
+	- gerer quand EXPAND ressort NULL
+- gerer les free
 - SIGNAUX
+- gerer les valeurs d'exit
+- cqt out1 | grep Out		Fais planter les dup => il faut ne pas gerer les 
+	dup si une des fonctions deconne ou gerer avec le resultat des exits +
+	on doit traiter quand meme les redirections
+- leak qund ligne vide (juste ENTER)
+	=> voir comment on gerer la ligne vide, on ne devrait pas lancer la suite ??
+
+tester un executable qvec un chemin relatif => tester de base avec le chemin
+	avant le PATH
+
 
 et ca sera deja tres bien :)))!
 ******************************************************************************/
@@ -117,7 +113,7 @@ cat <out1|grep Out|wc -l
 
 CA COINCE : !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 cat <out1 <<EOF >t1    Fais crash => OK mais passer par adresse
-cqt out1 | grep Out		Fais palnter les dup => il faut ne pas gerer les 
+cqt out1 | grep Out		Fais planter les dup => il faut ne pas gerer les 
 	dup si une des fonctions deconne ou gerer avec le resultat des exits
 
 tester un executable qvec un chemin relatif => tester de base avec le chemin
@@ -140,17 +136,25 @@ tester un executable qvec un chemin relatif => tester de base avec le chemin
 10) commande simple OK
 11) pipe OK
 12) > OK >> OK < OK
+13) HEREDOC OK
+14) EXPAND a priori OK
+15) restera les signaux a traiter;
 ******************************************************************************/
-/*
 static void	main_init(t_cmd_line	*cmd)
 {
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->fd_saved_stdout == -1)
+	{
+		ft_putstr_fd("toto DUP ERR MGT 1\n", 2);
 		msg_error(ERM_STD, ERN_STD);
+	}
 	cmd->fd_saved_stdin = dup(STDIN_FILENO);
 	if (cmd->fd_saved_stdin == -1)
+	{
+		ft_putstr_fd("toto DUP ERR MGT 2\n", 2);
 		msg_error(ERM_STD, ERN_STD);
-	cmd->err_nb = 0;
+	}
+	cmd->err_nb = 0;// A voir où on l'init
 }
 
 static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
@@ -170,7 +174,6 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 			cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args);
 			i++;
 		}
-		//display_simple_cmd(cmd);
 		cmd->tab_path = ft_split(getenv("PATH"), ':');
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
@@ -183,6 +186,7 @@ static void	main_free_mgt(t_cmd_line *cmd)
 {
 	int	i;
 
+	ft_putstr_fd("toto ON PASSE PAR FREE\n", 2);
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
@@ -193,10 +197,17 @@ static void	main_free_mgt(t_cmd_line *cmd)
 		i++;
 	}
 	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
+	{
+		ft_putstr_fd("toto DUP ERR MGT 3\n", 2);
 		msg_error(ERM_STD, ERN_STD);
+	}
 	close(cmd->fd_saved_stdout);
 	if (dup2(cmd->fd_saved_stdin, STDIN_FILENO) == -1)
+	{
+		ft_putstr_fd("toto DUP ERR MGT 4\n", 2);
 		msg_error(ERM_STD, ERN_STD);
+	}
+		
 	close(cmd->fd_saved_stdin);
 	if (cmd->input != NULL)
 	{
@@ -222,29 +233,36 @@ int	main(void)
 			main_init(cmd);
 			main_exec_mgt(cmd, environ);
 			main_free_mgt(cmd);
+			printf("toto ON SORT PROPRE !!!\n");
 		}
 	}
 	rl_clear_history();
 	return (0);
 }
-*/
 
+
+/* main de test pour expand */
+/*
 int	main(void)
 {
 	t_expand	*s;
-	
-	s = malloc(sizeof(t_expand) * 1);
-	s->input = NULL;
-	s->output = NULL;
-	s->env_name = NULL;
-	s->input = readline("minishell$ ");
-	expand(s);
-	printf("OUTPUT :%s\n", s->output);
-	if (s->input != NULL)
-		free(s->input);
-	if (s->output != NULL)
-		free(s->output);
-	if (s->env_name != NULL)
-		free(s->env_name);
-	free(s);
+
+	while (1)
+	{
+		s = malloc(sizeof(t_expand) * 1);
+		s->input = NULL;
+		s->output = NULL;
+		s->env_name = NULL;
+		s->input = readline("minishell$ ");
+		expand(s);
+		printf("OUTPUT :%s\n", s->output);
+		if (s->input != NULL)
+			free(s->input);
+		if (s->output != NULL)
+			free(s->output);
+		if (s->env_name != NULL)
+			free(s->env_name);
+		free(s);
+	}
 }
+*/

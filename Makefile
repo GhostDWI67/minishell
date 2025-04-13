@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/04/11 14:26:20 by dwianni          ###   ########.fr        #
+#    Updated: 2025/04/13 16:27:58 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,8 @@ NAME = minishell
 
 # Compiler and compiling flags
 CC = cc
-#CFLAGS = -Wall
-CFLAGS = -Wall -Wextra -Werror -g3
-#CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+#CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 # Directories
 SRC_DIR = src
@@ -46,6 +45,8 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/debug/display.c \
 		$(SRC_DIR)/input/input_mgt.c \
 		$(SRC_DIR)/expand/expand.c \
+		$(SRC_DIR)/expand/expand_utils1.c \
+		$(SRC_DIR)/expand/expand_utils2.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

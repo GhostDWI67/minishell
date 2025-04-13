@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_mgt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: admin <admin@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/04/07 23:51:19 by admin            ###   ########.fr       */
+/*   Updated: 2025/04/13 17:25:36 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 /******************************************************************************
 Manage the input and history
+
+For debug
+//display_token(cmd);
 ******************************************************************************/
 static void	input_first_check(t_cmd_line *cmd)
 {
 	cmd->token = parse_token(cmd->input);
-	//display_token(cmd);
 	if (check_token(cmd->token) == 1)
 	{
 		add_history(cmd->input);
@@ -83,6 +85,8 @@ void	main_input_mgt(t_cmd_line *cmd)
 		input_last_pipe(cmd, tmp, input);
 		if (ws_check(cmd->input) != 0 && cmd->input[0] != '\0')
 			add_history(cmd->input);
+		else
+			cmd->err_nb = 1;
 	}
 	else
 	{
