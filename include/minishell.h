@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/13 17:40:26 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/14 19:31:01 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_command {
 	int		hd_pipe[2];
 	char	*hd_input; //free OK
 	int		redir_test;
+	int		exit_code;
 }	t_command;
 
 typedef struct s_cmd_line {

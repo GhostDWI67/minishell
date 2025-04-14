@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/13 18:15:26 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:19:03 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,30 +71,18 @@ int	child(t_cmd_line *cmd, char **environ)
 		if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL)
 			path = get_path(cmd->tab_path,
 				cmd->tab_cmd[cmd->cmd_step].tab_args[0]);
-		if (path == NULL)
+		child_prepare(cmd);
+		if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
+			close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
+		if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 2)
+			close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
+		close(cmd->fd_saved_stdin);
+		close(cmd->fd_saved_stdout);
+		if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL)
 		{
-			ft_putstr_fd("Command '", 2);
-			ft_putstr_fd(cmd->tab_cmd[cmd->cmd_step].tab_args[0], 2);
-			ft_putstr_fd("' not found\n", 2);
-			exit(-1);
-		}
-		else
-		{
-			child_prepare(cmd);
-			if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
-				close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
-			if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 2)
-				close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
-			close(cmd->fd_saved_stdin);
-			close(cmd->fd_saved_stdout);
-			if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL)
-			{
-				if (execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
-					== -1)
-					msg_error(ERM_EXECVE, ERN_EXECVE);
-			}
-			else
-				exit(-1);//utile pour quoi ???
+			if (execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
+				== -1)
+				msg_error(ERM_EXECVE, ERN_EXECVE);
 		}
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/13 18:07:12 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/14 20:08:56 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@
 POUR MEMOIRE : on fait les redirections quoi qu'il arrive et ensuite on lance
 	les exec (creation des outfile meme si la fonction n'existe pas)
 
+	
 - verifier si leaks avec quote ouverte
-- cat <out <out1 ne doit pas s'executer quand out n'existe pas => integrer
-	les valeurs de defaut
+
 - waitpid gerer par rapport au numero de PID pour afficher le bon message en cas
 	de pb
-- cas
+
+	- cas
 	cmd |			=> ouvre une ligne de commande
 	cmd ||		=> idem mais mettre nimp ca marche la cmd avant/NE PAS GERER ?
 	cmd | |			=> unexpected token |
@@ -36,32 +37,44 @@ POUR MEMOIRE : on fait les redirections quoi qu'il arrive et ensuite on lance
 - tous les free a revoir
 
 EN COURS !!!!!!
+- >out20 | >out21 | cat out1 : ca ne marche pas quand il n'y a pas de commande
+
 - gerer la remise sur les bons fd en fin de cycle pour ne pas avoir de fd ouvert
 	dans les childs + gerer aussi celui du HEREDOC qui traine dans les childs OK
-	mais un peu merdique avec plein de close, voir on peut faire mieux
+	mais un peu merdique avec plein de close, voir si on peut faire mieux
+
 - EXPAND
 	- gerer quand EXPAND ressort NULL
-- gerer les free
+	- reste a gerer les trim entre $TEST et "$TEST"
+	- EXPAND sur le HEREDOC, fait des trucs bizarre, a tester avec bash
+
 - SIGNAUX
-- gerer les valeurs d'exit
-- cqt out1 | grep Out		Fais planter les dup => il faut ne pas gerer les 
-	dup si une des fonctions deconne ou gerer avec le resultat des exits +
-	on doit traiter quand meme les redirections
-- leak qund ligne vide (juste ENTER)
+
+- gerer les valeurs d'exit ou du message d'erreur => parametre exit_code
+		integrer pour $? => voir dans Expand
+
+- leak quand ligne vide (juste ENTER)
 	=> voir comment on gerer la ligne vide, on ne devrait pas lancer la suite ??
+	A VERIFIER J AI UN DOUTE AVEC SANITIZE / tester avec VALGRIND
 
-tester un executable qvec un chemin relatif => tester de base avec le chemin
-	avant le PATH
+- tester un executable avec un chemin relatif/absolue => tester de base avec
+	le chemin avant le PATH
 
+- HEREDOC
+	- voir comment on archive l'historique avec le HEREDOC comme dans bash,
+		pour l'instant pas pareil
 
 et ca sera deja tres bien :)))!
 ******************************************************************************/
 
 /******************************************************************************
 ---- A FAIRE ---- :
-- expend ; ls et "ls" doit idem et pas "ls "
-- gerer les $ dans les quotes '$qwe' ne fait rien mais "$qwe" met le contenu de
-	qwe
+Pour integration des built in
+	- fonction is_builtin
+	- est ce qu'on peut les pipe du genre env | grep USER
+	- est ce qu'on lance la fonction dans le parent ou le child ?
+
+
 DWI - differentes redirections
 DWI - free des structures
 MAX - gestion des variables d'environnememt
@@ -81,7 +94,7 @@ MAX - built in :
 - gerer les erreurs possibles quand une fonction decone + Tester
 
 A FAIRE EN DETAIL // point bloquant actuel // a finir :
-- nettoyer des white space avec les redirection <   < out1 est NOK
+
 
 ******************************************************************************/
 
@@ -95,7 +108,7 @@ Main
 Test a faire :
 cat out1 out2 out3 | grep out
     >   t1    test >t1 >   t2 >>t3 >>   t4 <t5 <   t6 <<t7   <<   t8  "<<   t8"
-echo " | " 		| grep ' |	 ' | 	echo " | " | grep ' | ' ||
+echo " | " 		| grep ' |	 ' | 	echo " | " | grep ' | '
 test1|test2
 ping -c 5 google.com | grep rtt
 cat        out1              out2 |        grep               Out
@@ -104,17 +117,11 @@ ls -l |ls -l |ls -l |ls -l |ls -l |cat out1 | grep Out
 cat out1 | grep Out |wc -l | ls -la
 ls | ls -l | grep out
 
-cat <out1 <out2 <<EOF >t1 >t2   Pas OK
-cat <out1 <<EOF <out2 >t1 >t2	Pas OK
-
->out20 | >out21 | cat out1
-
-cat <out1|grep Out|wc -l
-
 CA COINCE : !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-cat <out1 <<EOF >t1    Fais crash => OK mais passer par adresse
-cqt out1 | grep Out		Fais planter les dup => il faut ne pas gerer les 
-	dup si une des fonctions deconne ou gerer avec le resultat des exits
+
+>out20 | >out21 | cat out1 : ca ne marche pas quand il n'y a pas de commande
+	on a un pb de lexing sur le premier > et ensuite voir dans le parsing si
+	on range dans les bonnes categories =>
 
 tester un executable qvec un chemin relatif => tester de base avec le chemin
 	avant le PATH
@@ -145,13 +152,11 @@ static void	main_init(t_cmd_line	*cmd)
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->fd_saved_stdout == -1)
 	{
-		ft_putstr_fd("toto DUP ERR MGT 1\n", 2);
 		msg_error(ERM_STD, ERN_STD);
 	}
 	cmd->fd_saved_stdin = dup(STDIN_FILENO);
 	if (cmd->fd_saved_stdin == -1)
 	{
-		ft_putstr_fd("toto DUP ERR MGT 2\n", 2);
 		msg_error(ERM_STD, ERN_STD);
 	}
 	cmd->err_nb = 0;// A voir où on l'init
@@ -168,6 +173,7 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		if (cmd->tab_cmd == NULL)
 			return (1); //voir ce qu'il faudrait faire si malloc echoue??
 		parsing(cmd);
+		//display_simple_cmd(cmd);//affiche les cmd simple**************************
 		i = 0;
 		while (i < cmd->nb_simple_cmd)
 		{
@@ -186,7 +192,6 @@ static void	main_free_mgt(t_cmd_line *cmd)
 {
 	int	i;
 
-	ft_putstr_fd("toto ON PASSE PAR FREE\n", 2);
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
@@ -198,13 +203,11 @@ static void	main_free_mgt(t_cmd_line *cmd)
 	}
 	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
 	{
-		ft_putstr_fd("toto DUP ERR MGT 3\n", 2);
 		msg_error(ERM_STD, ERN_STD);
 	}
 	close(cmd->fd_saved_stdout);
 	if (dup2(cmd->fd_saved_stdin, STDIN_FILENO) == -1)
 	{
-		ft_putstr_fd("toto DUP ERR MGT 4\n", 2);
 		msg_error(ERM_STD, ERN_STD);
 	}
 		
@@ -228,12 +231,13 @@ int	main(void)
 			return (1);
 		cmd->err_nb = 0; // A voir où on l'init
 		main_input_mgt(cmd);
+		//display_token(cmd);//Affiche les token**********************************************
 		if (cmd->err_nb == 0)
 		{
 			main_init(cmd);
 			main_exec_mgt(cmd, environ);
 			main_free_mgt(cmd);
-			printf("toto ON SORT PROPRE !!!\n");
+			//printf("toto ON SORT PROPRE !!!\n");
 		}
 	}
 	rl_clear_history();

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/13 17:10:34 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:31:16 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ echo $123						23						OK
 echo $USER$/"$USER"'$USER' "$USER$'$USER''$USER'" $"salut" $+salut $123
 			dwianni$/dwianni$USER dwianni$'dwianni''dwianni' salut $+salut 23
 echo $$							donne le PID en cours
+
+export TEST="      XXX        "			=> reste a traiter
+ECHO $TEST		- XXX -
+ECHO "$TEST"	-      XXX    -
+
 ******************************************************************************/
 /******************************************************************************
 Free a expand structure
