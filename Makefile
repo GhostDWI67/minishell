@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/04/25 13:54:06 by mpalisse         ###   ########.fr        #
+#    Updated: 2025/04/25 14:04:30 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,13 +30,13 @@ INC_DIR = include
 SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/utils/check.c \
 		$(SRC_DIR)/utils/utils.c \
-		$(SRC_DIR)/utils/list_utils.c \
 		$(SRC_DIR)/parsing/parsing_utils.c \
 		$(SRC_DIR)/exec/exec.c \
 		$(SRC_DIR)/exec/exec_child.c \
 		$(SRC_DIR)/exec/exec_utils.c \
 		$(SRC_DIR)/error/error_mgt.c \
 		$(SRC_DIR)/utils/free_utils.c \
+		$(SRC_DIR)/utils/list_utils.c \
 		$(SRC_DIR)/redirection/redirection.c \
 		$(SRC_DIR)/redirection/heredoc.c \
 		$(SRC_DIR)/lexer/lexer.c \
@@ -48,6 +48,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/expand/expand.c \
 		$(SRC_DIR)/expand/expand_utils1.c \
 		$(SRC_DIR)/expand/expand_utils2.c \
+		$(SRC_DIR)/built_in/cd.c \
 		$(SRC_DIR)/built_in/echo.c \
 		$(SRC_DIR)/built_in/env.c \
 		$(SRC_DIR)/built_in/export.c \

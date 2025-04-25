@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/25 12:50:50 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:02:41 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
 static void	oldpwd(t_list **env)
 {
 	t_list	*temp;
@@ -56,3 +57,4 @@ int	cd(char **args, t_list **env)
 	}
 	return (1);
 }
+*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/25 13:54:56 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:01:53 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
-# include <linux/limits.h>
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
@@ -183,6 +182,11 @@ t_token		*token_last(t_token *lst);
 void		token_add_back(t_token **lst, t_token *new);
 void		token_clear(t_token **lst);
 
+/* list_utils.c */
+int			ft_lstaddback_content(t_list **env, char *content);
+char		**ft_lst_to_arr(t_list *env);
+void		sort_tab(char **arr, int len);
+
 /* parsing.c */
 void		parsing(t_cmd_line *cmd);
 char		**args_to_tab(t_list *args);
@@ -200,10 +204,5 @@ int			redir_appfile(t_cmd_line *cmd, char *s, int i);
 char		*ft_strndup(char const *src, int first, int last);
 int			ft_is_white_space(char c);
 void		ft_close(int fd);
-
-/* list_utils.c */
-int			ft_lstaddback_content(t_list **env, char *content);
-char		**ft_lst_to_arr(t_list *env);
-void		sort_tab(char **arr, int len);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/14 20:08:56 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/25 13:48:20 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ tester un executable qvec un chemin relatif => tester de base avec le chemin
 11) pipe OK
 12) > OK >> OK < OK
 13) HEREDOC OK
-14) EXPAND a priori OK
+14) EXPAND a priori OK sauf trim des variables d'ENV
 15) restera les signaux a traiter;
 ******************************************************************************/
 static void	main_init(t_cmd_line	*cmd)
@@ -219,16 +219,18 @@ static void	main_free_mgt(t_cmd_line *cmd)
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **environ)
 {
-	extern char	**environ;
 	t_cmd_line	*cmd;
 
+	(void)argc;
+	(void)argv;
+	cmd = malloc(sizeof(t_cmd_line) * 1);
+	if (cmd == NULL)
+		return (1);
 	while (1)
 	{
-		cmd = malloc(sizeof(t_cmd_line) * 1);
-		if (cmd == NULL)
-			return (1);
+		
 		cmd->err_nb = 0; // A voir où on l'init
 		main_input_mgt(cmd);
 		//display_token(cmd);//Affiche les token**********************************************
