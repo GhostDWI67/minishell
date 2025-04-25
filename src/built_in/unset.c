@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/25 12:26:56 by mpalisse         ###   ########.fr       */
+/*   Created: 2025/04/25 12:28:24 by mpalisse          #+#    #+#             */
+/*   Updated: 2025/04/25 13:07:17 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ static int	declared(char *arg, t_list *env)
 	if (!env)
 		return (-1);
 	i = 0;
-	j = 0;
+	j = 1;
 	tmp = env;
-	while (arg[i] && arg[i] != '=')
+	while (arg[i])
 		i++;
 	while (tmp != NULL)
 	{
@@ -50,9 +50,9 @@ static bool	check_name(char *arg)
 	int	i;
 
 	i = 0;
-	if (!arg[i] || (arg[i] != '_' && !ft_isalpha(arg[i])))
+	if (arg[i] != '_' && !ft_isalpha(arg[i]))
 		return (false);
-	while (arg[i] && arg[i] != '=')
+	while (arg[i])
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 			return (false);
@@ -62,89 +62,63 @@ static bool	check_name(char *arg)
 }
 
 /******************************************************************************
-transforme l'env en array et range l'array puis l'affiche
-Return true si ok sinon false;
+check si c'est la head de l'env et l'unset
+Return true si head sinon false;
 ******************************************************************************/
-static bool	no_args(t_list *env)
+static bool	unset_head(t_list **env, t_list *tmp, int pos)
 {
-	int		i;
-	int		j;
-	char	**tab;
-
-	i = 0;
-	tab = ft_lst_to_arr(env);
-	if (!tab)
+	if (pos != 1)
 		return (false);
-	sort_tab(tab, ft_lstsize(env));
-	while (tab[i])
-	{
-		printf("declare -x ");
-		j = 0;
-		while (tab[i][j] && tab[i][j] != '=')
-			printf("%c", tab[i][j++]);
-		if (tab[i][j] && tab[i][j] == '=')
-			printf("=\"%s\"\n", &tab[i][j + 1]);
-		else
-			printf("\n");
-		i++;
-	}
-	free(tab);
+	(*env) = tmp->next;
+	ft_lstdelone(tmp, free);
 	return (true);
 }
 
 /******************************************************************************
-ajoute ou update la valeur de la variable passé en arg
+check si le nom de la variable est bon, si elle existe et l'unset
 Return true si ok sinon false;
 ******************************************************************************/
-bool	export_core(char *arg, t_list **env)
+static bool	unset_core(char *arg, t_list **env)
 {
-	int		i;
-	int		index;
-	char	*var;
+	t_list	*tmp;
+	t_list	*tmp2;
+	int		pos;
 
-	index = declared(arg, (*env));
-	var = ft_strdup(arg);
-	if (!var)
+	if (!arg || !(*arg))
+		return (true);
+	if (!check_name(arg))
+	{
+		write(2, "unset: invalid identifier\n", 26);
 		return (false);
-	if (index == -1)
-	{
-		if (!ft_lstaddback_content(env, var))
-			return (false);
 	}
-	else if (index >= 0)
-	{
-		i = 0;
-		while (i++ < index)
-			(*env) = (*env)->next;
-		free((*env)->content);
-		(*env)->content = var;
-	}
+	pos = declared(arg, (*env));
+	if (pos == -1)
+		return (true);
+	tmp = (*env);
+	if (unset_head(env, tmp, pos) == true)
+		return (true);
+	pos--;
+	while (pos-- > 1)
+		tmp = tmp->next;
+	tmp2 = tmp->next;
+	tmp->next = tmp->next->next;
+	ft_lstdelone(tmp2, free);
 	return (true);
 }
 
 /******************************************************************************
-export ajoute la ou les variables passé en arg dans l'env si elles ont un nom
-valable, si aucun argument alors export affiche l'env trié par ordre
-alphabetique
-Return 0 si ok sinon 1;
+lance unset pour toute les variables dans args
+Return 0;
 ******************************************************************************/
-int	export(char **args, t_list **env)
+int	unset(char **args, t_list **env)
 {
 	int	i;
 
 	i = 1;
-	if (!args || !args[i])
-	{
-		if ((*env) && !no_args((*env)))
-			return (msg_error("export no args", 1));
-		return (0);
-	}
 	while (args[i])
 	{
-		if (!check_name(args[i]))
-			perror("export: invalid identifier\n");
-		else if (!export_core(args[i], env))
-			return (msg_error("export error", 1));
+		if (!unset_core(args[i], env))
+			write(2, "unset failed\n", 13);
 		i++;
 	}
 	return (0);
