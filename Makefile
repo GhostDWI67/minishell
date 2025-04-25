@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
+#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/04/13 16:27:58 by dwianni          ###   ########.fr        #
+#    Updated: 2025/04/25 13:54:06 by mpalisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ INC_DIR = include
 SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/utils/check.c \
 		$(SRC_DIR)/utils/utils.c \
+		$(SRC_DIR)/utils/list_utils.c \
 		$(SRC_DIR)/parsing/parsing_utils.c \
 		$(SRC_DIR)/exec/exec.c \
 		$(SRC_DIR)/exec/exec_child.c \
@@ -47,6 +48,11 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/expand/expand.c \
 		$(SRC_DIR)/expand/expand_utils1.c \
 		$(SRC_DIR)/expand/expand_utils2.c \
+		$(SRC_DIR)/built_in/echo.c \
+		$(SRC_DIR)/built_in/env.c \
+		$(SRC_DIR)/built_in/export.c \
+		$(SRC_DIR)/built_in/pwd.c \
+		$(SRC_DIR)/built_in/unset.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
