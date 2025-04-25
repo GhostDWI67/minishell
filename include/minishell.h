@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/25 13:47:05 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/04/25 13:54:56 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,5 +200,10 @@ int			redir_appfile(t_cmd_line *cmd, char *s, int i);
 char		*ft_strndup(char const *src, int first, int last);
 int			ft_is_white_space(char c);
 void		ft_close(int fd);
+
+/* list_utils.c */
+int			ft_lstaddback_content(t_list **env, char *content);
+char		**ft_lst_to_arr(t_list *env);
+void		sort_tab(char **arr, int len);
 
 #endif
