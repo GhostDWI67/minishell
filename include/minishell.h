@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/14 19:31:01 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/25 13:47:05 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
+# include <linux/limits.h>
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
@@ -108,6 +109,14 @@ typedef struct s_cmd_line {
 }	t_cmd_line;
 
 /* main.c */
+
+/* built_in */
+int			echo(char **args);
+int			env(t_list *env);
+int			export(char **args, t_list **env);
+bool		export_core(char *arg, t_list **env);
+int			pwd(void);
+int			unset(char **args, t_list **env);
 
 /* check.c */
 int			check_quote (char *s);
