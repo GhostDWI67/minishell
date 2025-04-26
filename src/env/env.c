@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/25 14:13:34 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/04/26 14:10:15 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,32 @@ int	init_env(t_cmd_line *cmd, char **env)
 	}
 	cmd->env = list;
 	return (0);
+}
+
+/******************************************************************************
+cherche dans l'env le nom de la variable donné et elle doit etre exact pour
+etre trouvé:
+ft_getenv("HOME", env) renvoi /home/USER
+ft_getenv("HOM", env) renvoi NULL
+Return renvoie la valeur de la variable sinon NULL;
+******************************************************************************/
+char	*ft_getenv(const char *var, t_list *env)
+{
+	t_list	*tmp;
+	int		i;
+
+	if (!env || !var)
+		return (NULL);
+	i = 0;
+	tmp = env;
+	while (var[i])
+		i++;
+	while (tmp != NULL)
+	{
+		if (!ft_strncmp((char *)tmp->content, var, i) && \
+		((char *)tmp->content)[i] == '=')
+			return ((char *)tmp->content + (i + 1));
+		tmp = tmp->next;
+	}
+	return (NULL);
 }
