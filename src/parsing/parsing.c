@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/04/13 17:08:21 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/26 16:29:55 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	parsing(t_cmd_line *cmd)
 
 	parsing_init(cmd);
 	i = 0;
+	//display_token(cmd);//display
 	while (cmd->token != NULL)
 	{
 		if ((cmd->token->content)[0] == '>' ||
@@ -65,24 +66,38 @@ void	parsing(t_cmd_line *cmd)
 Transform a list into a tab of string
 Return : pointer to a tab
 ******************************************************************************/
-char	**args_to_tab(t_list *args)
+char	**args_to_tab(t_list *args, t_list *env)
 {
 	char	**res;
 	t_list	*tmp;
+	int		lst_size;
 	int		i;
 
 	tmp = args;
-	res = (char **)malloc(sizeof(char *) * (ft_lstsize(tmp)+ 1));
+	lst_size = ft_lstsize(tmp);
+	if (lst_size != 0)
+		res = (char **)malloc(sizeof(char *) * (lst_size + 1));
+	else
+		res = (char **)malloc(sizeof(char *) * 3);
 	if (res == NULL)
 		return (NULL);
 	tmp = args;
-	i = 0;
-	while (tmp != NULL)
+	if (lst_size != 0)
 	{
-		res[i] = s_expand((char *)tmp-> content);
-		i++;
-		tmp = tmp->next;
+		i = 0;
+		while (tmp != NULL)
+		{
+			res[i] = s_expand((char *)tmp-> content, env);
+			i++;
+			tmp = tmp->next;
+			res[i] = NULL;
+		}
 	}
-	res[i] = NULL;
+	else
+	{
+		res[0] = ft_strdup("echo");
+		res[1] = ft_strdup("-n");
+		res[2] = NULL;
+	}
 	return (res);
 }

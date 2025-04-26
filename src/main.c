@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/25 13:48:20 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/26 17:01:42 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ POUR MEMOIRE : on fait les redirections quoi qu'il arrive et ensuite on lance
 - tous les free a revoir
 
 EN COURS !!!!!!
-- >out20 | >out21 | cat out1 : ca ne marche pas quand il n'y a pas de commande
-
 - gerer la remise sur les bons fd en fin de cycle pour ne pas avoir de fd ouvert
 	dans les childs + gerer aussi celui du HEREDOC qui traine dans les childs OK
 	mais un peu merdique avec plein de close, voir si on peut faire mieux
@@ -57,12 +55,15 @@ EN COURS !!!!!!
 	=> voir comment on gerer la ligne vide, on ne devrait pas lancer la suite ??
 	A VERIFIER J AI UN DOUTE AVEC SANITIZE / tester avec VALGRIND
 
-- tester un executable avec un chemin relatif/absolue => tester de base avec
-	le chemin avant le PATH
-
 - HEREDOC
 	- voir comment on archive l'historique avec le HEREDOC comme dans bash,
 		pour l'instant pas pareil
+
+- INTEGRATION des Built-In
+	- si cde seul, a lancer au niveau parent sinon en mode child
+	- fonction qui gere si c'est un built-in
+	- fonction qui lance dans parent
+	- fonction qui lance dans child
 
 et ca sera deja tres bien :)))!
 ******************************************************************************/
@@ -121,7 +122,11 @@ CA COINCE : !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 >out20 | >out21 | cat out1 : ca ne marche pas quand il n'y a pas de commande
 	on a un pb de lexing sur le premier > et ensuite voir dans le parsing si
-	on range dans les bonnes categories =>
+	on range dans les bonnes categories => NOK sur le premier argument ne sort pas
+	comme une redirection + tester si la liste est vide (afficher le contenue des 
+	args)
+
+| grep ls : 1er token = | pas bien gere =>pb dans le chech des token
 
 tester un executable qvec un chemin relatif => tester de base avec le chemin
 	avant le PATH
@@ -130,10 +135,9 @@ tester un executable qvec un chemin relatif => tester de base avec le chemin
 1) on lit la ligne de commande => A FAIRE : free la ligne, 
 	utiliser GNL à la place ?
 2) check les quote : OK
-3) clean les espaces devant les redirections : OK?, tester cat <   <  out1
-	==> A RETRAVAILLER car genere cat <<out1
-4) parse la ligne de commande en commande simple : OK
-5) chaque commande simple est parsée en token : OK
+3) clean les espaces devant les redirections
+4) lexing pour creer les token
+5) analyse les token pour creer les args et les redirections
 6) on transforme les listes de token vers un tableau de commande et de
 	redirection + pipe dans une struct command : OK
 7) Pipe mutliple : OK
@@ -152,12 +156,14 @@ static void	main_init(t_cmd_line	*cmd)
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->fd_saved_stdout == -1)
 	{
-		msg_error(ERM_STD, ERN_STD);
+		//msg_error(ERM_STD, ERN_STD);
+		msg_error("STD 1 MSG", ERN_STD);//fesfesf
 	}
 	cmd->fd_saved_stdin = dup(STDIN_FILENO);
 	if (cmd->fd_saved_stdin == -1)
 	{
-		msg_error(ERM_STD, ERN_STD);
+		//msg_error(ERM_STD, ERN_STD);
+		msg_error("STD 2 MSG", ERN_STD);//fesfesf
 	}
 	cmd->err_nb = 0;// A voir où on l'init
 }
@@ -165,7 +171,7 @@ static void	main_init(t_cmd_line	*cmd)
 static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 {
 	int		i;
-
+	
 	if (cmd->input != NULL)
 	{
 		cmd->nb_simple_cmd = check_token_nb_cmd(cmd->token);
@@ -177,13 +183,16 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		i = 0;
 		while (i < cmd->nb_simple_cmd)
 		{
-			cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args);
+			cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args, cmd->env);
+			//printf("ARGS[0] %d : %s###\n", i, cmd->tab_cmd[i].tab_args[0]);//affiche les arg dans tab cmd
 			i++;
 		}
-		cmd->tab_path = ft_split(getenv("PATH"), ':');
+		cmd->tab_path = ft_split(ft_getenv("PATH",cmd->env), ':');
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
+		//environ = ft_lst_to_arr(cmd->env);
 		f_pipe(cmd, environ);
+		//free_tab_char(environ);
 	}
 	return (0);
 }
@@ -201,17 +210,28 @@ static void	main_free_mgt(t_cmd_line *cmd)
 		ft_close(cmd->tab_cmd[i].hd_pipe[1]);
 		i++;
 	}
+	/*
+	printf("STDOUT SAVED %d STDIN SAVED %d\n", cmd->fd_saved_stdin, cmd->fd_saved_stdout);//test
+	ft_putstr_fd("STDIN SAVED ", 2);
+	ft_putnbr_fd(STDIN_FILENO, 2);
+	ft_putstr_fd("\nSTDOUT SAVED ", 2);
+	ft_putnbr_fd(STDOUT_FILENO, 2);
+	ft_putstr_fd("\n", 2);
+	*/
 	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
 	{
-		msg_error(ERM_STD, ERN_STD);
+		//msg_error(ERM_STD, ERN_STD);
+		msg_error("STD 3 MSG", ERN_STD);//fesfesf
 	}
-	close(cmd->fd_saved_stdout);
+	else
+		close(cmd->fd_saved_stdout);
 	if (dup2(cmd->fd_saved_stdin, STDIN_FILENO) == -1)
 	{
-		msg_error(ERM_STD, ERN_STD);
+		//msg_error(ERM_STD, ERN_STD);
+		msg_error("STD 4 MSG", ERN_STD);//fesfesf
 	}
-		
-	close(cmd->fd_saved_stdin);
+	else
+		close(cmd->fd_saved_stdin);
 	if (cmd->input != NULL)
 	{
 		free_cmd_line(cmd);
@@ -228,9 +248,10 @@ int	main(int argc, char **argv, char **environ)
 	cmd = malloc(sizeof(t_cmd_line) * 1);
 	if (cmd == NULL)
 		return (1);
+	init_env(cmd, environ);
 	while (1)
 	{
-		
+		environ = ft_lst_to_arr(cmd->env);
 		cmd->err_nb = 0; // A voir où on l'init
 		main_input_mgt(cmd);
 		//display_token(cmd);//Affiche les token**********************************************
@@ -239,7 +260,7 @@ int	main(int argc, char **argv, char **environ)
 			main_init(cmd);
 			main_exec_mgt(cmd, environ);
 			main_free_mgt(cmd);
-			//printf("toto ON SORT PROPRE !!!\n");
+			//printf("ON SORT PROPRE !!!------------------------------------------\n");
 		}
 	}
 	rl_clear_history();

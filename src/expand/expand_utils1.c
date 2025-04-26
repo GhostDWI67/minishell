@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/13 16:08:57 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/26 16:23:42 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	get_env_var_name(t_expand *s)
 /******************************************************************************
 Improve the output parameter with the contains of the env parameter
 ******************************************************************************/
-void	mod_dollar(t_expand *s)
+void	mod_dollar(t_expand *s, t_list *env)
 {
 	char	*tmp;
 
@@ -80,9 +80,9 @@ void	mod_dollar(t_expand *s)
 	if (s->env_name == NULL)
 		return ;
 	tmp = s->output;
-	if (getenv(s->env_name) != NULL)
+	if (ft_getenv(s->env_name, env) != NULL)
 	{
-		s->output = ft_strjoin(tmp, getenv(s->env_name));
+		s->output = ft_strjoin(tmp, ft_getenv(s->env_name, env));
 		free(tmp);
 		if (s->output == NULL)
 			return ;

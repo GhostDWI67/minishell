@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/26 13:22:05 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:42:21 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
-# include <linux/limits.h>
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../lib/libft/include/libft.h"
-# include "../lib/printf/include/ft_printf.h"
+# include <linux/limits.h>
+# include "libft.h"
+# include "ft_printf.h"
 
 /* Standard Value Definition for token */
 # define INPUT			1	//"<"
@@ -36,6 +36,16 @@
 # define PIPE			5	//"|"
 # define CMD			6	
 # define ARG			7	
+
+/* Value definition for BUILT IN*/
+# define BUILTIN_NOT	0
+# define BUILTIN_ECHO	1
+# define BUILTIN_CD		2
+# define BUILTIN_PWD	3
+# define BUILTIN_EXPORT	4
+# define BUILTIN_UNSET	5
+# define BUILTIN_ENV	6
+# define BUILTIN_EXIT	7
 
 /* Standard Value Definition for error message*/
 # define ERM_DUP2		"dup2 failed"	
@@ -50,7 +60,7 @@
 # define ERN_STRNDUP	14
 # define ERM_FILE		"file failed to open : "	
 # define ERN_FILE		15
-# define ERM_STD		"trouble in STD management  TOTO BORDEL"	
+# define ERM_STD		"trouble in STD management"	
 # define ERN_STD		16
 # define ERM_QUOTE		"opened single and/or double quote"	
 # define ERN_QUOTE		17
@@ -95,12 +105,9 @@ typedef struct s_cmd_line {
 	char		*input;
 	t_token		*token;
 	t_list		*env;
-	//t_list		*simple_cmd;
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
 	char		**tab_path;
-	int			fd_in;// a virer ??
-	int			fd_out;// a virer ??
 	int			*tab_fd;
 	int			*tab_pid;
 	int			cmd_step;
@@ -120,10 +127,6 @@ int			pwd(void);
 int			unset(char **args, t_list **env);
 int			cd(char **args, t_list **env);
 
-/* env.c */
-int			init_env(t_cmd_line *cmd, char **env);
-char		*ft_getenv(const char *var, t_list *env);
-
 /* check.c */
 int			check_quote (char *s);
 int			ws_check(char *s);
@@ -132,8 +135,16 @@ int			ws_check(char *s);
 void		display_simple_cmd(t_cmd_line *cmd);
 void		display_token(t_cmd_line *cmd);
 
+/* env.c */
+int			init_env(t_cmd_line *cmd, char **env);
+char		*ft_getenv(const char *var, t_list *env);
+
 /* exec.c */
 int			f_pipe(t_cmd_line *cmd, char **environ);
+
+/* exec_built_in.c*/
+int			is_built_in(char *s);
+int			exec_builtin(int bi, t_cmd_line *cmd);
 
 /* exec_child.c */
 int			child(t_cmd_line *cmd, char **environ);
@@ -149,17 +160,16 @@ int			msg_error(char *err_msg, int err_nb);
 int			msg_inf(char *err_msg, int err_nb);
 
 /* expand.c */
-char		*s_expand(char *str);
-void		expand(t_expand *s);
+char		*s_expand(char *str, t_list *env);
 
 /* expand_utils1.c */
 void		mod_no_case(t_expand *s);
 void		get_env_var_name(t_expand *s);
-void		mod_dollar(t_expand *s);
+void		mod_dollar(t_expand *s, t_list *env);
 void		mode_squote(t_expand *s);
 
 /* expand_utils2.c */
-void		mode_dquote(t_expand *s);
+void		mode_dquote(t_expand *s, t_list *env);
 
 /* free_utils.c */
 void		free_null(char *s);
@@ -196,7 +206,7 @@ void		sort_tab(char **arr, int len);
 
 /* parsing.c */
 void		parsing(t_cmd_line *cmd);
-char		**args_to_tab(t_list *args);
+char		**args_to_tab(t_list *args, t_list *env);
 
 /* parsing_utils.c */
 int			skip_quote(int i, char *s);

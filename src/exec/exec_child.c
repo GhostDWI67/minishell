@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/14 17:19:03 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/26 17:11:19 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,16 @@ int	child(t_cmd_line *cmd, char **environ)
 			close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
 		close(cmd->fd_saved_stdin);
 		close(cmd->fd_saved_stdout);
-		if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL)
+		if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL && is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) == 0)
 		{
 			if (execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
 				== -1)
 				msg_error(ERM_EXECVE, ERN_EXECVE);
+		}
+		else
+		{
+			printf("on est dans BI\n");//effew
+			exec_builtin(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]), cmd);
 		}
 	}
 	return (0);

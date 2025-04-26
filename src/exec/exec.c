@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/04/14 17:18:12 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/26 17:19:58 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ Function init the pipes
 static void	f_pipe_init(t_cmd_line *cmd)
 {
 	cmd->cmd_step = 0;
-	cmd->fd_in = 0;
-	cmd->fd_out = 1;
 	cmd->tab_pid = malloc(sizeof(int) * cmd->nb_simple_cmd);
 }
 
@@ -70,10 +68,12 @@ static int	is_exec_able(t_cmd_line *cmd)
 	res = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
-		if (cmd->tab_cmd[i].tab_args[0] != NULL)
+		if (cmd->tab_cmd[i].tab_args[0] != NULL &&
+			is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
 			path = get_path(cmd->tab_path,
 				cmd->tab_cmd[i].tab_args[0]);
-		if (path == NULL)
+		if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL &&
+			is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
 		{
 			res++;
 			ft_putstr_fd("Command '", 2);
@@ -96,24 +96,34 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 	cmd->cmd_step = 0;
 	if (cmd->tab_pid != NULL)
 	{
-		if (is_exec_able(cmd) == 0)
+		/*
+		if (cmd->nb_simple_cmd == 1 && is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) != 0)
 		{
-			while (cmd->cmd_step < cmd->nb_simple_cmd)
+			printf("on est dans BI SIMPLE\n");//effew
+			exec_builtin(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]), cmd);
+		}
+		else
+		*/
+		{
+			if (is_exec_able(cmd) == 0)
 			{
-				if (cmd->tab_cmd[cmd->cmd_step].redir_test == 1)
+				while (cmd->cmd_step < cmd->nb_simple_cmd)
 				{
-					cmd->tab_pid[cmd->cmd_step] = fork();
-					if (cmd->tab_pid[cmd->cmd_step] == -1)
-						msg_error(ERM_FORK, ERN_FORK);
-					else if (cmd->tab_pid[cmd->cmd_step] == 0)
+					if (cmd->tab_cmd[cmd->cmd_step].redir_test == 1)
 					{
-						child(cmd, environ);
+						cmd->tab_pid[cmd->cmd_step] = fork();
+						if (cmd->tab_pid[cmd->cmd_step] == -1)
+							msg_error(ERM_FORK, ERN_FORK);
+						else if (cmd->tab_pid[cmd->cmd_step] == 0)
+						{
+							child(cmd, environ);
+						}
+						else
+						{
+						}
 					}
-					else
-					{
-					}
+					cmd->cmd_step++;
 				}
-				cmd->cmd_step++;
 			}
 		}
 	}
