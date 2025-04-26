@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/25 14:01:53 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/26 13:22:05 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,13 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
+# include <linux/limits.h>
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft.h"
-# include "ft_printf.h"
+# include "../lib/libft/include/libft.h"
+# include "../lib/printf/include/ft_printf.h"
 
 /* Standard Value Definition for token */
 # define INPUT			1	//"<"
@@ -93,6 +94,7 @@ typedef struct s_command {
 typedef struct s_cmd_line {
 	char		*input;
 	t_token		*token;
+	t_list		*env;
 	//t_list		*simple_cmd;
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
@@ -116,6 +118,11 @@ int			export(char **args, t_list **env);
 bool		export_core(char *arg, t_list **env);
 int			pwd(void);
 int			unset(char **args, t_list **env);
+int			cd(char **args, t_list **env);
+
+/* env.c */
+int			init_env(t_cmd_line *cmd, char **env);
+char		*ft_getenv(const char *var, t_list *env);
 
 /* check.c */
 int			check_quote (char *s);

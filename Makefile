@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
+#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/04/25 14:04:30 by dwianni          ###   ########.fr        #
+#    Updated: 2025/04/26 12:59:11 by mpalisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/expand/expand.c \
 		$(SRC_DIR)/expand/expand_utils1.c \
 		$(SRC_DIR)/expand/expand_utils2.c \
+		$(SRC_DIR)/env/env.c \
 		$(SRC_DIR)/built_in/cd.c \
 		$(SRC_DIR)/built_in/echo.c \
 		$(SRC_DIR)/built_in/env.c \
