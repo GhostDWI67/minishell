@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/04/26 17:19:58 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 13:32:53 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,13 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 	cmd->cmd_step = 0;
 	if (cmd->tab_pid != NULL)
 	{
-		/*
 		if (cmd->nb_simple_cmd == 1 && is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) != 0)
 		{
-			printf("on est dans BI SIMPLE\n");//effew
-			exec_builtin(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]), cmd);
+			//printf("on est dans BI PARENT\n");//effew
+			parent_redir_mgt_in_out(cmd);
+			exec_builtin_p(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]), cmd);
 		}
 		else
-		*/
 		{
 			if (is_exec_able(cmd) == 0)
 			{

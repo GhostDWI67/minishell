@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/26 16:42:21 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:25:05 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int			export(char **args, t_list **env);
 bool		export_core(char *arg, t_list **env);
 int			pwd(void);
 int			unset(char **args, t_list **env);
-int			cd(char **args, t_list **env);
+int			cd(char **args, t_list *env);
 
 /* check.c */
 int			check_quote (char *s);
@@ -144,7 +144,9 @@ int			f_pipe(t_cmd_line *cmd, char **environ);
 
 /* exec_built_in.c*/
 int			is_built_in(char *s);
-int			exec_builtin(int bi, t_cmd_line *cmd);
+void		exec_builtin_c(int bi, t_cmd_line *cmd);
+int			exec_builtin_p(int bi, t_cmd_line *cmd);
+void		parent_redir_mgt_in_out(t_cmd_line *cmd);
 
 /* exec_child.c */
 int			child(t_cmd_line *cmd, char **environ);

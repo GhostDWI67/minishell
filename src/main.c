@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/26 17:01:42 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:38:36 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ EN COURS !!!!!!
 	- gerer quand EXPAND ressort NULL
 	- reste a gerer les trim entre $TEST et "$TEST"
 	- EXPAND sur le HEREDOC, fait des trucs bizarre, a tester avec bash
+	- ajouter les exemples d'Expand qui sont geres
 
 - SIGNAUX
 
@@ -59,11 +60,27 @@ EN COURS !!!!!!
 	- voir comment on archive l'historique avec le HEREDOC comme dans bash,
 		pour l'instant pas pareil
 
+- Dans PARENTS, gerer le waitpid pour recuperer les exit code
+
 - INTEGRATION des Built-In
 	- si cde seul, a lancer au niveau parent sinon en mode child
-	- fonction qui gere si c'est un built-in
-	- fonction qui lance dans parent
-	- fonction qui lance dans child
+	- fonction qui gere si c'est un built-in : OK
+	- fonction qui lance dans parent (gestion des reidrection a faire) : OK
+	- fonction qui lance dans child : OK
+
+- LEAK dans child abec les BI
+
+
+	1) finir integration built in
+2) expand mettre les exemples geres + faire le dernier + $?
+2a) mettre a la norme les modfis + nettoyer les print de debug sauf la sortie
+	propre
+3) exit code dans parents
+4) signaux
+5) shell level
+6) gerer les leaks et verifier les fd ouverts avec valgrind
+
+
 
 et ca sera deja tres bien :)))!
 ******************************************************************************/
@@ -210,14 +227,6 @@ static void	main_free_mgt(t_cmd_line *cmd)
 		ft_close(cmd->tab_cmd[i].hd_pipe[1]);
 		i++;
 	}
-	/*
-	printf("STDOUT SAVED %d STDIN SAVED %d\n", cmd->fd_saved_stdin, cmd->fd_saved_stdout);//test
-	ft_putstr_fd("STDIN SAVED ", 2);
-	ft_putnbr_fd(STDIN_FILENO, 2);
-	ft_putstr_fd("\nSTDOUT SAVED ", 2);
-	ft_putnbr_fd(STDOUT_FILENO, 2);
-	ft_putstr_fd("\n", 2);
-	*/
 	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
 	{
 		//msg_error(ERM_STD, ERN_STD);
@@ -267,7 +276,6 @@ int	main(int argc, char **argv, char **environ)
 	return (0);
 }
 
-
 /* main de test pour expand */
 /*
 int	main(void)
@@ -291,5 +299,14 @@ int	main(void)
 			free(s->env_name);
 		free(s);
 	}
+}
+*/
+
+/*
+int main(void)
+{
+	char	*s = "      to          to      ";
+
+	printf("%s", ft_strtrim(s, " "));
 }
 */

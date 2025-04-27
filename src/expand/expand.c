@@ -6,35 +6,36 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/26 16:36:24 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:11:45 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /******************************************************************************
-char *getenv(char *s)
-
-toto'$USER   est ici!'$USER'toto est la?'"titi et non!"EOF"h $USER 1 $USER12 ;"
-"toto $USER titi $USER"
+Case managed
 
 echo $USER						dwianni					OK
 echo "$USER"					dwianni					OK
 echo '$USER'					$USER					OK
 echo $USER"$USER"'$USER'		dwiannidwianni$USER		OK
 echo $USER$/"$USER"'$USER'		dwianni$/dwianni$USER	OK
-echo "$USER$'$USER'"			dwianni$'dwianni'		OK
+echo "$USER$'$USER'"			dwianni$'dwianni'		NOK
+echo "$USER$"					dwianni$				NOK
 echo $"salut"					salut					OK
 echo $+salut					$+salut					OK
 echo $123						23						OK
 echo $USER$/"$USER"'$USER' "$USER$'$USER''$USER'" $"salut" $+salut $123
 			dwianni$/dwianni$USER dwianni$'dwianni''dwianni' salut $+salut 23
-echo $$							donne le PID en cours
+echo $$							give the actual PID, not managed
 
 export TEST="      XXX        "			=> reste a traiter
-ECHO $TEST		- XXX -
-ECHO "$TEST"	-      XXX    -
+ECHO $TEST		- XXX -				on trime
+ECHO "$TEST"	-      XXX    -		on trime pas
 
+RULES FOR ENV VAR
+var start with an alpha (low or upper case) or underscore(_)
+after you can use alphanum and underscore(_)
 ******************************************************************************/
 /******************************************************************************
 Free a expand structure
