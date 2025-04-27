@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 14:11:45 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 18:35:37 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ echo "$USER"					dwianni					OK
 echo '$USER'					$USER					OK
 echo $USER"$USER"'$USER'		dwiannidwianni$USER		OK
 echo $USER$/"$USER"'$USER'		dwianni$/dwianni$USER	OK
-echo "$USER$'$USER'"			dwianni$'dwianni'		NOK
-echo "$USER$"					dwianni$				NOK
+echo "$USER$'$USER'"			dwianni$'dwianni'		OK
+echo "$USER$"					dwianni$				OK
 echo $"salut"					salut					OK
 echo $+salut					$+salut					OK
 echo $123						23						OK
@@ -42,13 +42,6 @@ Free a expand structure
 ******************************************************************************/
 static void	free_expand(t_expand *s)
 {
-	/*
-	if (s->input != NULL)
-	{
-		free(s->input);
-		s->input = NULL;
-	}
-	*/
 	s->input = NULL;
 	if (s->output != NULL)
 	{
@@ -86,7 +79,7 @@ static void	expand(t_expand *s, t_list *env)
 		else if (s->input[s->i] == '"')
 			mode_dquote(s, env);
 		else if (s->input[s->i] == '$')
-			mod_dollar(s, env);
+			mod_dollar(s, env, 0);
 	}
 }
 

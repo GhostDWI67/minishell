@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/04/27 13:32:53 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 18:31:52 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,17 @@ static int	is_exec_able(t_cmd_line *cmd)
 	res = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
-		if (cmd->tab_cmd[i].tab_args[0] != NULL &&
-			is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
-			path = get_path(cmd->tab_path,
-				cmd->tab_cmd[i].tab_args[0]);
-		if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL &&
-			is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
+		if (cmd->tab_cmd[i].tab_args[0] != NULL
+			&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
+			path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0]);
+		if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
+			&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
 		{
 			res++;
 			ft_putstr_fd("Command '", 2);
 			ft_putstr_fd(cmd->tab_cmd[i].tab_args[0], 2);
 			ft_putstr_fd("' not found\n", 2);
-		}	
+		}
 		i++;
 	}
 	return (res);
@@ -96,11 +95,12 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 	cmd->cmd_step = 0;
 	if (cmd->tab_pid != NULL)
 	{
-		if (cmd->nb_simple_cmd == 1 && is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) != 0)
+		if (cmd->nb_simple_cmd == 1
+			&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) != 0)
 		{
-			//printf("on est dans BI PARENT\n");//effew
 			parent_redir_mgt_in_out(cmd);
-			exec_builtin_p(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]), cmd);
+			exec_builtin_p(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]),
+				cmd);
 		}
 		else
 		{

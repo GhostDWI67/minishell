@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/27 14:24:16 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 18:40:33 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ Return exit status en int;
 ******************************************************************************/
 static int	cd_no_args(t_list *env)
 {
-	int 	ret;
+	int		ret;
 	char	*arg;
 
 	arg = ft_strdup(ft_getenv("HOME", env));
@@ -93,8 +93,8 @@ Return exit status en int;
 ******************************************************************************/
 static int	cd_args(char *arg, t_list *env)
 {
-	int ret;
-	
+	int	ret;
+
 	ret = chdir(arg);
 	if (ret == 0)
 		cd_core(arg, env);

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/04/26 16:29:55 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 18:28:57 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	parsing(t_cmd_line *cmd)
 
 	parsing_init(cmd);
 	i = 0;
-	//display_token(cmd);//display
 	while (cmd->token != NULL)
 	{
 		if ((cmd->token->content)[0] == '>' ||

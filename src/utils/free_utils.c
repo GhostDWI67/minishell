@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/25 14:24:36 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 17:34:03 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 Free a char tab
 Return ; 0 if OK, else 1
 ******************************************************************************/
-void	free_null(char *s)
+void	free_null(char **s)
 {
-	if (s != NULL)
-		free(s);
-	s = NULL;
+	if (*s != NULL && s != NULL)
+		free(*s);
+	*s = NULL;
 }
 
 /******************************************************************************
@@ -49,9 +49,9 @@ Return ; 0
 ******************************************************************************/
 int	free_command(t_command cmd)
 {
-	free_null(cmd.hd_input);
-	free_null(cmd.infile);
-	free_null(cmd.outfile);
+	free_null(&cmd.hd_input);
+	free_null(&cmd.infile);
+	free_null(&cmd.outfile);
 	if (cmd.args != NULL)
 		ft_lstclear(&cmd.args, free);
 	free(cmd.tab_args);

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 14:25:05 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 17:43:53 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ typedef struct s_expand
 {
 	char	*input;
 	char	*output;
-	char	*env_name;		
+	char	*env_name;
+	char	*tmp_env_var;
 	int		i;
 	int		start;
 }				t_expand;
@@ -167,14 +168,15 @@ char		*s_expand(char *str, t_list *env);
 /* expand_utils1.c */
 void		mod_no_case(t_expand *s);
 void		get_env_var_name(t_expand *s);
-void		mod_dollar(t_expand *s, t_list *env);
+void		mod_dollar(t_expand *s, t_list *env, int in_quote);
 void		mode_squote(t_expand *s);
+void		shorten_envvar_outq(t_expand *s);
 
 /* expand_utils2.c */
 void		mode_dquote(t_expand *s, t_list *env);
 
 /* free_utils.c */
-void		free_null(char *s);
+void		free_null(char **s);
 int			free_tab_char(char	**tab);
 int			free_command(t_command cmd);
 int			free_cmd_line(t_cmd_line *cmd);

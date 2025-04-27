@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 14:38:36 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 18:58:21 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,13 @@ EN COURS !!!!!!
 
 - LEAK dans child abec les BI
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+- TEST="ls -l" ne fonctionne pas => il faut expand
+	il faut expand apres le lexer au moment ou on a la liste des ARGS ou faire
+	un expand avant de lexer => meilleur solution a priori
+- Manque le expand des redirections
 
-	1) finir integration built in
+1) finir integration built in
 2) expand mettre les exemples geres + faire le dernier + $?
 2a) mettre a la norme les modfis + nettoyer les print de debug sauf la sortie
 	propre
@@ -87,11 +92,6 @@ et ca sera deja tres bien :)))!
 
 /******************************************************************************
 ---- A FAIRE ---- :
-Pour integration des built in
-	- fonction is_builtin
-	- est ce qu'on peut les pipe du genre env | grep USER
-	- est ce qu'on lance la fonction dans le parent ou le child ?
-
 
 DWI - differentes redirections
 DWI - free des structures
@@ -137,16 +137,8 @@ ls | ls -l | grep out
 
 CA COINCE : !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
->out20 | >out21 | cat out1 : ca ne marche pas quand il n'y a pas de commande
-	on a un pb de lexing sur le premier > et ensuite voir dans le parsing si
-	on range dans les bonnes categories => NOK sur le premier argument ne sort pas
-	comme une redirection + tester si la liste est vide (afficher le contenue des 
-	args)
+| grep ls : 1er token = | pas bien gere =>pb dans le check des token
 
-| grep ls : 1er token = | pas bien gere =>pb dans le chech des token
-
-tester un executable qvec un chemin relatif => tester de base avec le chemin
-	avant le PATH
 
 ---- FAIT ----
 1) on lit la ligne de commande => A FAIRE : free la ligne, 
@@ -173,22 +165,20 @@ static void	main_init(t_cmd_line	*cmd)
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->fd_saved_stdout == -1)
 	{
-		//msg_error(ERM_STD, ERN_STD);
-		msg_error("STD 1 MSG", ERN_STD);//fesfesf
+		msg_error(ERM_STD, ERN_STD);
 	}
 	cmd->fd_saved_stdin = dup(STDIN_FILENO);
 	if (cmd->fd_saved_stdin == -1)
 	{
-		//msg_error(ERM_STD, ERN_STD);
-		msg_error("STD 2 MSG", ERN_STD);//fesfesf
+		msg_error(ERM_STD, ERN_STD);
 	}
-	cmd->err_nb = 0;// A voir où on l'init
+	cmd->err_nb = 0;
 }
 
 static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 {
 	int		i;
-	
+
 	if (cmd->input != NULL)
 	{
 		cmd->nb_simple_cmd = check_token_nb_cmd(cmd->token);
@@ -196,15 +186,15 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		if (cmd->tab_cmd == NULL)
 			return (1); //voir ce qu'il faudrait faire si malloc echoue??
 		parsing(cmd);
-		//display_simple_cmd(cmd);//affiche les cmd simple**************************
+		//display_simple_cmd(cmd);//affiche les cmd simple***********
 		i = 0;
 		while (i < cmd->nb_simple_cmd)
 		{
-			cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args, cmd->env);
-			//printf("ARGS[0] %d : %s###\n", i, cmd->tab_cmd[i].tab_args[0]);//affiche les arg dans tab cmd
+			cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args,
+					cmd->env);
 			i++;
 		}
-		cmd->tab_path = ft_split(ft_getenv("PATH",cmd->env), ':');
+		cmd->tab_path = ft_split(ft_getenv("PATH", cmd->env), ':');
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
 		//environ = ft_lst_to_arr(cmd->env);
@@ -228,17 +218,11 @@ static void	main_free_mgt(t_cmd_line *cmd)
 		i++;
 	}
 	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
-	{
-		//msg_error(ERM_STD, ERN_STD);
-		msg_error("STD 3 MSG", ERN_STD);//fesfesf
-	}
+		msg_error(ERM_STD, ERN_STD);
 	else
 		close(cmd->fd_saved_stdout);
 	if (dup2(cmd->fd_saved_stdin, STDIN_FILENO) == -1)
-	{
-		//msg_error(ERM_STD, ERN_STD);
-		msg_error("STD 4 MSG", ERN_STD);//fesfesf
-	}
+		msg_error(ERM_STD, ERN_STD);
 	else
 		close(cmd->fd_saved_stdin);
 	if (cmd->input != NULL)
@@ -261,15 +245,15 @@ int	main(int argc, char **argv, char **environ)
 	while (1)
 	{
 		environ = ft_lst_to_arr(cmd->env);
-		cmd->err_nb = 0; // A voir où on l'init
+		cmd->err_nb = 0;
 		main_input_mgt(cmd);
-		//display_token(cmd);//Affiche les token**********************************************
+		//display_token(cmd);//Affiche les token***********
 		if (cmd->err_nb == 0)
 		{
 			main_init(cmd);
 			main_exec_mgt(cmd, environ);
 			main_free_mgt(cmd);
-			//printf("ON SORT PROPRE !!!------------------------------------------\n");
+			printf("ON SORT PROPRE !!!---------------------------\n");
 		}
 	}
 	rl_clear_history();

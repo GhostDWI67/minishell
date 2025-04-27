@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/26 16:23:42 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/27 18:38:05 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	get_env_var_name(t_expand *s)
 		return ;
 	}
 	if (ft_isalnum(s->input[s->i]) == 0 && s->input[s->i] != '_'
-		&& s->input[s->i] != '"' && s->input[s->i] != '\''
 		&& s->input[s->i] != ' ' && s->input[s->i] != ' ')
 	{
 		tmp = s->output;
@@ -72,7 +71,7 @@ void	get_env_var_name(t_expand *s)
 /******************************************************************************
 Improve the output parameter with the contains of the env parameter
 ******************************************************************************/
-void	mod_dollar(t_expand *s, t_list *env)
+void	mod_dollar(t_expand *s, t_list *env, int in_quote)
 {
 	char	*tmp;
 
@@ -80,15 +79,18 @@ void	mod_dollar(t_expand *s, t_list *env)
 	if (s->env_name == NULL)
 		return ;
 	tmp = s->output;
-	if (ft_getenv(s->env_name, env) != NULL)
+	s->tmp_env_var = ft_getenv(s->env_name, env);
+	if (in_quote == 0)
+		shorten_envvar_outq(s);
+	if (s->tmp_env_var != NULL)
 	{
-		s->output = ft_strjoin(tmp, ft_getenv(s->env_name, env));
-		free(tmp);
+		s->output = ft_strjoin(tmp, s->tmp_env_var);
+		free_null(&tmp);
 		if (s->output == NULL)
 			return ;
 	}
-	free(s->env_name);
-	s->env_name = NULL;
+	free_null(&s->env_name);
+	//free_null(&s->tmp_env_var);
 }
 
 /******************************************************************************
@@ -109,7 +111,50 @@ void	mode_squote(t_expand *s)
 	if (tmp_env == NULL)
 		return ;
 	s->output = ft_strjoin(tmp, tmp_env);
-	free(tmp);
-	free(tmp_env);
+	free_null(&tmp);
+	free_null(&tmp_env);
 	s->i++;
+}
+
+/******************************************************************************
+Manage the specific case of env var inside or outside dquote
+TEST="      XX      XX      " 
+echo $TEST		=> XX XX---
+echo "$TEST"	=>      XX      XX      ---
+******************************************************************************/
+void	shorten_envvar_outq(t_expand *s)
+{
+	char	*tmp;
+	int		i;
+	int		j;
+
+	tmp = s->tmp_env_var;
+	s->tmp_env_var = ft_strtrim(tmp, " ");
+	if (s->tmp_env_var != NULL)
+	{
+		i = 0;
+		j = 0;
+		while (s->tmp_env_var[i] != '\0')
+		{
+			while (ft_is_white_space(s->tmp_env_var[i]) == 0
+				&& s->tmp_env_var[i] != '\0')
+			{
+				s->tmp_env_var[j] = s->tmp_env_var[i];
+				i++;
+				j++;
+			}
+			if (ft_is_white_space(s->tmp_env_var[i]) == 1
+				&& s->tmp_env_var[i] != '\0')
+			{
+				s->tmp_env_var[j] = s->tmp_env_var[i];
+				i++;
+				j++;
+			}
+			while (ft_is_white_space(s->tmp_env_var[i]) == 1
+				&& s->tmp_env_var[i] != '\0')
+				i++;
+		}
+		s->tmp_env_var[j] = '\0';
+	}
+	//free_null(&tmp);
 }
