@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/26 13:45:34 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:01:42 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ update oldpwd dans l'env en copiant PWD si PWD n'existe pas alors OLDPWD est
 créé
 Return void;
 ******************************************************************************/
-static void	cd_oldpwd(t_list **env)
+static void	cd_oldpwd(t_list *env)
 {
 	t_list	*temp;
 	char	*oldpwd;
 	int		size;
 
-	temp = (*env);
+	temp = env;
 	size = ft_lstsize(temp);
 	oldpwd = NULL;
 	while (size--)
@@ -33,13 +33,13 @@ static void	cd_oldpwd(t_list **env)
 		temp = temp->next;
 	}
 	if (!oldpwd)
-		export_core("OLDPWD", env);
+		export_core("OLDPWD", &env);
 	else
 	{
 		oldpwd = ft_strjoin("OLD", oldpwd);
 		if (!oldpwd)
 			return ;
-		export_core(oldpwd, env);
+		export_core(oldpwd, &env);
 	}
 	free(oldpwd);
 }
@@ -48,7 +48,7 @@ static void	cd_oldpwd(t_list **env)
 lance cd_oldpwd puis update PWD dans l'env en copiant le retour de getcwd
 Return void;
 ******************************************************************************/
-static void	cd_core(char *arg, t_list **env)
+static void	cd_core(char *arg, t_list *env)
 {
 	char	*pwd;
 	char	cwd[PATH_MAX];
@@ -62,7 +62,7 @@ static void	cd_core(char *arg, t_list **env)
 	pwd = ft_strjoin("PWD=", cwd);
 	if (!pwd)
 		return ;
-	export_core(pwd, env);
+	export_core(pwd, &env);
 	free(pwd);
 }
 
@@ -70,12 +70,12 @@ static void	cd_core(char *arg, t_list **env)
 execute l'equivalent de "cd ~"
 Return exit status en int;
 ******************************************************************************/
-static int	cd_no_args(t_list **env)
+static int	cd_no_args(t_list *env)
 {
 	int 	ret;
 	char	*arg;
 
-	arg = ft_getenv("HOME", (*env));
+	arg = ft_strdup(ft_getenv("HOME", env));
 	ret = chdir(arg);
 	if (ret == 0)
 		cd_core(arg, env);
@@ -83,6 +83,7 @@ static int	cd_no_args(t_list **env)
 		ret = 1;
 	if (ret == 1)
 		perror(arg);
+	free(arg);
 	return (ret);
 }
 
@@ -90,7 +91,7 @@ static int	cd_no_args(t_list **env)
 lance cd avec l'argument donné
 Return exit status en int;
 ******************************************************************************/
-static int	cd_args(char *arg, t_list **env)
+static int	cd_args(char *arg, t_list *env)
 {
 	int ret;
 	
@@ -108,7 +109,7 @@ static int	cd_args(char *arg, t_list **env)
 check le bon nombre d'arg et lance cd_core si chdir a reussis
 Return 0 si ok sinon 1;
 ******************************************************************************/
-int	cd(char **args, t_list **env)
+int	cd(char **args, t_list *env)
 {
 	int	i;
 
