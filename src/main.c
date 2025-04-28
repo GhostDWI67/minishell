@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 18:58:21 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:16:06 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@ EN COURS !!!!!!
 	il faut expand apres le lexer au moment ou on a la liste des ARGS ou faire
 	un expand avant de lexer => meilleur solution a priori
 - Manque le expand des redirections
+- Test qvec es vqriqbles d'environnement suivamtes
+	TEST=ls -l
+	TEST3=   out1    
+	TEST2=out1
+	TEST4=     out1    out2 
 
 1) finir integration built in
 2) expand mettre les exemples geres + faire le dernier + $?
@@ -160,6 +165,45 @@ CA COINCE : !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 14) EXPAND a priori OK sauf trim des variables d'ENV
 15) restera les signaux a traiter;
 ******************************************************************************/
+
+/******************************************************************************
+---- A FAIRE ---- :
+
+DWI - differentes redirections
+DWI - free des structures
+MAX - gestion des variables d'environnememt
+- gestion de $?
+- signaux ctrl +c, ctrl + d, ctrl + \ (rien)
+DWI - traiter la ligne de commande vide
+- leak memory et free
+- mode intercatif ?
+MAX - built in :
+	X echo avec -n
+	- cd relatif et absolue path
+	X pwd
+	X export
+	- unset
+	X env
+	- exit
+- gerer les erreurs possibles quand une fonction decone + Tester
+
+A FAIRE EN DETAIL // point bloquant actuel // a finir :
+
+
+******************************************************************************/
+
+/******************************************************************************
+A FAIRE :
+MAX : 	- implementer la solution lexer expand lexer parsing
+		- shell lvl
+		- SIGNAUX
+
+DOM : 	- $?
+		- recuperer les exit code du child et des BI dans parents
+
+******************************************************************************/
+
+
 static void	main_init(t_cmd_line	*cmd)
 {
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
@@ -253,7 +297,7 @@ int	main(int argc, char **argv, char **environ)
 			main_init(cmd);
 			main_exec_mgt(cmd, environ);
 			main_free_mgt(cmd);
-			printf("ON SORT PROPRE !!!---------------------------\n");
+			//printf("ON SORT PROPRE !!!---------------------------\n");
 		}
 	}
 	rl_clear_history();

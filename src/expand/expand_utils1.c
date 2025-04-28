@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 18:38:05 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:12:02 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,14 @@ void	mod_dollar(t_expand *s, t_list *env, int in_quote)
 {
 	char	*tmp;
 
+	(void)in_quote;
 	get_env_var_name(s);
 	if (s->env_name == NULL)
 		return ;
 	tmp = s->output;
 	s->tmp_env_var = ft_getenv(s->env_name, env);
-	if (in_quote == 0)
-		shorten_envvar_outq(s);
+	//if (in_quote == 0)
+	//	shorten_envvar_outq(s);
 	if (s->tmp_env_var != NULL)
 	{
 		s->output = ft_strjoin(tmp, s->tmp_env_var);

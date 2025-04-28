@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 18:33:29 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:08:29 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,11 @@ int	child(t_cmd_line *cmd, char **environ)
 		close(cmd->fd_saved_stdout);
 		if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL
 			&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) == 0)
+		{
 			if (execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
 				== -1)
 				msg_error(ERM_EXECVE, ERN_EXECVE);
+		}
 		else
 			exec_builtin_c(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]),
 				cmd);

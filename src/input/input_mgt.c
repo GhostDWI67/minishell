@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/04/13 17:25:36 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/04/28 13:09:44 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	main_input_mgt(t_cmd_line *cmd)
 	else
 	{
 		cmd->err_nb = msg_inf(ERM_INPUT_NULL, ERN_INPUT_NULL);
+		exit (0);
 	}
 }
 
