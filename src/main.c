@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/28 14:16:06 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/03 13:44:01 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,6 @@ EN COURS !!!!!!
 - leak quand ligne vide (juste ENTER)
 	=> voir comment on gerer la ligne vide, on ne devrait pas lancer la suite ??
 	A VERIFIER J AI UN DOUTE AVEC SANITIZE / tester avec VALGRIND
-
-- HEREDOC
-	- voir comment on archive l'historique avec le HEREDOC comme dans bash,
-		pour l'instant pas pareil
 
 - Dans PARENTS, gerer le waitpid pour recuperer les exit code
 
@@ -178,13 +174,13 @@ DWI - traiter la ligne de commande vide
 - leak memory et free
 - mode intercatif ?
 MAX - built in :
-	X echo avec -n
-	- cd relatif et absolue path
-	X pwd
-	X export
-	- unset
-	X env
-	- exit
+	X echo avec -n					CHILD !!!!!
+	X - cd relatif et absolue path 	PARENT
+	X pwd							NA
+	X export						PARENT
+	X - unset						PARENT
+	X env							NA
+	- exit							NA
 - gerer les erreurs possibles quand une fonction decone + Tester
 
 A FAIRE EN DETAIL // point bloquant actuel // a finir :
@@ -198,8 +194,12 @@ MAX : 	- implementer la solution lexer expand lexer parsing
 		- shell lvl
 		- SIGNAUX
 
-DOM : 	- $?
-		- recuperer les exit code du child et des BI dans parents
+DOM : 	- Test |ls  // check token ne fonctionne pas comme il faut => 
+			ne devrait pas exec + message est pas juste (avec perror a revoir)
+			fonction check_token
+		- expand des redirections
+		- 2eme lexing
+		- mettre a la norme les fonctions 25 lignes
 
 ******************************************************************************/
 
@@ -222,6 +222,7 @@ static void	main_init(t_cmd_line	*cmd)
 static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 {
 	int		i;
+	char	*path;
 
 	if (cmd->input != NULL)
 	{
@@ -235,10 +236,14 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		while (i < cmd->nb_simple_cmd)
 		{
 			cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args,
-					cmd->env);
+					cmd->env, cmd);
 			i++;
 		}
-		cmd->tab_path = ft_split(ft_getenv("PATH", cmd->env), ':');
+		path = ft_getenv("PATH", cmd->env);
+		if (path != NULL)
+			cmd->tab_path = ft_split(path, ':');
+		else
+			cmd->tab_path = NULL;
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
 		//environ = ft_lst_to_arr(cmd->env);
@@ -299,6 +304,8 @@ int	main(int argc, char **argv, char **environ)
 			main_free_mgt(cmd);
 			//printf("ON SORT PROPRE !!!---------------------------\n");
 		}
+		//else
+			//cmd->exit_code = cmd->err_nb;
 	}
 	rl_clear_history();
 	return (0);

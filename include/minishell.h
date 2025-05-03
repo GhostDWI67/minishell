@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 17:43:53 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/03 13:09:14 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@
 # define ERM_STRNDUP	"strndup failed"	
 # define ERN_STRNDUP	14
 # define ERM_FILE		"file failed to open : "	
-# define ERN_FILE		15
+# define ERN_FILE		1
 # define ERM_STD		"trouble in STD management"	
 # define ERN_STD		16
 # define ERM_QUOTE		"opened single and/or double quote"	
@@ -69,7 +69,10 @@
 # define ERM_MALLOC		"malloc failed"	
 # define ERN_MALLOC		19
 # define ERM_TOKEN		"unexpected token : "	
-# define ERN_TOKEN		20
+# define ERN_TOKEN		2
+# define ERM_WAITPID	"Waitpid failed"	
+# define ERN_WAITPID	21
+# define ERN_NOTEXEC	127
 
 typedef struct s_token
 {
@@ -99,7 +102,6 @@ typedef struct s_command {
 	int		hd_pipe[2];
 	char	*hd_input; //free OK
 	int		redir_test;
-	int		exit_code;
 }	t_command;
 
 typedef struct s_cmd_line {
@@ -115,6 +117,7 @@ typedef struct s_cmd_line {
 	int			fd_saved_stdin;//a virer ??
 	int			fd_saved_stdout;//a virer ??
 	int			err_nb;
+	int			exit_code;
 }	t_cmd_line;
 
 /* main.c */
@@ -163,17 +166,17 @@ int			msg_error(char *err_msg, int err_nb);
 int			msg_inf(char *err_msg, int err_nb);
 
 /* expand.c */
-char		*s_expand(char *str, t_list *env);
+char		*s_expand(char *str, t_list *env, t_cmd_line *cmd);
 
 /* expand_utils1.c */
 void		mod_no_case(t_expand *s);
 void		get_env_var_name(t_expand *s);
-void		mod_dollar(t_expand *s, t_list *env, int in_quote);
+void		mod_dollar(t_expand *s, t_list *env, int in_quote, t_cmd_line *cmd);
 void		mode_squote(t_expand *s);
 void		shorten_envvar_outq(t_expand *s);
 
 /* expand_utils2.c */
-void		mode_dquote(t_expand *s, t_list *env);
+void		mode_dquote(t_expand *s, t_list *env, t_cmd_line *cmd);
 
 /* free_utils.c */
 void		free_null(char **s);
@@ -210,7 +213,7 @@ void		sort_tab(char **arr, int len);
 
 /* parsing.c */
 void		parsing(t_cmd_line *cmd);
-char		**args_to_tab(t_list *args, t_list *env);
+char		**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd);
 
 /* parsing_utils.c */
 int			skip_quote(int i, char *s);

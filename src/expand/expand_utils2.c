@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:17:44 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 17:44:01 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/02 11:46:12 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /******************************************************************************
 Improve the output parameter with the contains inside double quote
 ******************************************************************************/
-static void	mode_quote_dolcase(t_expand *s, t_list *env)
+static void	mode_quote_dolcase(t_expand *s, t_list *env, t_cmd_line *cmd)
 {
 	char	*tmp;
 	char	*tmp_env;
@@ -39,7 +39,7 @@ static void	mode_quote_dolcase(t_expand *s, t_list *env)
 		s->output = ft_strjoin(tmp, tmp_env);
 		free(tmp);
 		free(tmp_env);
-		mod_dollar(s, env, 1);
+		mod_dollar(s, env, 1, cmd);
 		s->start = s->i;
 	}
 }
@@ -59,7 +59,7 @@ static void	mode_quote_dquotecase(t_expand *s)
 	s->i++;
 }
 
-void	mode_dquote(t_expand *s, t_list *env)
+void	mode_dquote(t_expand *s, t_list *env, t_cmd_line *cmd)
 {
 	s->i++;
 	s->start = s->i;
@@ -69,7 +69,7 @@ void	mode_dquote(t_expand *s, t_list *env)
 			s->i++;
 		if (s->input[s->i] == '$')
 		{
-			mode_quote_dolcase(s, env);
+			mode_quote_dolcase(s, env, cmd);
 		}
 		else if (s->input[s->i] == '"' && s->start != s->i)
 		{

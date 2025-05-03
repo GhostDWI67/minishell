@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/04/27 18:28:57 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/02 17:59:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	parsing(t_cmd_line *cmd)
 Transform a list into a tab of string
 Return : pointer to a tab
 ******************************************************************************/
-char	**args_to_tab(t_list *args, t_list *env)
+char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
 {
 	char	**res;
 	t_list	*tmp;
@@ -74,29 +74,17 @@ char	**args_to_tab(t_list *args, t_list *env)
 
 	tmp = args;
 	lst_size = ft_lstsize(tmp);
-	if (lst_size != 0)
-		res = (char **)malloc(sizeof(char *) * (lst_size + 1));
-	else
-		res = (char **)malloc(sizeof(char *) * 3);
+	res = (char **)malloc(sizeof(char *) * (lst_size + 1));
 	if (res == NULL)
 		return (NULL);
 	tmp = args;
-	if (lst_size != 0)
+	i = 0;
+	while (tmp != NULL)
 	{
-		i = 0;
-		while (tmp != NULL)
-		{
-			res[i] = s_expand((char *)tmp-> content, env);
-			i++;
-			tmp = tmp->next;
-			res[i] = NULL;
-		}
-	}
-	else
-	{
-		res[0] = ft_strdup("echo");
-		res[1] = ft_strdup("-n");
-		res[2] = NULL;
+		res[i] = s_expand((char *)tmp-> content, env, cmd);
+		i++;
+		tmp = tmp->next;
+		res[i] = NULL;
 	}
 	return (res);
 }

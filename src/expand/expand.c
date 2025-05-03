@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 18:35:37 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/02 11:47:48 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	free_expand(t_expand *s)
 Generate the expand into the structure expand
 output parameter is fully modified by the function
 ******************************************************************************/
-static void	expand(t_expand *s, t_list *env)
+static void	expand(t_expand *s, t_list *env, t_cmd_line *cmd)
 {
 	s->output = NULL;
 	s->env_name = NULL;
@@ -77,9 +77,9 @@ static void	expand(t_expand *s, t_list *env)
 		if (s->input[s->i] == '\'')
 			mode_squote(s);
 		else if (s->input[s->i] == '"')
-			mode_dquote(s, env);
+			mode_dquote(s, env, cmd);
 		else if (s->input[s->i] == '$')
-			mod_dollar(s, env, 0);
+			mod_dollar(s, env, 0, cmd);
 	}
 }
 
@@ -87,7 +87,7 @@ static void	expand(t_expand *s, t_list *env)
 Expand the string
 Return : expended string
 ******************************************************************************/
-char	*s_expand(char *str, t_list *env)
+char	*s_expand(char *str, t_list *env, t_cmd_line *cmd)
 {
 	char		*res;
 	t_expand	*s;
@@ -96,7 +96,7 @@ char	*s_expand(char *str, t_list *env)
 	s->input = str;
 	s->output = NULL;
 	s->env_name = NULL;
-	expand(s, env);
+	expand(s, env, cmd);
 	res = ft_strdup(s->output);
 	free_expand(s);
 	return (res);

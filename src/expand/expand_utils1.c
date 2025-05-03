@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/28 14:12:02 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/02 11:49:25 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,27 +71,36 @@ void	get_env_var_name(t_expand *s)
 /******************************************************************************
 Improve the output parameter with the contains of the env parameter
 ******************************************************************************/
-void	mod_dollar(t_expand *s, t_list *env, int in_quote)
+void	mod_dollar(t_expand *s, t_list *env, int in_quote, t_cmd_line *cmd)
 {
 	char	*tmp;
 
 	(void)in_quote;
-	get_env_var_name(s);
-	if (s->env_name == NULL)
-		return ;
-	tmp = s->output;
-	s->tmp_env_var = ft_getenv(s->env_name, env);
-	//if (in_quote == 0)
-	//	shorten_envvar_outq(s);
-	if (s->tmp_env_var != NULL)
+	if (s->input[s->i + 1] == '?')
 	{
-		s->output = ft_strjoin(tmp, s->tmp_env_var);
-		free_null(&tmp);
-		if (s->output == NULL)
-			return ;
+		tmp = s->output;
+		s->output = ft_strjoin(tmp, ft_itoa(cmd->exit_code));
+		s->i = s-> i + 2;
 	}
-	free_null(&s->env_name);
-	//free_null(&s->tmp_env_var);
+	else
+	{
+		get_env_var_name(s);
+		if (s->env_name == NULL)
+			return ;
+		tmp = s->output;
+		s->tmp_env_var = ft_getenv(s->env_name, env);
+		//if (in_quote == 0)
+		//	shorten_envvar_outq(s);
+		if (s->tmp_env_var != NULL)
+		{
+			s->output = ft_strjoin(tmp, s->tmp_env_var);
+			free_null(&tmp);
+			if (s->output == NULL)
+				return ;
+		}
+		free_null(&s->env_name);
+		//free_null(&s->tmp_env_var);
+	}
 }
 
 /******************************************************************************

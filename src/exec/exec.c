@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/04/27 18:31:52 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/02 17:40:13 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static void	f_pipe_init(t_cmd_line *cmd)
 
 /******************************************************************************
 Function wait all the child process to finish
+Catch the exit code status
+
 ******************************************************************************/
 static void	f_pipe_wait(t_cmd_line *cmd)
 {
@@ -48,40 +50,12 @@ static void	f_pipe_wait(t_cmd_line *cmd)
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
-		wait(&status);
+		if(waitpid(cmd->tab_pid[i], &status, WUNTRACED) == -1)
+			msg_error(ERM_WAITPID, ERN_WAITPID);
+		if (WIFEXITED(status))
+			cmd->exit_code = WEXITSTATUS(status);
 		i++;
 	}
-}
-
-/******************************************************************************
-Function test if all the simple command are executable
-Return : 0 if OK else NOK (nb functions doesn't exist)
-******************************************************************************/
-static int	is_exec_able(t_cmd_line *cmd)
-{
-	char	*path;
-	int		i;
-	int		res;
-
-	path = NULL;
-	i = 0;
-	res = 0;
-	while (i < cmd->nb_simple_cmd)
-	{
-		if (cmd->tab_cmd[i].tab_args[0] != NULL
-			&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
-			path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0]);
-		if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
-			&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
-		{
-			res++;
-			ft_putstr_fd("Command '", 2);
-			ft_putstr_fd(cmd->tab_cmd[i].tab_args[0], 2);
-			ft_putstr_fd("' not found\n", 2);
-		}
-		i++;
-	}
-	return (res);
 }
 
 /******************************************************************************
@@ -99,34 +73,28 @@ int	f_pipe(t_cmd_line *cmd, char **environ)
 			&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) != 0)
 		{
 			parent_redir_mgt_in_out(cmd);
-			exec_builtin_p(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]),
-				cmd);
+			cmd->exit_code = exec_builtin_p(is_built_in
+				(cmd->tab_cmd[cmd->cmd_step].tab_args[0]),cmd);
 		}
 		else
 		{
-			if (is_exec_able(cmd) == 0)
+			while (cmd->cmd_step < cmd->nb_simple_cmd)
 			{
-				while (cmd->cmd_step < cmd->nb_simple_cmd)
+				cmd->tab_pid[cmd->cmd_step] = fork();
+				if (cmd->tab_pid[cmd->cmd_step] == -1)
+					msg_error(ERM_FORK, ERN_FORK);
+				else if (cmd->tab_pid[cmd->cmd_step] == 0)
 				{
-					if (cmd->tab_cmd[cmd->cmd_step].redir_test == 1)
-					{
-						cmd->tab_pid[cmd->cmd_step] = fork();
-						if (cmd->tab_pid[cmd->cmd_step] == -1)
-							msg_error(ERM_FORK, ERN_FORK);
-						else if (cmd->tab_pid[cmd->cmd_step] == 0)
-						{
-							child(cmd, environ);
-						}
-						else
-						{
-						}
-					}
-					cmd->cmd_step++;
+					child(cmd, environ);
 				}
+				else
+				{
+				}
+				cmd->cmd_step++;
 			}
+			close_tab_pipe(cmd);
+			f_pipe_wait(cmd);
 		}
 	}
-	close_tab_pipe(cmd);
-	f_pipe_wait(cmd);
 	return (0);
 }
