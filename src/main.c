@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/04 15:06:31 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 17:14:12 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,165 +14,58 @@
 #include "../include/minishell.h"
 
 /******************************************************************************
----- A FAIRE DWI ce jour---- :
+Comment fonctionne le minishell 
 
-POUR MEMOIRE : on fait les redirections quoi qu'il arrive et ensuite on lance
-	les exec (creation des outfile meme si la fonction n'existe pas)
+1) initialise l'ENV et on cree une liste chainee de l'ENV
+2) on lit la ligne de commande => A FAIRE : free la ligne, 
+	utiliser GNL à la place ?
+3) check les quote et les tokens bizarre
+4) lexing pour creer les token
+5) verifie les suite de token non valide
+6) parsing : analyse les token pour creer les args et les redirections(avec expand)
+7) rebuild les list d'ARG de chaque commande pour expand les $VAR
+8) on reconstruit ls list d'ARG expand
+9) on lance l'execution 
+	- tableau d'ARG de fonction
+	- creation des pipes
+	- lancememt des Built_In et des execve dans processus child
+		avec gestion des in/out file, cde qui n'existe pas, ...
 
-	
+******************************************************************************/
+
+/******************************************************************************
+---- A FAIRE ---- :
+
+- signaux ctrl +c, ctrl + d, ctrl + \ (rien)
+- leak memory et free
+- gerer les erreurs possibles quand une fonction decone + Tester
 - verifier si leaks avec quote ouverte
-
-- waitpid gerer par rapport au numero de PID pour afficher le bon message en cas
-	de pb
-
-	- cas
-	cmd |			=> ouvre une ligne de commande
-	cmd ||		=> idem mais mettre nimp ca marche la cmd avant/NE PAS GERER ?
-	cmd | |			=> unexpected token |
-	cmd |||			=> unexpected token ||
-	cmd ||||		=> unexpected token ||
-	cmd ||||..		=> unexpected token ||
-	cat <>  out1	=> affiche out1 NE PAS GERER ?? mais sinon, c'est 
-		assez simple
 - tous les free a revoir
-
-EN COURS !!!!!!
 - gerer la remise sur les bons fd en fin de cycle pour ne pas avoir de fd ouvert
 	dans les childs + gerer aussi celui du HEREDOC qui traine dans les childs OK
 	mais un peu merdique avec plein de close, voir si on peut faire mieux
-
-- EXPAND
-	- gerer quand EXPAND ressort NULL
-	- reste a gerer les trim entre $TEST et "$TEST"
-	- EXPAND sur le HEREDOC, fait des trucs bizarre, a tester avec bash
-	- ajouter les exemples d'Expand qui sont geres
-
 - SIGNAUX
-
 - gerer les valeurs d'exit ou du message d'erreur => parametre exit_code
 		integrer pour $? => voir dans Expand
-
 - leak quand ligne vide (juste ENTER)
 	=> voir comment on gerer la ligne vide, on ne devrait pas lancer la suite ??
 	A VERIFIER J AI UN DOUTE AVEC SANITIZE / tester avec VALGRIND
-
-- Dans PARENTS, gerer le waitpid pour recuperer les exit code
-
 - INTEGRATION des Built-In
 	- si cde seul, a lancer au niveau parent sinon en mode child
 	- fonction qui gere si c'est un built-in : OK
 	- fonction qui lance dans parent (gestion des reidrection a faire) : OK
 	- fonction qui lance dans child : OK
-
 - LEAK dans child abec les BI
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-- TEST="ls -l" ne fonctionne pas => il faut expand
-	il faut expand apres le lexer au moment ou on a la liste des ARGS ou faire
-	un expand avant de lexer => meilleur solution a priori
-- Manque le expand des redirections
-- Test qvec es vqriqbles d'environnement suivamtes
-	TEST=ls -l
-	TEST3=   out1    
-	TEST2=out1
-	TEST4=     out1    out2 
-
-1) finir integration built in
-2) expand mettre les exemples geres + faire le dernier + $?
-2a) mettre a la norme les modfis + nettoyer les print de debug sauf la sortie
-	propre
-3) exit code dans parents
-4) signaux
-5) shell level
-6) gerer les leaks et verifier les fd ouverts avec valgrind
-
-
-
-et ca sera deja tres bien :)))!
-******************************************************************************/
-
-/******************************************************************************
----- A FAIRE ---- :
-
-DWI - differentes redirections
-DWI - free des structures
-MAX - gestion des variables d'environnememt
-- gestion de $?
-- signaux ctrl +c, ctrl + d, ctrl + \ (rien)
-DWI - traiter la ligne de commande vide
-- leak memory et free
-- mode intercatif ?
-MAX - built in :
-	X echo avec -n
-	- cd relatif et absolue path
-	X pwd
-	X export
-	- unset
-	X env
-	- exit
-- gerer les erreurs possibles quand une fonction decone + Tester
-
-A FAIRE EN DETAIL // point bloquant actuel // a finir :
+- gerer les leaks et verifier les fd ouverts avec valgrind
 
 
 ******************************************************************************/
 
 /******************************************************************************
-CHATGPT : 
-en francais  construire en pseudo code un lexer, un parser, un AST 
-et un interpreteur d'AST pour un shell
-
-Main
-
-Test a faire :
-cat out1 out2 out3 | grep out
-    >   t1    test >t1 >   t2 >>t3 >>   t4 <t5 <   t6 <<t7   <<   t8  "<<   t8"
-echo " | " 		| grep ' |	 ' | 	echo " | " | grep ' | '
-test1|test2
-ping -c 5 google.com | grep rtt
-cat        out1              out2 |        grep               Out
-ls -l | cat out1 | grep Out
-ls -l |ls -l |ls -l |ls -l |ls -l |cat out1 | grep Out
-cat out1 | grep Out |wc -l | ls -la
-ls | ls -l | grep out
-
-CA COINCE : !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-| grep ls : 1er token = | pas bien gere =>pb dans le check des token
-
-
----- FAIT ----
-1) on lit la ligne de commande => A FAIRE : free la ligne, 
-	utiliser GNL à la place ?
-2) check les quote : OK
-3) clean les espaces devant les redirections
-4) lexing pour creer les token
-5) analyse les token pour creer les args et les redirections
-6) on transforme les listes de token vers un tableau de commande et de
-	redirection + pipe dans une struct command : OK
-7) Pipe mutliple : OK
-8) creer une fonction pour la gestion des erreurs => passe en para le texte et
-	la valeur du return : OK ??, a voir pour ajouter du free ??
-9) historique et rappel : OK
-10) commande simple OK
-11) pipe OK
-12) > OK >> OK < OK
-13) HEREDOC OK
-14) EXPAND a priori OK sauf trim des variables d'ENV
-15) restera les signaux a traiter;
-******************************************************************************/
-
-/******************************************************************************
----- A FAIRE ---- :
-
-DWI - differentes redirections
-DWI - free des structures
-MAX - gestion des variables d'environnememt
-- gestion de $?
-- signaux ctrl +c, ctrl + d, ctrl + \ (rien)
-DWI - traiter la ligne de commande vide
-- leak memory et free
-- mode intercatif ?
+REPARTITION DES TACHES :
+MAX : 	- implementer la solution lexer expand lexer parsing
+		- shell lvl
+		- SIGNAUX
 MAX - built in :
 	X echo avec -n					CHILD !!!!!
 	X - cd relatif et absolue path 	PARENT
@@ -181,20 +74,11 @@ MAX - built in :
 	X - unset						PARENT
 	X env							NA
 	- exit							NA
-- gerer les erreurs possibles quand une fonction decone + Tester
-
-A FAIRE EN DETAIL // point bloquant actuel // a finir :
-
-
-******************************************************************************/
-
-/******************************************************************************
-A FAIRE :
-MAX : 	- implementer la solution lexer expand lexer parsing
-		- shell lvl
-		- SIGNAUX
-
+		
 DOM : 	- tester avec sanitize et valgrind pour verifier les fd
+			cat <out1 <out2 | grep out | wc -l >test.txt
+			reste des fd ouvert
+
 		- regarder les SIGNAUX
 
 ******************************************************************************/
@@ -293,3 +177,44 @@ int	main(int argc, char **argv, char **environ)
 	rl_clear_history();
 	return (0);
 }
+
+/*
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <string.h>
+
+// Handler pour les signaux
+void handle_signal(int sig) {
+    printf("Reçu le signal : %d\n", sig);
+    fflush(stdout);  // Forcer l'affichage immédiat
+}
+
+int main() {
+    struct sigaction sa;
+    
+    // Nettoyage et configuration de la structure sigaction
+    memset(&sa, 0, sizeof(sa));
+    sa.sa_handler = handle_signal;
+    sa.sa_flags = SA_RESTART;  // Pour que les appels comme fgets ne soient pas interrompus
+
+    // Installation des gestionnaires de signaux
+    sigaction(SIGINT, &sa, NULL);   // Ctrl-C
+    sigaction(SIGQUIT, &sa, NULL);  // Ctrl-/
+	sigaction(EOF, &sa, NULL);  // Ctrl-/
+
+    printf("Programme en attente (Ctrl-C, Ctrl-/, Ctrl-D pour tester)...\n");
+
+    char buffer[100];
+    while (1) {
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+            printf("Fin de l'entrée détectée (probablement Ctrl-D)\n");
+            break;
+        }
+        printf("Vous avez entré : %s", buffer);
+    }
+
+    return 0;
+}
+*/
