@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/02 11:49:25 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 14:15:21 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,10 @@ void	get_env_var_name(t_expand *s)
 /******************************************************************************
 Improve the output parameter with the contains of the env parameter
 ******************************************************************************/
-void	mod_dollar(t_expand *s, t_list *env, int in_quote, t_cmd_line *cmd)
+void	mod_dollar(t_expand *s, t_list *env, t_cmd_line *cmd)
 {
 	char	*tmp;
 
-	(void)in_quote;
 	if (s->input[s->i + 1] == '?')
 	{
 		tmp = s->output;
@@ -89,8 +88,6 @@ void	mod_dollar(t_expand *s, t_list *env, int in_quote, t_cmd_line *cmd)
 			return ;
 		tmp = s->output;
 		s->tmp_env_var = ft_getenv(s->env_name, env);
-		//if (in_quote == 0)
-		//	shorten_envvar_outq(s);
 		if (s->tmp_env_var != NULL)
 		{
 			s->output = ft_strjoin(tmp, s->tmp_env_var);
@@ -124,47 +121,4 @@ void	mode_squote(t_expand *s)
 	free_null(&tmp);
 	free_null(&tmp_env);
 	s->i++;
-}
-
-/******************************************************************************
-Manage the specific case of env var inside or outside dquote
-TEST="      XX      XX      " 
-echo $TEST		=> XX XX---
-echo "$TEST"	=>      XX      XX      ---
-******************************************************************************/
-void	shorten_envvar_outq(t_expand *s)
-{
-	char	*tmp;
-	int		i;
-	int		j;
-
-	tmp = s->tmp_env_var;
-	s->tmp_env_var = ft_strtrim(tmp, " ");
-	if (s->tmp_env_var != NULL)
-	{
-		i = 0;
-		j = 0;
-		while (s->tmp_env_var[i] != '\0')
-		{
-			while (ft_is_white_space(s->tmp_env_var[i]) == 0
-				&& s->tmp_env_var[i] != '\0')
-			{
-				s->tmp_env_var[j] = s->tmp_env_var[i];
-				i++;
-				j++;
-			}
-			if (ft_is_white_space(s->tmp_env_var[i]) == 1
-				&& s->tmp_env_var[i] != '\0')
-			{
-				s->tmp_env_var[j] = s->tmp_env_var[i];
-				i++;
-				j++;
-			}
-			while (ft_is_white_space(s->tmp_env_var[i]) == 1
-				&& s->tmp_env_var[i] != '\0')
-				i++;
-		}
-		s->tmp_env_var[j] = '\0';
-	}
-	//free_null(&tmp);
 }

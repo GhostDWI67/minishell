@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/02 17:15:07 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 13:43:02 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,5 @@ int	free_cmd_line(t_cmd_line *cmd)
 	free(cmd->tab_cmd);
 	if (cmd->tab_path != NULL)
 		free_tab_char(cmd->tab_path);
-	//free(cmd);
 	return (0);
 }

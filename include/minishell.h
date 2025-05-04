@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/03 13:09:14 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 15:09:44 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ typedef struct s_expand
 	int		start;
 }				t_expand;
 
-typedef struct s_command {
+typedef struct s_command
+{
 	t_list	*args; //free OK
 	t_list	*redirection; //free OK
 	char	**tab_args; //free ?? a revoir ?
@@ -104,7 +105,8 @@ typedef struct s_command {
 	int		redir_test;
 }	t_command;
 
-typedef struct s_cmd_line {
+typedef struct s_cmd_line
+{
 	char		*input;
 	t_token		*token;
 	t_list		*env;
@@ -132,7 +134,7 @@ int			unset(char **args, t_list **env);
 int			cd(char **args, t_list *env);
 
 /* check.c */
-int			check_quote (char *s);
+int			check_quote(char *s);
 int			ws_check(char *s);
 
 /* display.c */
@@ -144,7 +146,7 @@ int			init_env(t_cmd_line *cmd, char **env);
 char		*ft_getenv(const char *var, t_list *env);
 
 /* exec.c */
-int			f_pipe(t_cmd_line *cmd, char **environ);
+void		f_exec(t_cmd_line *cmd, char **environ);
 
 /* exec_built_in.c*/
 int			is_built_in(char *s);
@@ -157,7 +159,7 @@ int			child(t_cmd_line *cmd, char **environ);
 
 /* exec_utils.c */
 char		*get_path(char **tab_path, char *fexec);
-void 		close_fd(int *fd, int nb_fd);
+void		close_fd(int *fd, int nb_fd);
 void		build_pipe(t_cmd_line *cmd);
 void		close_tab_pipe(t_cmd_line *cmd);
 
@@ -167,11 +169,12 @@ int			msg_inf(char *err_msg, int err_nb);
 
 /* expand.c */
 char		*s_expand(char *str, t_list *env, t_cmd_line *cmd);
+void		free_expand(t_expand *s);
 
 /* expand_utils1.c */
 void		mod_no_case(t_expand *s);
 void		get_env_var_name(t_expand *s);
-void		mod_dollar(t_expand *s, t_list *env, int in_quote, t_cmd_line *cmd);
+void		mod_dollar(t_expand *s, t_list *env, t_cmd_line *cmd);
 void		mode_squote(t_expand *s);
 void		shorten_envvar_outq(t_expand *s);
 
@@ -213,10 +216,16 @@ void		sort_tab(char **arr, int len);
 
 /* parsing.c */
 void		parsing(t_cmd_line *cmd);
-char		**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd);
+void		cmd_arg_to_tab(t_cmd_line *cmd);
+
+/* parsing2.c */
+void		parsing_args(t_cmd_line *cmd);
 
 /* parsing_utils.c */
 int			skip_quote(int i, char *s);
+
+/* rebuilt_arg.c */
+char		*rebuilt_args(t_cmd_line *cmd, int i);
 
 /* redirection.c */
 int			redir_mgt(t_cmd_line *cmd);

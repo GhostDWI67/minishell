@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/04/27 15:55:20 by dwianni          ###   ########.fr        #
+#    Updated: 2025/05/04 13:28:41 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,8 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/built_in/pwd.c \
 		$(SRC_DIR)/built_in/unset.c \
 		$(SRC_DIR)/env/env.c \
+		$(SRC_DIR)/parsing2/rebuilt_arg.c \
+		$(SRC_DIR)/parsing2/parsing2.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

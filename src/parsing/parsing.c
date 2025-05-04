@@ -6,14 +6,14 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/02 17:59:00 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 15:05:32 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /******************************************************************************
-Sort the token list into a command structure
+Init all the parameter of the parsing function
 ******************************************************************************/
 static void	parsing_init(t_cmd_line *cmd)
 {
@@ -32,19 +32,19 @@ static void	parsing_init(t_cmd_line *cmd)
 	}
 }
 
-void	parsing(t_cmd_line *cmd)
+/******************************************************************************
+Additionnal function of parsing
+Sort the token in the ARG list and redirection list
+******************************************************************************/
+static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 {
-	char	*tmp;
-	int		i;
-
-	parsing_init(cmd);
-	i = 0;
 	while (cmd->token != NULL)
 	{
 		if ((cmd->token->content)[0] == '>' ||
 			(cmd->token->content)[0] == '<')
 		{
-			tmp = ft_strjoin(cmd->token->content, cmd->token->next->content);
+			tmp = ft_strjoin(cmd->token->content,
+					s_expand(cmd->token->next->content, cmd->env, cmd));
 			if (tmp != NULL)
 			{
 				ft_lstadd_back(&cmd->tab_cmd[i].redirection, ft_lstnew(tmp));
@@ -62,10 +62,26 @@ void	parsing(t_cmd_line *cmd)
 }
 
 /******************************************************************************
+Sort the token list into a command structure
+Fill the redirection list of a simple command
+fill the ARG list of a simple command
+******************************************************************************/
+void	parsing(t_cmd_line *cmd)
+{
+	char	*tmp;
+	int		i;
+
+	parsing_init(cmd);
+	i = 0;
+	tmp = NULL;
+	parsing_sort(cmd, i, tmp);
+}
+
+/******************************************************************************
 Transform a list into a tab of string
 Return : pointer to a tab
 ******************************************************************************/
-char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
+static char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
 {
 	char	**res;
 	t_list	*tmp;
@@ -87,4 +103,20 @@ char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
 		res[i] = NULL;
 	}
 	return (res);
+}
+
+/******************************************************************************
+Transform the list ARG into a tab of string for ALL the simple command
+******************************************************************************/
+void	cmd_arg_to_tab(t_cmd_line *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd->nb_simple_cmd)
+	{
+		cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args,
+				cmd->env, cmd);
+		i++;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/05/03 13:42:36 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 14:12:46 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 /******************************************************************************
 Manage the input and history
+
+First check open quote and token check : even if not OK add to the history
+Check if the last token is a pipe and manage the additionnal entries
+Check if the line is only with white space => return a new command linde and
+	don't add in history
+Manage the exit
 
 For debug
 //display_token(cmd);
@@ -46,6 +52,22 @@ static void	input_last_pipe_prep(t_cmd_line *cmd, char *tmp, char *input)
 	cmd->token = parse_token(cmd->input);
 }
 
+static void	input_last_pipe_check(t_cmd_line *cmd)
+{
+	if (check_token(cmd->token) == 1)
+	{
+		cmd->err_nb = ERN_TOKEN;
+		cmd->exit_code = cmd->err_nb;
+		add_history(cmd->input);
+	}
+	if (check_quote(cmd->input) != 0)
+	{
+		cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
+		cmd->exit_code = cmd->err_nb;
+		add_history(cmd->input);
+	}
+}
+
 static void	input_last_pipe(t_cmd_line *cmd, char *tmp, char *input)
 {
 	while (check_token_last_pipe(cmd->token) == 1)
@@ -59,18 +81,9 @@ static void	input_last_pipe(t_cmd_line *cmd, char *tmp, char *input)
 		else if (ws_check(input) != 0 && input[0] != '\0')
 		{
 			input_last_pipe_prep(cmd, tmp, input);
-			if (check_token(cmd->token) == 1)
+			if (check_token(cmd->token) == 1 || check_quote(cmd->input) != 0)
 			{
-				cmd->err_nb = ERN_TOKEN;
-				cmd->exit_code = cmd->err_nb;
-				add_history(cmd->input);
-				break ;
-			}
-			if (check_quote(cmd->input) != 0)
-			{
-				cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
-				cmd->exit_code = cmd->err_nb;
-				add_history(cmd->input);
+				input_last_pipe_check(cmd);
 				break ;
 			}
 		}
@@ -98,7 +111,7 @@ void	main_input_mgt(t_cmd_line *cmd)
 		cmd->err_nb = 25;
 	else
 	{
-		//
+		//gestion de l'exit a l'arrache pour le moment
 		exit (0);
 	}
 }

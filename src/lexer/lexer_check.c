@@ -6,27 +6,18 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:21:11 by admin             #+#    #+#             */
-/*   Updated: 2025/05/03 13:15:09 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 14:44:40 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /******************************************************************************
-Check if no problem with token
+manage the message of the check_token function
 Return : 0 if no pb/OK, other if not OK
 ******************************************************************************/
-int	check_token(t_token *token)
+static int	check_token_msg(t_token *tmp)
 {
-	t_token	*tmp;
-
-	tmp = token;
-	
-	if (tmp->type == 5)
-		{
-			msg_error(ft_strjoin(ERM_TOKEN, tmp->content), ERN_TOKEN);//
-			return (1);
-		}
 	while (tmp != NULL)
 	{
 		if (tmp->next != NULL)
@@ -45,6 +36,23 @@ int	check_token(t_token *token)
 		tmp = tmp->next;
 	}
 	return (0);
+}
+
+/******************************************************************************
+Check if no problem with token
+Return : 0 if no pb/OK, other if not OK
+******************************************************************************/
+int	check_token(t_token *token)
+{
+	t_token	*tmp;
+
+	tmp = token;
+	if (tmp->type == 5)
+	{
+		msg_error(ft_strjoin(ERM_TOKEN, tmp->content), ERN_TOKEN);//changer le type de message, utiliser une autre fonction
+		return (1);
+	}
+	return (check_token_msg(tmp));
 }
 
 /******************************************************************************

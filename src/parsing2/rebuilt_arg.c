@@ -1,61 +1,64 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
+/*   rebuilt_arg.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/04 14:23:24 by dwianni          ###   ########.fr       */
+/*   Created: 2025/05/04 13:08:52 by dwianni           #+#    #+#             */
+/*   Updated: 2025/05/04 14:24:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /******************************************************************************
-Case managed
-
-echo $USER						dwianni					OK
-echo "$USER"					dwianni					OK
-echo '$USER'					$USER					OK
-echo $USER"$USER"'$USER'		dwiannidwianni$USER		OK
-echo $USER$/"$USER"'$USER'		dwianni$/dwianni$USER	OK
-echo "$USER$'$USER'"			dwianni$'dwianni'		OK
-echo "$USER$"					dwianni$				OK
-echo $"salut"					salut					OK
-echo $+salut					$+salut					OK
-echo $123						23						OK
-echo $USER$/"$USER"'$USER' "$USER$'$USER''$USER'" $"salut" $+salut $123
-			dwianni$/dwianni$USER dwianni$'dwianni''dwianni' salut $+salut 23
-echo $$							give the actual PID, not managed
-
-NON GERE
-export TEST="      XXX        "			=> reste a traiter
-ECHO $TEST		- XXX -				on trime
-ECHO "$TEST"	-      XXX    -		on trime pas
-
-RULES FOR ENV VAR
-var start with an alpha (low or upper case) or underscore(_)
-after you can use alphanum and underscore(_)
+dup_inquote
+make duplication part of exp_inquote
 ******************************************************************************/
-/******************************************************************************
-Free a expand structure
-******************************************************************************/
-void	free_expand(t_expand *s)
+static void	dup_inquote(t_expand *s, int start, char *tmp, char *tmp_env)
 {
-	s->input = NULL;
-	if (s->output != NULL)
+	if (s->i != start)
 	{
-		free(s->output);
-		s->output = NULL;
+		tmp = s->output;
+		tmp_env = ft_strndup(s->input, start, s->i);
+		if (tmp_env == NULL)
+			return ;
+		s->output = ft_strjoin(tmp, tmp_env);
+		free(tmp);
+		tmp = NULL;
+		free(tmp_env);
+		tmp_env = NULL;
 	}
-	if (s->env_name != NULL)
+}
+
+/******************************************************************************
+exp_inquote
+Generate the expand into the structure expand inside the quote
+******************************************************************************/
+static void	exp_inquote(t_expand *s)
+{
+	int		start;
+	char	*tmp;
+	char	*tmp_env;
+
+	tmp = NULL;
+	tmp_env = NULL;
+	start = s->i;
+	if (s->input[s->i] == '\'')
 	{
-		free(s->env_name);
-		s->env_name = NULL;
+		s->i++;
+		while (s->input[s->i] != '\'')
+			s->i++;
 	}
-	free(s);
-	s = NULL;
+	else if (s->input[s->i] == '"')
+	{
+		s->i++;
+		while (s->input[s->i] != '"')
+			s->i++;
+	}
+	dup_inquote(s, start, tmp, tmp_env);
+	s->i++;
 }
 
 /******************************************************************************
@@ -75,10 +78,8 @@ static void	expand(t_expand *s, t_list *env, t_cmd_line *cmd)
 		mod_no_case(s);
 		if (s->output == NULL)
 			return ;
-		if (s->input[s->i] == '\'')
-			mode_squote(s);
-		else if (s->input[s->i] == '"')
-			mode_dquote(s, env, cmd);
+		if (s->input[s->i] == '\'' || s->input[s->i] == '"')
+			exp_inquote(s);
 		else if (s->input[s->i] == '$')
 			mod_dollar(s, env, cmd);
 	}
@@ -88,7 +89,7 @@ static void	expand(t_expand *s, t_list *env, t_cmd_line *cmd)
 Expand the string
 Return : expended string
 ******************************************************************************/
-char	*s_expand(char *str, t_list *env, t_cmd_line *cmd)
+static char	*d_expand(char *str, t_list *env, t_cmd_line *cmd)
 {
 	char		*res;
 	t_expand	*s;
@@ -100,5 +101,32 @@ char	*s_expand(char *str, t_list *env, t_cmd_line *cmd)
 	expand(s, env, cmd);
 	res = ft_strdup(s->output);
 	free_expand(s);
+	return (res);
+}
+
+/******************************************************************************
+Rebuild ARGS
+from the list ARGS of a simple command
+Return : a string with all the ARGS of the list with only expension of $VAR
+******************************************************************************/
+char	*rebuilt_args(t_cmd_line *cmd, int i)
+{
+	t_list	*tmp;
+	char	*tmp_res;
+	char	*res;
+
+	res = ft_strdup("");
+	tmp = cmd->tab_cmd[i].args;
+	while (tmp != NULL)
+	{
+		tmp_res = res;
+		res = ft_strjoin(tmp_res,
+				d_expand((char *)tmp->content, cmd->env, cmd));
+		free(tmp_res);
+		tmp_res = res;
+		res = ft_strjoin(tmp_res, " ");
+		free(tmp_res);
+		tmp = tmp->next;
+	}
 	return (res);
 }

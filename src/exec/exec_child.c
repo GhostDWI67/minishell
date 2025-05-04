@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/02 17:36:43 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 13:46:19 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ Return : 0 if OK else NOK (nb functions doesn't exist)
 static int	is_exec_able(t_cmd_line *cmd, int i)
 {
 	char	*path;
-	
+
 	path = NULL;
 	if (cmd->tab_cmd[i].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
-			path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0]);
+		path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0]);
 	if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
 	{
@@ -77,6 +77,10 @@ static void	child_redir_mgt_out(t_cmd_line *cmd)
 
 static void	child_prepare(t_cmd_line *cmd)
 {
+	if (cmd->tab_cmd[cmd->cmd_step].redir_test == 0)
+		exit (ERN_FILE);
+	if (is_exec_able(cmd, cmd->cmd_step) != 0)
+		exit (ERN_NOTEXEC);
 	child_redir_mgt_in(cmd);
 	child_redir_mgt_out(cmd);
 	close_tab_pipe(cmd);
@@ -89,12 +93,8 @@ int	child(t_cmd_line *cmd, char **environ)
 	char	*path;
 
 	path = NULL;
-	if (cmd->tab_cmd[cmd->cmd_step].redir_test == 0)
-		exit (ERN_FILE);
-	if (is_exec_able(cmd, cmd->cmd_step) != 0)
-		exit (ERN_NOTEXEC);
-	path = get_path(cmd->tab_path, cmd->tab_cmd[cmd->cmd_step].tab_args[0]);
 	child_prepare(cmd);
+	path = get_path(cmd->tab_path, cmd->tab_cmd[cmd->cmd_step].tab_args[0]);
 	if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
 	if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 2)

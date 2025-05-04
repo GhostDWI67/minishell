@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/03 13:44:01 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 15:06:31 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,16 +194,10 @@ MAX : 	- implementer la solution lexer expand lexer parsing
 		- shell lvl
 		- SIGNAUX
 
-DOM : 	- Test |ls  // check token ne fonctionne pas comme il faut => 
-			ne devrait pas exec + message est pas juste (avec perror a revoir)
-			fonction check_token
-		- expand des redirections
-		- 2eme lexing
-		- mettre a la norme les fonctions 25 lignes
+DOM : 	- tester avec sanitize et valgrind pour verifier les fd
+		- regarder les SIGNAUX
 
 ******************************************************************************/
-
-
 static void	main_init(t_cmd_line	*cmd)
 {
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
@@ -221,7 +215,6 @@ static void	main_init(t_cmd_line	*cmd)
 
 static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 {
-	int		i;
 	char	*path;
 
 	if (cmd->input != NULL)
@@ -229,16 +222,10 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		cmd->nb_simple_cmd = check_token_nb_cmd(cmd->token);
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 		if (cmd->tab_cmd == NULL)
-			return (1); //voir ce qu'il faudrait faire si malloc echoue??
+			return (1);
 		parsing(cmd);
-		//display_simple_cmd(cmd);//affiche les cmd simple***********
-		i = 0;
-		while (i < cmd->nb_simple_cmd)
-		{
-			cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args,
-					cmd->env, cmd);
-			i++;
-		}
+		parsing_args(cmd);
+		cmd_arg_to_tab(cmd);
 		path = ft_getenv("PATH", cmd->env);
 		if (path != NULL)
 			cmd->tab_path = ft_split(path, ':');
@@ -247,7 +234,7 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
 		//environ = ft_lst_to_arr(cmd->env);
-		f_pipe(cmd, environ);
+		f_exec(cmd, environ);
 		//free_tab_char(environ);
 	}
 	return (0);
@@ -296,52 +283,13 @@ int	main(int argc, char **argv, char **environ)
 		environ = ft_lst_to_arr(cmd->env);
 		cmd->err_nb = 0;
 		main_input_mgt(cmd);
-		//display_token(cmd);//Affiche les token***********
 		if (cmd->err_nb == 0)
 		{
 			main_init(cmd);
 			main_exec_mgt(cmd, environ);
 			main_free_mgt(cmd);
-			//printf("ON SORT PROPRE !!!---------------------------\n");
 		}
-		//else
-			//cmd->exit_code = cmd->err_nb;
 	}
 	rl_clear_history();
 	return (0);
 }
-
-/* main de test pour expand */
-/*
-int	main(void)
-{
-	t_expand	*s;
-
-	while (1)
-	{
-		s = malloc(sizeof(t_expand) * 1);
-		s->input = NULL;
-		s->output = NULL;
-		s->env_name = NULL;
-		s->input = readline("minishell$ ");
-		expand(s);
-		printf("OUTPUT :%s\n", s->output);
-		if (s->input != NULL)
-			free(s->input);
-		if (s->output != NULL)
-			free(s->output);
-		if (s->env_name != NULL)
-			free(s->env_name);
-		free(s);
-	}
-}
-*/
-
-/*
-int main(void)
-{
-	char	*s = "      to          to      ";
-
-	printf("%s", ft_strtrim(s, " "));
-}
-*/

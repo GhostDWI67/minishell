@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:17:44 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/02 11:46:12 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/04 14:23:48 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	mode_quote_dolcase(t_expand *s, t_list *env, t_cmd_line *cmd)
 		s->output = ft_strjoin(tmp, tmp_env);
 		free(tmp);
 		free(tmp_env);
-		mod_dollar(s, env, 1, cmd);
+		mod_dollar(s, env, cmd);
 		s->start = s->i;
 	}
 }
