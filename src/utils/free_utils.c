@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/04 13:43:02 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:22:18 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 /******************************************************************************
 Free a char tab
@@ -81,5 +81,30 @@ int	free_cmd_line(t_cmd_line *cmd)
 	free(cmd->tab_cmd);
 	if (cmd->tab_path != NULL)
 		free_tab_char(cmd->tab_path);
+	return (0);
+}
+
+int	free_cmd_line_exit(t_cmd_line *cmd)
+{
+	int	i;
+
+	if (cmd->input != NULL)
+		free(cmd->input);
+	free(cmd->tab_fd);
+	free(cmd->tab_pid);
+	i = 0;
+	while (i < cmd->nb_simple_cmd)
+	{
+		free_command(cmd->tab_cmd[i]);
+		i++;
+	}
+	free(cmd->tab_cmd);
+	ft_lstclear(&cmd->env, free);
+	free(cmd->env);
+	if (cmd->token)
+		free(cmd->token);
+	if (cmd->tab_path != NULL)
+		free_tab_char(cmd->tab_path);
+	free(cmd);
 	return (0);
 }

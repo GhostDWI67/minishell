@@ -1,56 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 17:33:44 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:32:36 by mpalisse         ###   ########.fr       */
+/*   Created: 2025/05/06 13:00:02 by mpalisse          #+#    #+#             */
+/*   Updated: 2025/05/07 13:01:14 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-Duplicate a string between first and last
-Return : 1 string
+redisplay une ligne quand le signal SIGINT (ctrl + c) est recu 
+Return void;
 ******************************************************************************/
-char	*ft_strndup(char const *src, int first, int last)
+static void	sigint_handler(int sig)
 {
-	char	*dest;
-	int		i;
-
-	dest = (char *) malloc(sizeof(char) * (last - first + 2));
-	if (dest == NULL)
-		return (NULL);
-	i = 0;
-	while (i < (last - first + 1))
-	{
-		dest[i] = src[first + i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	(void)sig;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	if (g_signal == 0)
+		rl_redisplay();
 }
 
 /******************************************************************************
-Is white space
-Return : 1 true , 0 = false
+init les signaux et les fonctions a lance en fonction du signal recu
+Return void;
 ******************************************************************************/
-int	ft_is_white_space(char c)
+void	signals_handler(void)
 {
-	if ((c >= 9 && c <= 13) || c == ' ')
-		return (1);
-	return (0);
-}
-
-/******************************************************************************
-Is white space
-Return : 1 true , 0 = false
-******************************************************************************/
-void	ft_close(int fd)
-{
-	if (fd > 2)
-		close(fd);
+	signal(SIGINT, &sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

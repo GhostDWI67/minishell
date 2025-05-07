@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   input_mgt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/05/04 14:12:46 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/07 11:25:27 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 /******************************************************************************
 Manage the input and history
@@ -97,7 +97,7 @@ void	main_input_mgt(t_cmd_line *cmd)
 
 	tmp = NULL;
 	input = NULL;
-	cmd->input = readline("minishell$");
+	cmd->input = readline("minishell$ ");
 	if (cmd->input != NULL && cmd->input[0] != '\0')
 	{
 		input_first_check(cmd);

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_in.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:49:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/04/27 14:25:45 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/06 11:23:53 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 /******************************************************************************
 Check if teh command is a built in
@@ -53,7 +53,7 @@ void	exec_builtin_c(int bi, t_cmd_line *cmd)
 	else if (bi == BUILTIN_ENV)
 		exit(env(cmd->env));
 	else if (bi == BUILTIN_EXIT)
-		exit(BUILTIN_EXIT);// a implementer
+		ft_exit(cmd, cmd->tab_cmd[cmd->cmd_step].tab_args);
 	exit(0);
 }
 
@@ -75,7 +75,7 @@ int	exec_builtin_p(int bi, t_cmd_line *cmd)
 	else if (bi == BUILTIN_ENV)
 		return (env(cmd->env));
 	else if (bi == BUILTIN_EXIT)
-		return (BUILTIN_EXIT);// a implementer
+		ft_exit(cmd, cmd->tab_cmd[cmd->cmd_step].tab_args);
 	return (0);
 }
 

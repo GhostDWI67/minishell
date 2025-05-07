@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
+#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/05/04 17:04:36 by dwianni          ###   ########.fr        #
+#    Updated: 2025/05/06 13:10:06 by mpalisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,9 +55,11 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/built_in/export.c \
 		$(SRC_DIR)/built_in/pwd.c \
 		$(SRC_DIR)/built_in/unset.c \
+		$(SRC_DIR)/built_in/exit.c \
 		$(SRC_DIR)/env/env.c \
 		$(SRC_DIR)/parsing2/rebuilt_arg.c \
 		$(SRC_DIR)/parsing2/parsing2.c \
+		$(SRC_DIR)/signals/signals.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

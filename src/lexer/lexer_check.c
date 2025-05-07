@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:21:11 by admin             #+#    #+#             */
-/*   Updated: 2025/05/04 14:44:40 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/07 11:25:12 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 /******************************************************************************
 manage the message of the check_token function

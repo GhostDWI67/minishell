@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/04 15:09:44 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:20:13 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <linux/limits.h>
-# include "libft.h"
-# include "ft_printf.h"
+//# include <asm/signal.h>
+# include "../lib/libft/include/libft.h"
+# include "../lib/printf/include/ft_printf.h"
 
 /* Standard Value Definition for token */
 # define INPUT			1	//"<"
@@ -73,6 +74,8 @@
 # define ERM_WAITPID	"Waitpid failed"	
 # define ERN_WAITPID	21
 # define ERN_NOTEXEC	127
+
+extern int g_signal;
 
 typedef struct s_token
 {
@@ -132,6 +135,8 @@ bool		export_core(char *arg, t_list **env);
 int			pwd(void);
 int			unset(char **args, t_list **env);
 int			cd(char **args, t_list *env);
+void		ft_exit(t_cmd_line *cmd, char **args);
+void		free_exit(t_cmd_line *cmd, int exit_status);
 
 /* check.c */
 int			check_quote(char *s);
@@ -166,6 +171,7 @@ void		close_tab_pipe(t_cmd_line *cmd);
 /* error_mgt */
 int			msg_error(char *err_msg, int err_nb);
 int			msg_inf(char *err_msg, int err_nb);
+void		ft_perror(char *str);
 
 /* expand.c */
 char		*s_expand(char *str, t_list *env, t_cmd_line *cmd);
@@ -186,6 +192,7 @@ void		free_null(char **s);
 int			free_tab_char(char	**tab);
 int			free_command(t_command cmd);
 int			free_cmd_line(t_cmd_line *cmd);
+int			free_cmd_line_exit(t_cmd_line *cmd);
 
 /* heredoc.c */
 int			redir_heredoc(t_cmd_line *cmd, char *s, int i);
@@ -233,9 +240,13 @@ int			redir_infile(t_cmd_line *cmd, char *s, int i);
 int			redir_outfile(t_cmd_line *cmd, char *s, int i);
 int			redir_appfile(t_cmd_line *cmd, char *s, int i);
 
+/* signals.c */
+void		signals_handler(void);
+
 /* utils.c */
 char		*ft_strndup(char const *src, int first, int last);
 int			ft_is_white_space(char c);
 void		ft_close(int fd);
+long long	ft_atoll(char *s);
 
 #endif

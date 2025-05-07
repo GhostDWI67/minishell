@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/04 17:14:12 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:21:01 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ DOM : 	- tester avec sanitize et valgrind pour verifier les fd
 		- regarder les SIGNAUX
 
 ******************************************************************************/
+
+int	g_signal;
+
 static void	main_init(t_cmd_line	*cmd)
 {
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
@@ -158,6 +161,8 @@ int	main(int argc, char **argv, char **environ)
 
 	(void)argc;
 	(void)argv;
+	g_signal = 0;
+	signals_handler();
 	cmd = malloc(sizeof(t_cmd_line) * 1);
 	if (cmd == NULL)
 		return (1);
@@ -170,7 +175,9 @@ int	main(int argc, char **argv, char **environ)
 		if (cmd->err_nb == 0)
 		{
 			main_init(cmd);
+			g_signal = 1;
 			main_exec_mgt(cmd, environ);
+			g_signal = 0;
 			main_free_mgt(cmd);
 		}
 	}
