@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/05/07 11:26:09 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:11:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,11 @@ void	f_exec(t_cmd_line *cmd, char **environ)
 			&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) != 0)
 		{
 			parent_redir_mgt_in_out(cmd);
-			cmd->exit_code = exec_builtin_p(is_built_in
-					(cmd->tab_cmd[cmd->cmd_step].tab_args[0]), cmd);
+			if (cmd->tab_cmd[0].redir_test == 1)//
+				cmd->exit_code = exec_builtin_p(is_built_in
+						(cmd->tab_cmd[cmd->cmd_step].tab_args[0]), cmd);
+			else
+				cmd->exit_code = ERN_FILE;
 		}
 		else
 		{

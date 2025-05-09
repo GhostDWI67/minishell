@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_mgt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:19:36 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/06 11:24:24 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 08:31:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 /******************************************************************************
 Print a message (parameter) and 
 Return an int = error number
-
-A faire, integrer un free de tout
-On stocke le resultat dans la structure commande ??
 ******************************************************************************/
 int	msg_error(char *err_msg, int err_nb)
 {
@@ -28,20 +25,16 @@ int	msg_error(char *err_msg, int err_nb)
 /******************************************************************************
 Print a message (parameter) and 
 Return an int = error number
-
-A faire, integrer un free de tout
-On stocke le resultat dans la structure commande ??
 ******************************************************************************/
 int	msg_inf(char *err_msg, int err_nb)
 {
-	printf("%s\n", err_msg);
+	ft_putstr_fd(err_msg, 2);
+	ft_putstr_fd("\n", 2);
 	return (err_nb);
 }
 
 /******************************************************************************
 ecrit une string dans la sortie d'erreur
-
-return void;
 ******************************************************************************/
 void	ft_perror(char *str)
 {

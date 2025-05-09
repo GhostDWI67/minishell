@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:25:59 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:47:07 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static void	child_redir_mgt_out(t_cmd_line *cmd)
 static void	child_prepare(t_cmd_line *cmd)
 {
 	if (cmd->tab_cmd[cmd->cmd_step].redir_test == 0)
-		exit (ERN_FILE);
+		exit (ERN_FILE);//
 	if (is_exec_able(cmd, cmd->cmd_step) != 0)
 		exit (ERN_NOTEXEC);
 	child_redir_mgt_in(cmd);

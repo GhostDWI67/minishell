@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 13:22:18 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 08:26:28 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ int	free_cmd_line(t_cmd_line *cmd)
 		i++;
 	}
 	free(cmd->tab_cmd);
+	if (cmd->token != NULL)
+		free(cmd->token);
 	if (cmd->tab_path != NULL)
 		free_tab_char(cmd->tab_path);
 	return (0);
@@ -99,12 +101,12 @@ int	free_cmd_line_exit(t_cmd_line *cmd)
 		i++;
 	}
 	free(cmd->tab_cmd);
-	ft_lstclear(&cmd->env, free);
-	free(cmd->env);
 	if (cmd->token)
 		free(cmd->token);
 	if (cmd->tab_path != NULL)
 		free_tab_char(cmd->tab_path);
+	ft_lstclear(&cmd->env, free);
+		free(cmd->env);
 	free(cmd);
 	return (0);
 }

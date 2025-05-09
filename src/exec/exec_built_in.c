@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_in.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:49:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/06 11:23:53 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:36:32 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	exec_builtin_c(int bi, t_cmd_line *cmd)
 	else if (bi == BUILTIN_ENV)
 		exit(env(cmd->env));
 	else if (bi == BUILTIN_EXIT)
-		ft_exit(cmd, cmd->tab_cmd[cmd->cmd_step].tab_args);
+		exit(ft_exit(cmd, cmd->tab_cmd[cmd->cmd_step].tab_args));
 	exit(0);
 }
 
@@ -75,7 +75,7 @@ int	exec_builtin_p(int bi, t_cmd_line *cmd)
 	else if (bi == BUILTIN_ENV)
 		return (env(cmd->env));
 	else if (bi == BUILTIN_EXIT)
-		ft_exit(cmd, cmd->tab_cmd[cmd->cmd_step].tab_args);
+		return (ft_exit(cmd, cmd->tab_cmd[cmd->cmd_step].tab_args));
 	return (0);
 }
 
@@ -87,13 +87,13 @@ void	parent_redir_mgt_in_out(t_cmd_line *cmd)
 	if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
 	{
 		if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_infile, STDIN_FILENO) == -1)
-			msg_error(ERM_DUP2, ERN_DUP2);
+			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
 		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
 	}
 	if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 1)
 	{
 		if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_outfile, STDOUT_FILENO) == -1)
-			msg_error(ERM_DUP2, ERN_DUP2);
+			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
 		close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 10:28:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/07 13:20:47 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:24:44 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ Return void;
 void	free_exit(t_cmd_line *cmd, int exit_status)
 {
 	if (exit_status != 2)
-		printf("exit\n");
+		ft_putstr_fd("exit\n", 1);
 	free_cmd_line_exit(cmd);
+	cmd->exit_code = exit_status;//
 	exit(exit_status);
 }
 
@@ -56,7 +57,7 @@ void	free_exit(t_cmd_line *cmd, int exit_status)
 lance exit avec le bon retour en fonction des args
 Return void;
 ******************************************************************************/
-void	ft_exit(t_cmd_line *cmd, char **args)
+int	ft_exit(t_cmd_line *cmd, char **args)
 {
 	int		exit_status;
 	bool	error;
@@ -78,8 +79,10 @@ void	ft_exit(t_cmd_line *cmd, char **args)
 	}
 	if (args[1] && args[2])
 	{
-		ft_perror("exit: too many arguments\n");
-		return ;
+		exit_status = msg_inf(ERM_EXIT, ERN_EXIT);
+		cmd->exit_code = exit_status;
+		return (exit_status);
 	}
 	free_exit(cmd, exit_status);
+	return (0);
 }

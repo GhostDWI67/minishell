@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/27 18:40:33 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 08:57:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,5 @@ int	cd(char **args, t_list *env)
 		return (cd_no_args(env));
 	if (i == 2)
 		return (cd_args(args[1], env));
-	write(2, "cd: too many args\n", 18);
-	return (1);
+	return (msg_inf(ERM_CD, ERN_CD));
 }

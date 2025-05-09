@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 13:21:01 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:03:36 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../include/minishell.h"
 #include "../include/minishell.h"
 
 /******************************************************************************
@@ -81,6 +80,12 @@ DOM : 	- tester avec sanitize et valgrind pour verifier les fd
 
 		- regarder les SIGNAUX
 
+A DEBUG
+	- echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<" pb expand le $ disparait
+	
+	- expand du heredoc a revoir, faudrait pas expand
+	- msg_error : rajouter exit_code ?? partout ??
+	- gestion des exit code si on a des NULL dans la structure ??
 ******************************************************************************/
 
 int	g_signal;

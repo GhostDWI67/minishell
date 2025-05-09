@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 13:20:13 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:22:09 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,12 @@
 # define ERM_WAITPID	"Waitpid failed"	
 # define ERN_WAITPID	21
 # define ERN_NOTEXEC	127
+# define ERM_EXPORT		"export: not a valid identifier"
+# define ERN_EXPORT		1
+# define ERM_CD			"cd: too many arguments"
+# define ERN_CD			1
+# define ERM_EXIT		"exit: too many arguments"
+# define ERN_EXIT		1
 
 extern int g_signal;
 
@@ -135,7 +141,7 @@ bool		export_core(char *arg, t_list **env);
 int			pwd(void);
 int			unset(char **args, t_list **env);
 int			cd(char **args, t_list *env);
-void		ft_exit(t_cmd_line *cmd, char **args);
+int			ft_exit(t_cmd_line *cmd, char **args);
 void		free_exit(t_cmd_line *cmd, int exit_status);
 
 /* check.c */

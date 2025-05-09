@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/25 12:26:56 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 08:46:35 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,9 +142,10 @@ int	export(char **args, t_list **env)
 	while (args[i])
 	{
 		if (!check_name(args[i]))
-			perror("export: invalid identifier\n");
+			return(msg_inf(ERM_EXPORT, ERN_EXPORT));
 		else if (!export_core(args[i], env))
-			return (msg_error("export error", 1));
+			return (0);
+			//return (msg_error("export error TOTO", 1));
 		i++;
 	}
 	return (0);
