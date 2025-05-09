@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 10:47:07 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 13:37:39 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,18 @@ static int	is_exec_able(t_cmd_line *cmd, int i)
 	path = NULL;
 	if (cmd->tab_cmd[i].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
-		path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0]);
+		path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0], cmd);
+	
 	if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
+			&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0 && cmd->exit_code != 0)//
+		return (cmd->exit_code);
+	else if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
 	{
 		ft_putstr_fd("Command '", 2);
 		ft_putstr_fd(cmd->tab_cmd[i].tab_args[0], 2);
 		ft_putstr_fd("' not found\n", 2);
+		cmd->exit_code = ERN_NOTEXEC;
 		return (ERN_NOTEXEC);
 	}
 	return (0);
@@ -78,9 +83,10 @@ static void	child_redir_mgt_out(t_cmd_line *cmd)
 static void	child_prepare(t_cmd_line *cmd)
 {
 	if (cmd->tab_cmd[cmd->cmd_step].redir_test == 0)
-		exit (ERN_FILE);//
+		exit (ERN_FILE);
 	if (is_exec_able(cmd, cmd->cmd_step) != 0)
-		exit (ERN_NOTEXEC);
+		exit(cmd->exit_code);
+		//exit (ERN_NOTEXEC);
 	child_redir_mgt_in(cmd);
 	child_redir_mgt_out(cmd);
 	close_tab_pipe(cmd);
@@ -94,7 +100,7 @@ int	child(t_cmd_line *cmd, char **environ)
 
 	path = NULL;
 	child_prepare(cmd);
-	path = get_path(cmd->tab_path, cmd->tab_cmd[cmd->cmd_step].tab_args[0]);
+	path = get_path(cmd->tab_path, cmd->tab_cmd[cmd->cmd_step].tab_args[0], cmd);
 	if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
 	if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 2)

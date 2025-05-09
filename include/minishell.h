@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 10:22:09 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 14:12:09 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <linux/limits.h>
+# include <dirent.h>
 //# include <asm/signal.h>
 # include "../lib/libft/include/libft.h"
 # include "../lib/printf/include/ft_printf.h"
@@ -80,6 +81,12 @@
 # define ERN_CD			1
 # define ERM_EXIT		"exit: too many arguments"
 # define ERN_EXIT		1
+# define ERM_ISDIR		" Is a directory"
+# define ERN_ISDIR		126
+# define ERM_PERM		" Permission denied"
+# define ERN_PERM		126
+# define ERM_NOTFD		" No such file or directory"
+# define ERN_NOTFD		127
 
 extern int g_signal;
 
@@ -169,7 +176,7 @@ void		parent_redir_mgt_in_out(t_cmd_line *cmd);
 int			child(t_cmd_line *cmd, char **environ);
 
 /* exec_utils.c */
-char		*get_path(char **tab_path, char *fexec);
+char		*get_path(char **tab_path, char *fexec, t_cmd_line *cmd);
 void		close_fd(int *fd, int nb_fd);
 void		build_pipe(t_cmd_line *cmd);
 void		close_tab_pipe(t_cmd_line *cmd);

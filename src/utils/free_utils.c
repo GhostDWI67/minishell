@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 08:26:28 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 11:29:45 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	free_tab_char(char	**tab)
 		i++;
 	}
 	free(tab);
+	tab = NULL;
 	return (0);
 }
 
