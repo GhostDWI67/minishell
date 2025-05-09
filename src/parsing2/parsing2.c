@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:08:52 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:24:54 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:20:15 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	parsing_args(t_cmd_line *cmd)
 	while (i < cmd->nb_simple_cmd)
 	{
 		tmp = rebuilt_args(cmd, i);
+		//printf("REBUILT-%s-\n", tmp);//
 		if (cmd->tab_cmd[i].args != NULL)
 			ft_lstclear(&cmd->tab_cmd[i].args, free);
 		cmd->tab_cmd[i].args = parse_arg(tmp);

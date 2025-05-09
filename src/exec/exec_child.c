@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 13:37:39 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 17:18:59 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,19 @@ static int	is_exec_able(t_cmd_line *cmd, int i)
 	char	*path;
 
 	path = NULL;
+	if (cmd->tab_cmd[i].tab_args == NULL)
+		return (cmd->exit_code = 0, cmd->exit_code);
+	
 	if (cmd->tab_cmd[i].tab_args[0] != NULL
-		&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
+		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0)
 		path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0], cmd);
 	
 	if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
-			&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0 && cmd->exit_code != 0)//
+			&& is_built_in(cmd->tab_cmd[i].tab_args) == 0
+			&& cmd->exit_code != 0)//
 		return (cmd->exit_code);
 	else if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
-		&& is_built_in(cmd->tab_cmd[i].tab_args[0]) == 0)
+		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0)
 	{
 		ft_putstr_fd("Command '", 2);
 		ft_putstr_fd(cmd->tab_cmd[i].tab_args[0], 2);
@@ -100,6 +104,8 @@ int	child(t_cmd_line *cmd, char **environ)
 
 	path = NULL;
 	child_prepare(cmd);
+	if (cmd->tab_cmd[cmd->cmd_step].tab_args == NULL)
+		exit(0);
 	path = get_path(cmd->tab_path, cmd->tab_cmd[cmd->cmd_step].tab_args[0], cmd);
 	if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
@@ -107,15 +113,16 @@ int	child(t_cmd_line *cmd, char **environ)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
 	close(cmd->fd_saved_stdin);
 	close(cmd->fd_saved_stdout);
+	//ft_putstr_fd(cmd->tab_cmd[cmd->cmd_step].tab_args[0], 2);//
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL
-		&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]) == 0)
+		&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args) == 0)
 	{
 		if (execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
 			== -1)
 			msg_error(ERM_EXECVE, ERN_EXECVE);
 	}
 	else
-		exec_builtin_c(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args[0]),
+		exec_builtin_c(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args),
 			cmd);
 	return (0);
 }

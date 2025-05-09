@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:25:34 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:31:50 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ void	get_env_var_name(t_expand *s)
 		s->i++;
 		return ;
 	}
-	if (ft_isalnum(s->input[s->i]) == 0 && s->input[s->i] != '_'
-		&& s->input[s->i] != ' ' && s->input[s->i] != ' ')
+	if (ft_isalnum(s->input[s->i]) == 0 && s->input[s->i] != '_')
 	{
 		tmp = s->output;
 		s->output = ft_strjoin(tmp, "$");

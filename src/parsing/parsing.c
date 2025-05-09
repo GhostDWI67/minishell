@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/07 11:25:07 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:21:41 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,10 @@ static char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
 	tmp = args;
 	lst_size = ft_lstsize(tmp);
 	res = (char **)malloc(sizeof(char *) * (lst_size + 1));
-	if (res == NULL)
+	if (res == NULL || lst_size == 0)
+	{
 		return (NULL);
+	}
 	tmp = args;
 	i = 0;
 	while (tmp != NULL)

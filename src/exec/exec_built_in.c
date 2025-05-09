@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:49:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 10:36:32 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 17:07:21 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,23 @@
 Check if teh command is a built in
 Return : BUILTIN_NOT if not or the BUILTIN number
 ******************************************************************************/
-int	is_built_in(char *s)
+int	is_built_in(char **s)
 {
-	if (ft_strncmp(s, "echo", ft_strlen(s)) == 0)
+	if (s == NULL)
+		return (BUILTIN_NOT);
+	if (ft_strncmp(s[0], "echo", ft_strlen(s[0])) == 0)
 		return (BUILTIN_ECHO);
-	else if (ft_strncmp(s, "cd", ft_strlen(s)) == 0)
+	else if (ft_strncmp(s[0], "cd", ft_strlen(s[0])) == 0)
 		return (BUILTIN_CD);
-	else if (ft_strncmp(s, "pwd", ft_strlen(s)) == 0)
+	else if (ft_strncmp(s[0], "pwd", ft_strlen(s[0])) == 0)
 		return (BUILTIN_PWD);
-	else if (ft_strncmp(s, "export", ft_strlen(s)) == 0)
+	else if (ft_strncmp(s[0], "export", ft_strlen(s[0])) == 0)
 		return (BUILTIN_EXPORT);
-	else if (ft_strncmp(s, "unset", ft_strlen(s)) == 0)
+	else if (ft_strncmp(s[0], "unset", ft_strlen(s[0])) == 0)
 		return (BUILTIN_UNSET);
-	else if (ft_strncmp(s, "env", ft_strlen(s)) == 0)
+	else if (ft_strncmp(s[0], "env", ft_strlen(s[0])) == 0)
 		return (BUILTIN_ENV);
-	else if (ft_strncmp(s, "exit", ft_strlen(s)) == 0)
+	else if (ft_strncmp(s[0], "exit", ft_strlen(s[0])) == 0)
 		return (BUILTIN_EXIT);
 	return (BUILTIN_NOT);
 }

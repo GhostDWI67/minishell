@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 12:41:15 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 17:47:59 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,13 @@ DOM : 	- tester avec sanitize et valgrind pour verifier les fd
 		- regarder les SIGNAUX
 
 A DEBUG
-	- echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<" pb expand le $ disparait
-	
 	- expand du heredoc a revoir, faudrait pas expand
 	- msg_error : rajouter exit_code ?? partout ??
 	- gestion des exit code si on a des NULL dans la structure ??
+	- BI leaks dans child => fonction free allegee ?? A CREER et TESTER
+
+ft_putstr_fd("TOTO passe ici\n", 2);
+	
 ******************************************************************************/
 
 int	g_signal;
@@ -115,8 +117,12 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 		if (cmd->tab_cmd == NULL)
 			return (1);
+		//ft_putstr_fd("TOTO 1\n", 2);
 		parsing(cmd);
+		//ft_putstr_fd("TOTO 2\n", 2);
+		//display_simple_cmd(cmd);//
 		parsing_args(cmd);
+		//display_simple_cmd(cmd);//
 		cmd_arg_to_tab(cmd);
 		path = ft_getenv("PATH", cmd->env);
 		if (path != NULL)

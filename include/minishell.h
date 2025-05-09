@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 14:12:09 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 17:04:09 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ char		*ft_getenv(const char *var, t_list *env);
 void		f_exec(t_cmd_line *cmd, char **environ);
 
 /* exec_built_in.c*/
-int			is_built_in(char *s);
+int			is_built_in(char **s);
 void		exec_builtin_c(int bi, t_cmd_line *cmd);
 int			exec_builtin_p(int bi, t_cmd_line *cmd);
 void		parent_redir_mgt_in_out(t_cmd_line *cmd);

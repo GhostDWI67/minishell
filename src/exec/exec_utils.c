@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 14:12:05 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/09 14:51:31 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,16 @@ char	*get_path(char **tab_path, char *fexec, t_cmd_line *cmd)
 
 	if (opendir(fexec) == NULL && access(fexec, X_OK) == 0)
 		return (fexec);
-	
-	
-	//tester si c'est un repertoire
-	//tester si c'est un fichier mais non executable (pb de permission)
-	// ./missing.out => no such file or directory
-	// test_files : command not found avec test_files qui est un repertoire
-
-	// A FAIRE apres manger :)
-	// si / ou ./ ou .// => test directory/permission/ni fichier ni repertoire
-	// sinon c'est un executable
 	if (ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "./", 2) == 0 ||
 		ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "../", 3) == 0 ||
 		ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "/", 1) == 0)
 	{
 		if (opendir(fexec) != NULL)
-		{
-			//cmd->exit_code = msg_inf(ERM_DIRECTORY, ERN_DIRECTORY);
 			return (cmd->exit_code = msg_inf(ERM_ISDIR, ERN_ISDIR), NULL);
-		}
 		else if (access(fexec, F_OK) == 0 && access(fexec, X_OK) != 0)
-		{
-			//cmd->exit_code = msg_inf(ERM_INVPERM, ERN_INVPERM);
 			return (cmd->exit_code = msg_inf(ERM_PERM, ERN_PERM), NULL);
-		}
 		else if (opendir(fexec) == NULL && access(fexec, F_OK) != 0)
-		{
-			//cmd->exit_code = msg_inf(ERM_NOTFD, ERN_NOTFD);
 			return (cmd->exit_code = msg_inf(ERM_NOTFD, ERN_NOTFD), NULL);
-		}
 	}
 	else if (tab_path != NULL)
 	{
