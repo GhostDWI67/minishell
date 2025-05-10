@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_in.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:49:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 18:16:57 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:43:11 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,15 @@ Execute build_in inside a child
 void	exec_builtin_c(int bi, t_cmd_line *cmd)
 {
 	if (bi == BUILTIN_ECHO)
-		exit(echo(cmd->tab_cmd[cmd->cmd_step].tab_args));
+		exit(echo(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd, 1));
 	else if (bi == BUILTIN_CD)
-		exit(cd(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd->env));
+		exit(cd(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd->env, cmd, 1));
 	else if (bi == BUILTIN_PWD)
-		exit(pwd());
+		exit(pwd(cmd, 1));
 	else if (bi == BUILTIN_EXPORT)
-		exit(export(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env));
+		exit(export(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env, cmd, 1));
 	else if (bi == BUILTIN_UNSET)
-		exit(unset(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env));
+		exit(unset(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env, cmd, 1));
 	else if (bi == BUILTIN_ENV)
 		exit(env(cmd->env, cmd, 1));
 	else if (bi == BUILTIN_EXIT)
@@ -65,15 +65,15 @@ Execute build-in inside a parent (when it's a single command)
 int	exec_builtin_p(int bi, t_cmd_line *cmd, char **environ)
 {
 	if (bi == BUILTIN_ECHO)
-		return (echo(cmd->tab_cmd[cmd->cmd_step].tab_args));
+		return (echo(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd, 0));
 	else if (bi == BUILTIN_CD)
-		return (cd(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd->env));
+		return (cd(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd->env, cmd, 0));
 	else if (bi == BUILTIN_PWD)
-		return (pwd());
+		return (pwd(cmd, 0));
 	else if (bi == BUILTIN_EXPORT)
-		return (export(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env));
+		return (export(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env, cmd, 0));
 	else if (bi == BUILTIN_UNSET)
-		return (unset(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env));
+		return (unset(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env, cmd, 0));
 	else if (bi == BUILTIN_ENV)
 		return (env(cmd->env, cmd, 0));
 	else if (bi == BUILTIN_EXIT)

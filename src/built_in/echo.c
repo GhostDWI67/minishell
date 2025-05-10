@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:55:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/25 12:28:03 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:30:02 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ dans le terminal.
 si -n alors il n'y a pas de "\n" a la fin, sans -n alors il y a un "\n" a la fin
 Return 0; 
 ******************************************************************************/
-int	echo(char **args)
+int	echo(char **args, t_cmd_line *cmd, int in_child)
 {
 	bool	n;
 	int		i;
@@ -73,5 +73,7 @@ int	echo(char **args)
 	i = 1;
 	n = true;
 	echo_core(args, n, i, count);
+	if (in_child == 1)
+		free_cmd_line_exit(cmd);
 	return (0);
 }

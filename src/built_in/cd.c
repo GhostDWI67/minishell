@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/09 08:57:18 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/10 19:05:59 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	cd_core(char *arg, t_list *env)
 execute l'equivalent de "cd ~"
 Return exit status en int;
 ******************************************************************************/
-static int	cd_no_args(t_list *env)
+static int	cd_no_args(t_list *env, t_cmd_line *cmd, int in_child)
 {
 	int		ret;
 	char	*arg;
@@ -84,6 +84,8 @@ static int	cd_no_args(t_list *env)
 	if (ret == 1)
 		perror(arg);
 	free(arg);
+	if (in_child == 1)
+		free_cmd_line_exit(cmd);
 	return (ret);
 }
 
@@ -91,7 +93,7 @@ static int	cd_no_args(t_list *env)
 lance cd avec l'argument donné
 Return exit status en int;
 ******************************************************************************/
-static int	cd_args(char *arg, t_list *env)
+static int	cd_args(char *arg, t_list *env, t_cmd_line *cmd, int in_child)
 {
 	int	ret;
 
@@ -102,6 +104,8 @@ static int	cd_args(char *arg, t_list *env)
 		ret = 1;
 	if (ret == 1)
 		perror(arg);
+	if (in_child == 1)
+		free_cmd_line_exit(cmd);
 	return (ret);
 }
 
@@ -109,7 +113,7 @@ static int	cd_args(char *arg, t_list *env)
 check le bon nombre d'arg et lance cd_core si chdir a reussis
 Return 0 si ok sinon 1;
 ******************************************************************************/
-int	cd(char **args, t_list *env)
+int	cd(char **args, t_list *env, t_cmd_line *cmd, int in_child)
 {
 	int	i;
 
@@ -117,8 +121,10 @@ int	cd(char **args, t_list *env)
 	while (args[i])
 		i++;
 	if (i == 1)
-		return (cd_no_args(env));
+		return (cd_no_args(env, cmd, in_child));
 	if (i == 2)
-		return (cd_args(args[1], env));
+		return (cd_args(args[1], env, cmd, in_child));
+	if (in_child == 1)
+		free_cmd_line_exit(cmd);
 	return (msg_inf(ERM_CD, ERN_CD));
 }

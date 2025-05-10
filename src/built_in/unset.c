@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:28:24 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/04/25 13:07:17 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:32:15 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static bool	unset_core(char *arg, t_list **env)
 lance unset pour toute les variables dans args
 Return 0;
 ******************************************************************************/
-int	unset(char **args, t_list **env)
+int	unset(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 {
 	int	i;
 
@@ -121,5 +121,7 @@ int	unset(char **args, t_list **env)
 			write(2, "unset failed\n", 13);
 		i++;
 	}
+	if (in_child == 1)
+		free_cmd_line_exit(cmd);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 18:17:17 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/10 19:13:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,15 +109,15 @@ typedef struct s_expand
 
 typedef struct s_command
 {
-	t_list	*args; //free OK
-	t_list	*redirection; //free OK
-	char	**tab_args; //free ?? a revoir ?
+	t_list	*args;
+	t_list	*redirection;
+	char	**tab_args;
 	int		fd_infile;
 	int		fd_outfile;
-	char	*infile; //free OK
-	char	*outfile; //free OK
+	char	*infile;
+	char	*outfile;
 	int		hd_pipe[2];
-	char	*hd_input; //free OK
+	char	*hd_input;
 	int		redir_test;
 }	t_command;
 
@@ -126,14 +126,15 @@ typedef struct s_cmd_line
 	char		*input;
 	t_token		*token;
 	t_list		*env;
+	char		**tab_env;
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
 	char		**tab_path;
 	int			*tab_fd;
 	int			*tab_pid;
 	int			cmd_step;
-	int			fd_saved_stdin;//a virer ??
-	int			fd_saved_stdout;//a virer ??
+	int			fd_saved_stdin;
+	int			fd_saved_stdout;
 	int			err_nb;
 	int			exit_code;
 }	t_cmd_line;
@@ -141,13 +142,13 @@ typedef struct s_cmd_line
 /* main.c */
 
 /* built_in */
-int			echo(char **args);
+int			echo(char **args, t_cmd_line *cmd, int in_child);
 int			env(t_list *env, t_cmd_line *cmd, int in_child);
-int			export(char **args, t_list **env);
+int			export(char **args, t_list **env, t_cmd_line *cmd, int in_child);
 bool		export_core(char *arg, t_list **env);
-int			pwd(void);
-int			unset(char **args, t_list **env);
-int			cd(char **args, t_list *env);
+int			pwd(t_cmd_line *cmd, int in_child);
+int			unset(char **args, t_list **env, t_cmd_line *cmd, int in_child);
+int			cd(char **args, t_list *env, t_cmd_line *cmd, int in_child);
 int			ft_exit(t_cmd_line *cmd, char **args);
 void		free_exit(t_cmd_line *cmd, bool err, int exit_status);
 

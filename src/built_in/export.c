@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/09 08:46:35 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/10 18:36:33 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ valable, si aucun argument alors export affiche l'env trié par ordre
 alphabetique
 Return 0 si ok sinon 1;
 ******************************************************************************/
-int	export(char **args, t_list **env)
+int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 {
 	int	i;
 
@@ -136,17 +136,30 @@ int	export(char **args, t_list **env)
 	if (!args || !args[i])
 	{
 		if ((*env) && !no_args((*env)))
+		{
+			if (in_child == 1)
+				free_cmd_line_exit(cmd);
 			return (msg_error("export no args", 1));
+		}
 		return (0);
 	}
 	while (args[i])
 	{
 		if (!check_name(args[i]))
+		{
+			if (in_child == 1)
+				free_cmd_line_exit(cmd);
 			return(msg_inf(ERM_EXPORT, ERN_EXPORT));
+		}
 		else if (!export_core(args[i], env))
+		{
+			if (in_child == 1)
+				free_cmd_line_exit(cmd);
 			return (0);
-			//return (msg_error("export error TOTO", 1));
+		}
 		i++;
 	}
+	if (in_child == 1)
+		free_cmd_line_exit(cmd);
 	return (0);
 }

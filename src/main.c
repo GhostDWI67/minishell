@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 18:10:35 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/10 19:47:52 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,11 @@ DOM : 	- tester avec sanitize et valgrind pour verifier les fd
 		- regarder les SIGNAUX
 
 A DEBUG
-	- expand du heredoc a revoir, faudrait pas expand
-	- msg_error : rajouter exit_code ?? partout ??
-	- gestion des exit code si on a des NULL dans la structure ??
+	- expand du heredoc a revoir, faudrait pas expand => a modifier SAMEDI PROCHAIN
+	- msg_error : rajouter exit_code ?? partout ?? => partout on met le cmd->exit_code
+	- gestion des exit code si on a des NULL dans la structure ?? =>SAMEDI
 	- BI leaks dans child => fonction free allegee ?? A CREER et TESTER
+	- verifier les fd qui reste ouvert => SAMEDI PROCHAIN
 
 ft_putstr_fd("TOTO passe ici\n", 2);
 	
@@ -92,7 +93,7 @@ ft_putstr_fd("TOTO passe ici\n", 2);
 
 int	g_signal;
 
-static void	main_init(t_cmd_line	*cmd)
+static void	main_init(t_cmd_line *cmd)
 {
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->fd_saved_stdout == -1)
@@ -117,12 +118,8 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 		if (cmd->tab_cmd == NULL)
 			return (1);
-		//ft_putstr_fd("TOTO 1\n", 2);
 		parsing(cmd);
-		//ft_putstr_fd("TOTO 2\n", 2);
-		//display_simple_cmd(cmd);//
 		parsing_args(cmd);
-		//display_simple_cmd(cmd);//
 		cmd_arg_to_tab(cmd);
 		path = ft_getenv("PATH", cmd->env);
 		if (path != NULL)
@@ -131,9 +128,7 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 			cmd->tab_path = NULL;
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
-		//environ = ft_lst_to_arr(cmd->env);
 		f_exec(cmd, environ);
-		//free_tab_char(environ);
 	}
 	return (0);
 }
@@ -159,17 +154,16 @@ static void	main_free_mgt(t_cmd_line *cmd)
 		msg_error(ERM_STD, ERN_STD);
 	else
 		close(cmd->fd_saved_stdin);
-	// if (cmd->input != NULL)
-	// {
-	// 	free_cmd_line(cmd);
-	// 	cmd = NULL;
-	// }
+	if (cmd->input != NULL)
+	{
+	 	free_cmd_line(cmd);
+	 	cmd = NULL;
+	}
 }
 
 int	main(int argc, char **argv, char **environ)
 {
 	t_cmd_line	*cmd;
-	int			i;
 
 	(void)argc;
 	(void)argv;
@@ -179,65 +173,22 @@ int	main(int argc, char **argv, char **environ)
 	if (cmd == NULL)
 		return (1);
 	init_env(cmd, environ);
-	i = 0;
-	while (i < 1)
+	while (1)
 	{
-		environ = ft_lst_to_arr(cmd->env);
+		cmd->tab_env = ft_lst_to_arr(cmd->env);
 		cmd->err_nb = 0;
 		main_input_mgt(cmd);
 		if (cmd->err_nb == 0)
 		{
 			main_init(cmd);
 			g_signal = 1;
-			main_exec_mgt(cmd, environ);
+			main_exec_mgt(cmd, cmd->tab_env);
 			g_signal = 0;
 			main_free_mgt(cmd);
 		}
-		i++;
 	}
-	free(environ);
-	free_cmd_line_exit(cmd);
-	rl_clear_history();
+	//free(environ);
+	//free_cmd_line_exit(cmd);
+	//rl_clear_history();
 	return (0);
 }
-
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <string.h>
-
-// Handler pour les signaux
-void handle_signal(int sig) {
-    printf("Reçu le signal : %d\n", sig);
-    fflush(stdout);  // Forcer l'affichage immédiat
-}
-
-int main() {
-    struct sigaction sa;
-    
-    // Nettoyage et configuration de la structure sigaction
-    memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = handle_signal;
-    sa.sa_flags = SA_RESTART;  // Pour que les appels comme fgets ne soient pas interrompus
-
-    // Installation des gestionnaires de signaux
-    sigaction(SIGINT, &sa, NULL);   // Ctrl-C
-    sigaction(SIGQUIT, &sa, NULL);  // Ctrl-/
-	sigaction(EOF, &sa, NULL);  // Ctrl-/
-
-    printf("Programme en attente (Ctrl-C, Ctrl-/, Ctrl-D pour tester)...\n");
-
-    char buffer[100];
-    while (1) {
-        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
-            printf("Fin de l'entrée détectée (probablement Ctrl-D)\n");
-            break;
-        }
-        printf("Vous avez entré : %s", buffer);
-    }
-
-    return 0;
-}
-*/

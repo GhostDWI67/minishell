@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 18:22:22 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/10 19:26:45 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ int	child(t_cmd_line *cmd, char **environ)
 	else
 	{
 		free(path);
-		free(environ);
 		exec_builtin_c(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args),
 			cmd);
 	}
