@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:00:02 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/07 13:01:14 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:22:52 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	sigint_handler(int sig)
 }
 
 /******************************************************************************
-init les signaux et les fonctions a lance en fonction du signal recu
+init les signaux et les fonctions a lancer en fonction du signal recu
 Return void;
 ******************************************************************************/
 void	signals_handler(void)

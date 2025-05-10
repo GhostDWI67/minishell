@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 11:29:45 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/10 18:11:06 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	free_command(t_command cmd)
 	free_null(&cmd.outfile);
 	if (cmd.args != NULL)
 		ft_lstclear(&cmd.args, free);
-	free(cmd.tab_args);
+	free_tab_char(cmd.tab_args);
 	if (cmd.redirection != NULL)
 		ft_lstclear(&cmd.redirection, free);
 	return (0);
@@ -93,21 +93,28 @@ int	free_cmd_line_exit(t_cmd_line *cmd)
 
 	if (cmd->input != NULL)
 		free(cmd->input);
-	free(cmd->tab_fd);
-	free(cmd->tab_pid);
+	if (cmd->tab_fd)
+		free(cmd->tab_fd);
+	if (cmd->tab_pid)
+		free(cmd->tab_pid);
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
 		free_command(cmd->tab_cmd[i]);
 		i++;
 	}
-	free(cmd->tab_cmd);
+	if (cmd->tab_cmd)
+		free(cmd->tab_cmd);
 	if (cmd->token)
-		free(cmd->token);
+		token_clear(&cmd->token);
 	if (cmd->tab_path != NULL)
 		free_tab_char(cmd->tab_path);
-	ft_lstclear(&cmd->env, free);
+	if (cmd->env)
+	{
+		ft_lstclear(&cmd->env, free);
 		free(cmd->env);
-	free(cmd);
+	}
+	if (cmd)
+		free(cmd);
 	return (0);
 }

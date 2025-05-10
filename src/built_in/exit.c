@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 10:28:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/09 10:24:44 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/10 17:24:17 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ static int	check_arg(char *s, bool *error)
 lance la fonction pour clear la memoire puis exit avec le bon status
 Return void;
 ******************************************************************************/
-void	free_exit(t_cmd_line *cmd, int exit_status)
+void	free_exit(t_cmd_line *cmd, bool err, int exit_status)
 {
-	if (exit_status != 2)
+	if (err == false)
 		ft_putstr_fd("exit\n", 1);
 	free_cmd_line_exit(cmd);
-	cmd->exit_code = exit_status;//
+	//cmd->exit_code = exit_status;
 	exit(exit_status);
 }
 
@@ -65,7 +65,7 @@ int	ft_exit(t_cmd_line *cmd, char **args)
 	error = false;
 	exit_status = 0;
 	if (!args[1])
-		free_exit(cmd, exit_status);
+		free_exit(cmd, error, exit_status);
 	if (args[1])
 	{
 		exit_status = check_arg(args[1], &error);
@@ -74,7 +74,7 @@ int	ft_exit(t_cmd_line *cmd, char **args)
 			ft_perror("exit: ");
 			ft_perror(args[1]);
 			ft_perror(": numeric argument required\n");
-			free_exit(cmd, 2);
+			free_exit(cmd, error, 2);
 		}
 	}
 	if (args[1] && args[2])
@@ -83,6 +83,6 @@ int	ft_exit(t_cmd_line *cmd, char **args)
 		cmd->exit_code = exit_status;
 		return (exit_status);
 	}
-	free_exit(cmd, exit_status);
+	free_exit(cmd, error, exit_status);
 	return (0);
 }

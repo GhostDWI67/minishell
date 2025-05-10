@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 17:47:59 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/10 18:10:35 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,16 +159,17 @@ static void	main_free_mgt(t_cmd_line *cmd)
 		msg_error(ERM_STD, ERN_STD);
 	else
 		close(cmd->fd_saved_stdin);
-	if (cmd->input != NULL)
-	{
-		free_cmd_line(cmd);
-		cmd = NULL;
-	}
+	// if (cmd->input != NULL)
+	// {
+	// 	free_cmd_line(cmd);
+	// 	cmd = NULL;
+	// }
 }
 
 int	main(int argc, char **argv, char **environ)
 {
 	t_cmd_line	*cmd;
+	int			i;
 
 	(void)argc;
 	(void)argv;
@@ -178,7 +179,8 @@ int	main(int argc, char **argv, char **environ)
 	if (cmd == NULL)
 		return (1);
 	init_env(cmd, environ);
-	while (1)
+	i = 0;
+	while (i < 1)
 	{
 		environ = ft_lst_to_arr(cmd->env);
 		cmd->err_nb = 0;
@@ -191,7 +193,10 @@ int	main(int argc, char **argv, char **environ)
 			g_signal = 0;
 			main_free_mgt(cmd);
 		}
+		i++;
 	}
+	free(environ);
+	free_cmd_line_exit(cmd);
 	rl_clear_history();
 	return (0);
 }

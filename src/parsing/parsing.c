@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/09 17:21:41 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/10 18:09:21 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ Sort the token in the ARG list and redirection list
 ******************************************************************************/
 static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 {
+	t_token *temp;
+
+	temp = cmd->token;
 	while (cmd->token != NULL)
 	{
 		if ((cmd->token->content)[0] == '>' ||
@@ -56,9 +59,10 @@ static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 		else if ((cmd->token->content)[0] != '>' &&
 			(cmd->token->content)[0] != '<')
 			ft_lstadd_back(&cmd->tab_cmd[i].args,
-				ft_lstnew(cmd->token->content));
+				ft_lstnew(ft_strdup(cmd->token->content)));
 		cmd->token = cmd->token->next;
 	}
+	cmd->token = temp;
 }
 
 /******************************************************************************

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 17:18:59 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/10 18:22:22 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,11 @@ int	child(t_cmd_line *cmd, char **environ)
 			msg_error(ERM_EXECVE, ERN_EXECVE);
 	}
 	else
+	{
+		free(path);
+		free(environ);
 		exec_builtin_c(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args),
 			cmd);
+	}
 	return (0);
 }

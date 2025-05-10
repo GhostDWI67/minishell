@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 17:04:09 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/10 18:17:17 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,14 +142,14 @@ typedef struct s_cmd_line
 
 /* built_in */
 int			echo(char **args);
-int			env(t_list *env);
+int			env(t_list *env, t_cmd_line *cmd, int in_child);
 int			export(char **args, t_list **env);
 bool		export_core(char *arg, t_list **env);
 int			pwd(void);
 int			unset(char **args, t_list **env);
 int			cd(char **args, t_list *env);
 int			ft_exit(t_cmd_line *cmd, char **args);
-void		free_exit(t_cmd_line *cmd, int exit_status);
+void		free_exit(t_cmd_line *cmd, bool err, int exit_status);
 
 /* check.c */
 int			check_quote(char *s);
@@ -169,7 +169,7 @@ void		f_exec(t_cmd_line *cmd, char **environ);
 /* exec_built_in.c*/
 int			is_built_in(char **s);
 void		exec_builtin_c(int bi, t_cmd_line *cmd);
-int			exec_builtin_p(int bi, t_cmd_line *cmd);
+int			exec_builtin_p(int bi, t_cmd_line *cmd, char **environ);
 void		parent_redir_mgt_in_out(t_cmd_line *cmd);
 
 /* exec_child.c */
@@ -260,6 +260,5 @@ void		signals_handler(void);
 char		*ft_strndup(char const *src, int first, int last);
 int			ft_is_white_space(char c);
 void		ft_close(int fd);
-long long	ft_atoll(char *s);
 
 #endif

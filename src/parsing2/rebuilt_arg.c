@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:08:52 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:24:58 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/10 17:01:13 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,14 +114,16 @@ char	*rebuilt_args(t_cmd_line *cmd, int i)
 	t_list	*tmp;
 	char	*tmp_res;
 	char	*res;
+	char	*ret;
 
 	res = ft_strdup("");
 	tmp = cmd->tab_cmd[i].args;
 	while (tmp != NULL)
 	{
 		tmp_res = res;
-		res = ft_strjoin(tmp_res,
-				d_expand((char *)tmp->content, cmd->env, cmd));
+		ret = d_expand((char *)tmp->content, cmd->env, cmd);
+		res = ft_strjoin(tmp_res, ret);
+		free(ret);
 		free(tmp_res);
 		tmp_res = res;
 		res = ft_strjoin(tmp_res, " ");

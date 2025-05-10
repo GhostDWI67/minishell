@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
+#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/05/09 17:48:13 by dwianni          ###   ########.fr        #
+#    Updated: 2025/05/10 17:40:58 by mpalisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = minishell
 
 # Compiler and compiling flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -g3
 #CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 # Directories
