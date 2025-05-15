@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 19:13:00 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/15 11:53:51 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void		f_exec(t_cmd_line *cmd, char **environ);
 /* exec_built_in.c*/
 int			is_built_in(char **s);
 void		exec_builtin_c(int bi, t_cmd_line *cmd);
-int			exec_builtin_p(int bi, t_cmd_line *cmd, char **environ);
+int			exec_builtin_p(int bi, t_cmd_line *cmd);
 void		parent_redir_mgt_in_out(t_cmd_line *cmd);
 
 /* exec_child.c */
@@ -207,6 +207,7 @@ int			free_tab_char(char	**tab);
 int			free_command(t_command cmd);
 int			free_cmd_line(t_cmd_line *cmd);
 int			free_cmd_line_exit(t_cmd_line *cmd);
+void		free_exit_ctrld(t_cmd_line *cmd, bool err, int exit_status);
 
 /* heredoc.c */
 int			redir_heredoc(t_cmd_line *cmd, char *s, int i);
@@ -261,5 +262,6 @@ void		signals_handler(void);
 char		*ft_strndup(char const *src, int first, int last);
 int			ft_is_white_space(char c);
 void		ft_close(int fd);
+bool		empty_line(char *line);
 
 #endif

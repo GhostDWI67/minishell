@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/10 18:36:33 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/13 13:03:22 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 		{
 			if (in_child == 1)
 				free_cmd_line_exit(cmd);
-			return(msg_inf(ERM_EXPORT, ERN_EXPORT));
+			return (msg_inf(ERM_EXPORT, ERN_EXPORT));
 		}
 		else if (!export_core(args[i], env))
 		{

@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:25:42 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/15 13:31:41 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,19 @@ RULES FOR ENV VAR
 var start with an alpha (low or upper case) or underscore(_)
 after you can use alphanum and underscore(_)
 ******************************************************************************/
+
 /******************************************************************************
 Free a expand structure
 ******************************************************************************/
 void	free_expand(t_expand *s)
 {
 	s->input = NULL;
-	if (s->output != NULL)
+	if (s->output)
 	{
 		free(s->output);
 		s->output = NULL;
 	}
-	if (s->env_name != NULL)
+	if (s->env_name)
 	{
 		free(s->env_name);
 		s->env_name = NULL;

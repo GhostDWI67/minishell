@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 17:33:44 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:32:36 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:52:49 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,29 @@ void	ft_close(int fd)
 {
 	if (fd > 2)
 		close(fd);
+}
+
+static bool	is_space(char c)
+{
+	if (c && (c == ' ' || c == '\n' || c == '\r' || c == '\f' || c == '\t' \
+	|| c == '\v'))
+		return (true);
+	return (false);
+}
+
+bool	empty_line(char *line)
+{
+	int	i;
+
+	if (!line)
+		return (false);
+	i = 0;
+	while (line[i] && is_space(line[i]))
+		i++;
+	if (i == (int)ft_strlen(line))
+	{
+		free(line);
+		return (true);
+	}
+	return (false);
 }

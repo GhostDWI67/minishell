@@ -6,7 +6,7 @@
 #    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/05/10 17:40:58 by mpalisse         ###   ########.fr        #
+#    Updated: 2025/05/15 11:40:55 by mpalisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/exec/exec_built_in.c \
 		$(SRC_DIR)/error/error_mgt.c \
 		$(SRC_DIR)/utils/free_utils.c \
+		$(SRC_DIR)/utils/free_utils2.c \
 		$(SRC_DIR)/utils/list_utils.c \
 		$(SRC_DIR)/redirection/redirection.c \
 		$(SRC_DIR)/redirection/heredoc.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 19:47:52 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/15 13:13:38 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,8 +156,8 @@ static void	main_free_mgt(t_cmd_line *cmd)
 		close(cmd->fd_saved_stdin);
 	if (cmd->input != NULL)
 	{
-	 	free_cmd_line(cmd);
-	 	cmd = NULL;
+		free_cmd_line(cmd);
+		cmd = NULL;
 	}
 }
 
@@ -186,6 +186,8 @@ int	main(int argc, char **argv, char **environ)
 			g_signal = 0;
 			main_free_mgt(cmd);
 		}
+		if (cmd->err_nb == 25)
+			free(cmd->tab_env);
 	}
 	//free(environ);
 	//free_cmd_line_exit(cmd);

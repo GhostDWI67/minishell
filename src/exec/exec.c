@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/05/10 15:50:08 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/15 11:39:35 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	f_exec(t_cmd_line *cmd, char **environ)
 			parent_redir_mgt_in_out(cmd);
 			if (cmd->tab_cmd[0].redir_test == 1)
 				cmd->exit_code = exec_builtin_p(is_built_in
-						(cmd->tab_cmd[cmd->cmd_step].tab_args), cmd, environ);
+						(cmd->tab_cmd[cmd->cmd_step].tab_args), cmd);
 			else
 				cmd->exit_code = ERN_FILE;
 		}

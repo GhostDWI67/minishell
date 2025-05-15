@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 19:22:35 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/15 11:44:02 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	free_cmd_line(t_cmd_line *cmd)
 		token_clear(&cmd->token);
 	if (cmd->tab_path != NULL)
 		free_tab_char(cmd->tab_path);
+	free(cmd->tab_env);
 	return (0);
 }
 

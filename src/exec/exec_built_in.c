@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_in.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:49:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 18:43:11 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/15 13:15:32 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ int	is_built_in(char **s)
 {
 	if (s == NULL)
 		return (BUILTIN_NOT);
-	if (ft_strncmp(s[0], "echo", 4) == 0)
+	if (ft_strncmp(s[0], "echo", INT_MAX) == 0)
 		return (BUILTIN_ECHO);
-	else if (ft_strncmp(s[0], "cd", 2) == 0)
+	else if (ft_strncmp(s[0], "cd", INT_MAX) == 0)
 		return (BUILTIN_CD);
-	else if (ft_strncmp(s[0], "pwd", 3) == 0)
+	else if (ft_strncmp(s[0], "pwd", INT_MAX) == 0)
 		return (BUILTIN_PWD);
-	else if (ft_strncmp(s[0], "export", 6) == 0)
+	else if (ft_strncmp(s[0], "export", INT_MAX) == 0)
 		return (BUILTIN_EXPORT);
-	else if (ft_strncmp(s[0], "unset", 5) == 0)
+	else if (ft_strncmp(s[0], "unset", INT_MAX) == 0)
 		return (BUILTIN_UNSET);
-	else if (ft_strncmp(s[0], "env", 3) == 0)
+	else if (ft_strncmp(s[0], "env", INT_MAX) == 0)
 		return (BUILTIN_ENV);
-	else if (ft_strncmp(s[0], "exit", 4) == 0)
+	else if (ft_strncmp(s[0], "exit", INT_MAX) == 0)
 		return (BUILTIN_EXIT);
 	return (BUILTIN_NOT);
 }
@@ -62,7 +62,7 @@ void	exec_builtin_c(int bi, t_cmd_line *cmd)
 /******************************************************************************
 Execute build-in inside a parent (when it's a single command)
 ******************************************************************************/
-int	exec_builtin_p(int bi, t_cmd_line *cmd, char **environ)
+int	exec_builtin_p(int bi, t_cmd_line *cmd)
 {
 	if (bi == BUILTIN_ECHO)
 		return (echo(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd, 0));
@@ -77,10 +77,7 @@ int	exec_builtin_p(int bi, t_cmd_line *cmd, char **environ)
 	else if (bi == BUILTIN_ENV)
 		return (env(cmd->env, cmd, 0));
 	else if (bi == BUILTIN_EXIT)
-	{
-		free(environ);
 		return (ft_exit(cmd, cmd->tab_cmd[cmd->cmd_step].tab_args));
-	}
 	return (0);
 }
 

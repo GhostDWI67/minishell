@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/05/07 11:25:27 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:01:03 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,11 @@ void	main_input_mgt(t_cmd_line *cmd)
 	tmp = NULL;
 	input = NULL;
 	cmd->input = readline("minishell$ ");
+	if (empty_line(cmd->input))
+	{
+		cmd->err_nb = 25;
+		return ;
+	}
 	if (cmd->input != NULL && cmd->input[0] != '\0')
 	{
 		input_first_check(cmd);
@@ -107,11 +112,8 @@ void	main_input_mgt(t_cmd_line *cmd)
 		else
 			cmd->err_nb = 1;
 	}
-	else if (cmd->input != NULL && cmd->input[0] == '\0')
-		cmd->err_nb = 25;
 	else
 	{
-		//gestion de l'exit a l'arrache pour le moment
-		exit (0);
+		free_exit_ctrld(cmd, false, 0);
 	}
 }

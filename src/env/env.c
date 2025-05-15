@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/07 13:24:31 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:04:08 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 clear l'env s'il y a eu un probleme
 Return 1;
 ******************************************************************************/
-static int clear_and_return(t_list **list)
+static int	clear_and_return(t_list **list)
 {
 	ft_lstclear(list, free);
 	return (1);
@@ -31,7 +31,7 @@ static int	make_env(t_cmd_line *cmd)
 	t_list	*list;
 	char	path[PATH_MAX];
 	char	*temp;
-	
+
 	list = NULL;
 	if (getcwd(path, PATH_MAX) == NULL)
 		return (1);
