@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:21:11 by admin             #+#    #+#             */
-/*   Updated: 2025/05/17 14:32:19 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/17 16:38:13 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,24 @@ static int	check_token_msg(t_token *tmp)
 {
 	while (tmp != NULL)
 	{
+		
 		if (tmp->next != NULL)
 		{
-			if (tmp->type < 5 && tmp->next->type < 5)
+			if (tmp->type < 5 && tmp->next->type < 6)
 			{
-				msg_error(ft_strjoin(ERM_TOKEN, tmp->next->content), ERN_TOKEN);
-				return (1);
+				return (msg_inf(ft_strjoin(ERM_TOKEN, tmp->next->content),
+					ERN_TOKEN));
 			}
 			if (tmp->type == 5 && tmp->next->type == 5)
 			{
-				msg_error(ft_strjoin(ERM_TOKEN, tmp->next->content), ERN_TOKEN);
-				return (1);
+				return (msg_inf(ft_strjoin(ERM_TOKEN, tmp->next->content), 
+					ERN_TOKEN));
 			}
+		}
+		if (tmp->type < 5 && tmp->next == NULL)
+		{
+			return (msg_inf(ft_strjoin(ERM_TOKEN, "newline"),
+				ERN_TOKEN));
 		}
 		tmp = tmp->next;
 	}
@@ -49,8 +55,7 @@ int	check_token(t_token *token)
 	tmp = token;
 	if (tmp->type == 5)
 	{
-		msg_error(ft_strjoin(ERM_TOKEN, tmp->content), ERN_TOKEN);//changer le type de message, utiliser une autre fonction
-		return (1);
+		return (msg_inf(ft_strjoin(ERM_TOKEN, tmp->content), ERN_TOKEN));
 	}
 	return (check_token_msg(tmp));
 }

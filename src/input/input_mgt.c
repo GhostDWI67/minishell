@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_mgt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/05/15 12:01:03 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:38:30 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,24 @@ Manage the exit
 For debug
 //display_token(cmd);
 ******************************************************************************/
-static void	input_first_check(t_cmd_line *cmd)
+static int	input_first_check(t_cmd_line *cmd)
 {
 	cmd->token = parse_token(cmd->input);
-	if (check_token(cmd->token) == 1)
+	if (check_token(cmd->token) != 0)
 	{
 		add_history(cmd->input);
 		cmd->err_nb = ERN_TOKEN;
 		cmd->exit_code = cmd->err_nb;
-		return ;
+		return (1);
 	}
 	if (check_quote(cmd->input) != 0)
 	{
 		cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
 		cmd->exit_code = cmd->err_nb;
 		add_history(cmd->input);
-		return ;
+		return (1);
 	}
+	return (0);
 }
 
 static void	input_last_pipe_prep(t_cmd_line *cmd, char *tmp, char *input)
@@ -54,7 +55,7 @@ static void	input_last_pipe_prep(t_cmd_line *cmd, char *tmp, char *input)
 
 static void	input_last_pipe_check(t_cmd_line *cmd)
 {
-	if (check_token(cmd->token) == 1)
+	if (check_token(cmd->token) != 0)
 	{
 		cmd->err_nb = ERN_TOKEN;
 		cmd->exit_code = cmd->err_nb;
@@ -70,7 +71,7 @@ static void	input_last_pipe_check(t_cmd_line *cmd)
 
 static void	input_last_pipe(t_cmd_line *cmd, char *tmp, char *input)
 {
-	while (check_token_last_pipe(cmd->token) == 1)
+	while (check_token_last_pipe(cmd->token) != 0)
 	{
 		input = readline("pipe> ");
 		if (input == NULL)
@@ -81,7 +82,7 @@ static void	input_last_pipe(t_cmd_line *cmd, char *tmp, char *input)
 		else if (ws_check(input) != 0 && input[0] != '\0')
 		{
 			input_last_pipe_prep(cmd, tmp, input);
-			if (check_token(cmd->token) == 1 || check_quote(cmd->input) != 0)
+			if (check_token(cmd->token) != 0 || check_quote(cmd->input) != 0)
 			{
 				input_last_pipe_check(cmd);
 				break ;
@@ -105,8 +106,8 @@ void	main_input_mgt(t_cmd_line *cmd)
 	}
 	if (cmd->input != NULL && cmd->input[0] != '\0')
 	{
-		input_first_check(cmd);
-		input_last_pipe(cmd, tmp, input);
+		if (input_first_check(cmd) == 0)
+			input_last_pipe(cmd, tmp, input);
 		if (ws_check(cmd->input) != 0 && cmd->input[0] != '\0')
 			add_history(cmd->input);
 		else

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 14:36:02 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/17 15:35:29 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ DOM : 	- tester avec sanitize et valgrind pour verifier les fd
 		- regarder les SIGNAUX
 
 A DEBUG
-	- expand du heredoc a revoir, faudrait pas expand => a modifier SAMEDI PROCHAIN
+	- expand du heredoc a revoir, faudrait pas expand => a modifier SAMEDI PROCHAIN   FAIT
 	- msg_error : rajouter exit_code ?? partout ?? => partout on met le cmd->exit_code
-		dans lexer-check reste 2 msg_error / heredoc 1 / 
+		dans lexer-check reste 2 msg_error / heredoc 1 msg_error/ 
 	- gestion des exit code si on a des NULL dans la structure ?? =>SAMEDI
 	- BI leaks dans child => fonction free allegee ?? A CREER et TESTER
 	- verifier les fd qui reste ouvert => SAMEDI PROCHAIN
@@ -96,7 +96,6 @@ int	g_signal;
 
 static void	main_init(t_cmd_line *cmd)
 {
-	cmd->exit_code = 0;
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->fd_saved_stdout == -1)
 	{
@@ -175,6 +174,7 @@ int	main(int argc, char **argv, char **environ)
 	if (cmd == NULL)
 		return (1);
 	init_env(cmd, environ);
+	cmd->exit_code = 0;
 	while (1)
 	{
 		cmd->tab_env = ft_lst_to_arr(cmd->env);
@@ -188,7 +188,7 @@ int	main(int argc, char **argv, char **environ)
 			g_signal = 0;
 			main_free_mgt(cmd);
 		}
-		if (cmd->err_nb == 25)
+		else
 			free(cmd->tab_env);
 	}
 	return (0);
