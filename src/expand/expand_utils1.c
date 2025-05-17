@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 15:31:50 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/17 17:46:12 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,16 @@ Improve the output parameter with the contains of the env parameter
 void	mod_dollar(t_expand *s, t_list *env, t_cmd_line *cmd)
 {
 	char	*tmp;
+	char	*tmp2;
 
 	if (s->input[s->i + 1] == '?')
 	{
 		tmp = s->output;
-		s->output = ft_strjoin(tmp, ft_itoa(cmd->exit_code));
+		tmp2 = ft_itoa(cmd->exit_code);
+		s->output = ft_strjoin(tmp, tmp2);
 		s->i = s-> i + 2;
+		free(tmp2);
+		free(tmp);
 	}
 	else
 	{

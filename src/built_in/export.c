@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/17 14:18:44 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 17:42:23 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ bool	export_core(char *arg, t_list **env)
 	if (index == -1)
 	{
 		if (!ft_lstaddback_content(env, var))
-			return (false);
+			return (true);
 	}
 	else if (index >= 0)
 	{
@@ -144,6 +144,8 @@ int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 				free_cmd_line_exit(cmd);
 			return (msg_error("export no args", 1));
 		}
+		if (in_child == 1)
+			free_cmd_line_exit(cmd);
 		return (0);
 	}
 	while (args[i])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:28:24 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/10 18:32:15 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/17 17:43:01 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,17 @@ Return 0;
 int	unset(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 {
 	int	i;
+	int	exit_status;
 
 	i = 1;
+	exit_status = 0;
 	while (args[i])
 	{
 		if (!unset_core(args[i], env))
-			write(2, "unset failed\n", 13);
+			exit_status = 1;
 		i++;
 	}
 	if (in_child == 1)
 		free_cmd_line_exit(cmd);
-	return (0);
+	return (exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 14:31:11 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/17 17:45:40 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,20 @@ char	*get_path(char **tab_path, char *fexec, t_cmd_line *cmd)
 	char	*path;
 	char	*p_to_test;
 	int		i;
+	DIR		*stream;
 
-	if (opendir(fexec) == NULL && access(fexec, X_OK) == 0)
+	stream = opendir(fexec);
+	if (stream == NULL && access(fexec, X_OK) == 0)
 		return (fexec);
 	if (ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "./", 2) == 0 ||
 		ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "../", 3) == 0 ||
 		ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "/", 1) == 0)
 	{
-		if (opendir(fexec) != NULL)
+		if (stream != NULL)
+		{
+			closedir(stream);
 			return (cmd->exit_code = msg_inf(ERM_ISDIR, ERN_ISDIR), NULL);
+		}
 		else if (access(fexec, F_OK) == 0 && access(fexec, X_OK) != 0)
 			return (cmd->exit_code = msg_inf(ERM_PERM, ERN_PERM), NULL);
 		else if (opendir(fexec) == NULL && access(fexec, F_OK) != 0)

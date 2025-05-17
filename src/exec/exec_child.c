@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 14:30:55 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/17 17:47:58 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ static int	is_exec_able(t_cmd_line *cmd, int i)
 		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0)
 		path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0], cmd);
 	
+	// if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
+	// 		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0
+	// 		&& cmd->exit_code != 0)
+	// 	{
+	// 		free(path);
+	// 		return (cmd->exit_code);
+	// 	}
 	if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
-			&& is_built_in(cmd->tab_cmd[i].tab_args) == 0
-			&& cmd->exit_code != 0)
-		{
-			free(path);
-			return (cmd->exit_code);
-		}
-	else if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0)
 	{
 		ft_putstr_fd("Command '", 2);
