@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/05/17 12:46:12 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:31:23 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	f_exec_wait(t_cmd_line *cmd)
 	while (i < cmd->nb_simple_cmd)
 	{
 		if (waitpid(cmd->tab_pid[i], &status, WUNTRACED) == -1)
-			msg_error(ERM_WAITPID, ERN_WAITPID);
+			cmd->exit_code = msg_error(ERM_WAITPID, ERN_WAITPID);
 		if (WIFEXITED(status))
 			cmd->exit_code = WEXITSTATUS(status);
 		i++;
@@ -67,7 +67,7 @@ void	f_exec(t_cmd_line *cmd, char **environ)
 			{
 				cmd->tab_pid[cmd->cmd_step] = fork();
 				if (cmd->tab_pid[cmd->cmd_step] == -1)
-					msg_error(ERM_FORK, ERN_FORK);
+					cmd->exit_code = msg_error(ERM_FORK, ERN_FORK);
 				else if (cmd->tab_pid[cmd->cmd_step] == 0)
 					child(cmd, environ);
 				cmd->cmd_step++;

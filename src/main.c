@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 14:02:02 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:36:02 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ DOM : 	- tester avec sanitize et valgrind pour verifier les fd
 A DEBUG
 	- expand du heredoc a revoir, faudrait pas expand => a modifier SAMEDI PROCHAIN
 	- msg_error : rajouter exit_code ?? partout ?? => partout on met le cmd->exit_code
+		dans lexer-check reste 2 msg_error / heredoc 1 / 
 	- gestion des exit code si on a des NULL dans la structure ?? =>SAMEDI
 	- BI leaks dans child => fonction free allegee ?? A CREER et TESTER
 	- verifier les fd qui reste ouvert => SAMEDI PROCHAIN
@@ -99,12 +100,12 @@ static void	main_init(t_cmd_line *cmd)
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->fd_saved_stdout == -1)
 	{
-		msg_error(ERM_STD, ERN_STD);
+		cmd->exit_code = msg_error(ERM_STD, ERN_STD);
 	}
 	cmd->fd_saved_stdin = dup(STDIN_FILENO);
 	if (cmd->fd_saved_stdin == -1)
 	{
-		msg_error(ERM_STD, ERN_STD);
+		cmd->exit_code = msg_error(ERM_STD, ERN_STD);
 	}
 	cmd->err_nb = 0;
 }
@@ -148,11 +149,11 @@ static void	main_free_mgt(t_cmd_line *cmd)
 		i++;
 	}
 	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
-		msg_error(ERM_STD, ERN_STD);
+		cmd->exit_code = msg_error(ERM_STD, ERN_STD);
 	else
 		close(cmd->fd_saved_stdout);
 	if (dup2(cmd->fd_saved_stdin, STDIN_FILENO) == -1)
-		msg_error(ERM_STD, ERN_STD);
+		cmd->exit_code = msg_error(ERM_STD, ERN_STD);
 	else
 		close(cmd->fd_saved_stdin);
 	if (cmd->input != NULL)

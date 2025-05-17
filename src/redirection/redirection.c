@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 11:59:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/09 11:11:46 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/17 14:35:06 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	redir_infile(t_cmd_line *cmd, char *s, int i)
 	cmd->tab_cmd[i].infile = ft_strndup(s, 1, ft_strlen(s));
 	if (cmd->tab_cmd[i].infile == NULL)
 	{
-		msg_error(ERM_STRNDUP, ERN_STRNDUP);
+		cmd->exit_code = msg_error(ERM_STRNDUP, ERN_STRNDUP);
 		return (-1);
 	}
 	cmd->tab_cmd[i].fd_infile = open(cmd->tab_cmd[i].infile, O_RDONLY);
@@ -68,7 +68,7 @@ int	redir_infile(t_cmd_line *cmd, char *s, int i)
 	{
 		cmd->tab_cmd[i].redir_test = cmd->tab_cmd[i].redir_test * 0;
 		msg = ft_strjoin(ERM_FILE, cmd->tab_cmd[i].infile);
-		msg_error(msg, ERN_FILE);
+		cmd->exit_code = msg_error(msg, ERN_FILE);
 		free(msg);
 	}
 	return (cmd->tab_cmd[i].fd_infile);
@@ -88,7 +88,7 @@ int	redir_outfile(t_cmd_line *cmd, char *s, int i)
 	cmd->tab_cmd[i].outfile = ft_strndup(s, 1, ft_strlen(s));
 	if (cmd->tab_cmd[i].outfile == NULL)
 	{
-		msg_error(ERM_STRNDUP, ERN_STRNDUP);
+		cmd->exit_code = msg_error(ERM_STRNDUP, ERN_STRNDUP);
 		return (-1);
 	}
 	cmd->tab_cmd[i].fd_outfile = open(cmd->tab_cmd[i].outfile,
@@ -97,7 +97,7 @@ int	redir_outfile(t_cmd_line *cmd, char *s, int i)
 	{
 		cmd->tab_cmd[i].redir_test = cmd->tab_cmd[i].redir_test * 0;
 		msg = ft_strjoin(ERM_FILE, cmd->tab_cmd[i].outfile);
-		msg_error(msg, ERN_FILE);
+		cmd->exit_code = msg_error(msg, ERN_FILE);
 		free(msg);
 	}
 	return (cmd->tab_cmd[i].fd_outfile);
@@ -117,7 +117,7 @@ int	redir_appfile(t_cmd_line *cmd, char *s, int i)
 	cmd->tab_cmd[i].outfile = ft_strndup(s, 2, ft_strlen(s));
 	if (cmd->tab_cmd[i].outfile == NULL)
 	{
-		msg_error(ERM_STRNDUP, ERN_STRNDUP);
+		cmd->exit_code = msg_error(ERM_STRNDUP, ERN_STRNDUP);
 		return (-1);
 	}
 	cmd->tab_cmd[i].fd_outfile = open(cmd->tab_cmd[i].outfile,

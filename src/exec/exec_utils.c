@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/15 12:26:42 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:31:11 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ void	build_pipe(t_cmd_line *cmd)
 
 	cmd->tab_fd = malloc(sizeof(int) * (cmd->nb_simple_cmd - 1) * 2);
 	if (cmd->tab_fd == NULL)
-		msg_error(ERM_MALLOC, ERN_MALLOC);
+		cmd->exit_code = msg_error(ERM_MALLOC, ERN_MALLOC);
 	i = 0;
 	while (i < cmd->nb_simple_cmd - 1)
 	{
 		if (pipe(cmd->tab_fd + 2 * i) == -1)
-			msg_error(ERM_PIPE, ERN_PIPE);
+			cmd->exit_code = msg_error(ERM_PIPE, ERN_PIPE);
 		i++;
 	}
 }

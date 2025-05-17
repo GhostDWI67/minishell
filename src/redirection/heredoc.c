@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:24:42 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:34:23 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	build_hd_pipe(t_cmd_line *cmd)
 	while (i < cmd->nb_simple_cmd)
 	{
 		if (pipe(cmd->tab_cmd[i].hd_pipe) == -1)
-			msg_error(ERM_DUP2, ERN_DUP2);
+			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
 		cmd->tab_cmd[i].hd_input = NULL;
 		i++;
 	}
@@ -45,7 +45,7 @@ int	redir_heredoc(t_cmd_line *cmd, char *s, int i)
 		close(cmd->tab_cmd[i].fd_infile);
 	eof = ft_strndup(s, 2, ft_strlen(s));
 	if (eof == NULL)
-		msg_error(ERM_STRNDUP, ERN_STRNDUP);
+		cmd->exit_code = msg_error(ERM_STRNDUP, ERN_STRNDUP);
 	cmd->tab_cmd[i].hd_input = build_heredoc_input(eof);
 	free(eof);
 	write(cmd->tab_cmd[i].hd_pipe[1], cmd->tab_cmd[i].hd_input,
