@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/15 12:55:10 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:02:17 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int	child(t_cmd_line *cmd, char **environ)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
 	close(cmd->fd_saved_stdin);
 	close(cmd->fd_saved_stdout);
+	signalquit();
 	//ft_putstr_fd(cmd->tab_cmd[cmd->cmd_step].tab_args[0], 2);//
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args) == 0)

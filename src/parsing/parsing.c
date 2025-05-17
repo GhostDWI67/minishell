@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/10 19:41:41 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/17 12:31:27 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 		if ((cmd->token->content)[0] == '>' ||
 			(cmd->token->content)[0] == '<')
 		{
-			tmp = ft_strjoin(cmd->token->content,
+			tmp = ft_strjoin(cmd->token->content, \
 					s_expand(cmd->token->next->content, cmd->env, cmd));
 			if (tmp != NULL)
 			{

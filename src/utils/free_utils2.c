@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:35:21 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/15 11:38:12 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:27:34 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@ void	free_exit_ctrld(t_cmd_line *cmd, bool err, int exit_status)
 	if (err == false)
 		ft_putstr_fd("exit\n", 1);
 	free_cmd(cmd);
-	//cmd->exit_code = exit_status;
 	exit(exit_status);
 }

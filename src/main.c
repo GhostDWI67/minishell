@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/15 13:13:38 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:02:02 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int	g_signal;
 
 static void	main_init(t_cmd_line *cmd)
 {
+	cmd->exit_code = 0;
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->fd_saved_stdout == -1)
 	{
@@ -189,8 +190,5 @@ int	main(int argc, char **argv, char **environ)
 		if (cmd->err_nb == 25)
 			free(cmd->tab_env);
 	}
-	//free(environ);
-	//free_cmd_line_exit(cmd);
-	//rl_clear_history();
 	return (0);
 }

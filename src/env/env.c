@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/13 13:04:08 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:05:18 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,10 @@ static void	increase_shlvl(t_list *env)
 	char	*temp;
 
 	tmp = env;
+	lvl_char = NULL;
 	while (tmp != NULL)
 	{
-		if (!ft_strncmp((char *)tmp->content, "SHLVL", 5) && \
+		if (!ft_strncmp((char *)tmp->content, "SHLVL", INT_MAX) && \
 		((char *)tmp->content)[5] == '=')
 		{
 			lvl = ft_atoi((char *)tmp->content + 6);
@@ -79,7 +80,8 @@ static void	increase_shlvl(t_list *env)
 		}
 		tmp = tmp->next;
 	}
-	free(lvl_char);
+	if (lvl_char)
+		free(lvl_char);
 }
 
 /******************************************************************************

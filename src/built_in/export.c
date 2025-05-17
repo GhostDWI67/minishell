@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/13 13:03:22 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:18:44 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,9 @@ bool	export_core(char *arg, t_list **env)
 	int		i;
 	int		index;
 	char	*var;
+	t_list	*temp;
 
+	temp = (*env);
 	index = declared(arg, (*env));
 	var = ft_strdup(arg);
 	if (!var)
@@ -119,6 +121,7 @@ bool	export_core(char *arg, t_list **env)
 		free((*env)->content);
 		(*env)->content = var;
 	}
+	(*env) = temp;
 	return (true);
 }
 

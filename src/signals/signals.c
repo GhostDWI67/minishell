@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:00:02 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/13 12:37:54 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:03:23 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static void	sigint_handler(int sig)
 	rl_on_new_line();
 	if (g_signal == 0)
 		rl_redisplay();
+}
+
+void	signalquit(void)
+{
+	signal(SIGQUIT, SIG_DFL);
 }
 
 /******************************************************************************

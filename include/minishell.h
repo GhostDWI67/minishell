@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/15 11:53:51 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:46:15 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,7 @@ int			redir_appfile(t_cmd_line *cmd, char *s, int i);
 
 /* signals.c */
 void		signals_handler(void);
+void		signalquit(void);
 
 /* utils.c */
 char		*ft_strndup(char const *src, int first, int last);

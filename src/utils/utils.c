@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 17:33:44 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/15 14:52:49 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/17 11:53:10 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,6 @@ bool	empty_line(char *line)
 	while (line[i] && is_space(line[i]))
 		i++;
 	if (i == (int)ft_strlen(line))
-	{
-		free(line);
 		return (true);
-	}
 	return (false);
 }
