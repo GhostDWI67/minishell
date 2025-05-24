@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/05/17 14:31:23 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/24 15:07:02 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,15 @@ Function manage the mutiple pipe command
 ******************************************************************************/
 void	f_exec(t_cmd_line *cmd, char **environ)
 {
+	//ft_putstr_fd("F_EXEC Point 1\n", 2);//
 	f_exec_init(cmd);
+	//ft_putstr_fd("F_EXEC Point 2\n", 2);//
 	if (cmd->tab_pid != NULL)
 	{
 		if (cmd->nb_simple_cmd == 1
 			&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args) != 0)
 		{
+			//ft_putstr_fd("F_EXEC Point 2\n", 2);//
 			parent_redir_mgt_in_out(cmd);
 			if (cmd->tab_cmd[0].redir_test == 1)
 				cmd->exit_code = exec_builtin_p(is_built_in
@@ -63,6 +66,7 @@ void	f_exec(t_cmd_line *cmd, char **environ)
 		}
 		else
 		{
+			//ft_putstr_fd("F_EXEC Point 3\n", 2);//
 			while (cmd->cmd_step < cmd->nb_simple_cmd)
 			{
 				cmd->tab_pid[cmd->cmd_step] = fork();
@@ -74,6 +78,7 @@ void	f_exec(t_cmd_line *cmd, char **environ)
 			}
 			close_tab_pipe(cmd);
 			f_exec_wait(cmd);
+			//ft_putstr_fd("F_EXEC Point 4\n", 2);//
 		}
 	}
 }

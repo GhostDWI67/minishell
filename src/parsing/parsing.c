@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/17 15:00:54 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/24 15:15:27 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ static char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
 	res = (char **)malloc(sizeof(char *) * (lst_size + 1));
 	if (res == NULL || lst_size == 0)
 	{
+		if (lst_size == 0)
+			free(res);
 		return (NULL);
 	}
 	tmp = args;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:21:11 by admin             #+#    #+#             */
-/*   Updated: 2025/05/24 13:44:39 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/24 15:46:42 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static int	check_token_msg(t_token *tmp)
 		}
 		if (tmp->type < 5 && tmp->next == NULL)
 		{
+			ft_putstr_fd("CASE 2\n",2);
 			return (msg_inf("unexpected token : newline", ERN_TOKEN));
 		}
 		tmp = tmp->next;

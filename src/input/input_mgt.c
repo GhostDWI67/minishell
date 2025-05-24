@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/05/17 16:38:30 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/24 16:03:57 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int	input_first_check(t_cmd_line *cmd)
 	cmd->token = parse_token(cmd->input);
 	if (check_token(cmd->token) != 0)
 	{
-		add_history(cmd->input);
 		cmd->err_nb = ERN_TOKEN;
 		cmd->exit_code = cmd->err_nb;
 		return (1);
@@ -38,7 +37,6 @@ static int	input_first_check(t_cmd_line *cmd)
 	{
 		cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
 		cmd->exit_code = cmd->err_nb;
-		add_history(cmd->input);
 		return (1);
 	}
 	return (0);
@@ -59,13 +57,11 @@ static void	input_last_pipe_check(t_cmd_line *cmd)
 	{
 		cmd->err_nb = ERN_TOKEN;
 		cmd->exit_code = cmd->err_nb;
-		add_history(cmd->input);
 	}
 	if (check_quote(cmd->input) != 0)
 	{
 		cmd->err_nb = msg_inf(ERM_QUOTE, ERN_QUOTE);
 		cmd->exit_code = cmd->err_nb;
-		add_history(cmd->input);
 	}
 }
 

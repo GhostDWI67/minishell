@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/24 14:29:54 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/24 19:23:46 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static int	is_exec_able(t_cmd_line *cmd, int i)
 	
 	if (path == NULL && cmd->err_nb == ERN_ISDIR) //reglage pb / double message
 		return (ERN_ISDIR);
-	
+	if (path == NULL && cmd->err_nb == ERN_NOTFD) //
+		return (ERN_NOTFD);
 	// if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
 	// 		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0
 	// 		&& cmd->exit_code != 0)
@@ -109,9 +110,23 @@ int	child(t_cmd_line *cmd, char **environ)
 	char	*path;
 
 	path = NULL;
+	//ft_putstr_fd("CHILD Point 1\n", 2);//
 	child_prepare(cmd);
+	//ft_putstr_fd("CHILD Point 2\n", 2);//
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args == NULL)
+	{
+		ft_putstr_fd("CHILD Point 2-BIS\n", 2);//
+		free(cmd->tab_cmd[cmd->cmd_step].tab_args);
+		if (cmd->env)
+		{	
+			ft_lstclear(&cmd->env, free);
+			free(cmd->env);
+		}
+		free_cmd_line(cmd);
+		free(cmd);
 		exit(0);
+	}
+	//ft_putstr_fd("CHILD Point 3\n", 2);//
 	path = get_path(cmd->tab_path, cmd->tab_cmd[cmd->cmd_step].tab_args[0], cmd);
 	if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
@@ -120,16 +135,19 @@ int	child(t_cmd_line *cmd, char **environ)
 	close(cmd->fd_saved_stdin);
 	close(cmd->fd_saved_stdout);
 	signalquit();
+	//ft_putstr_fd("CHILD Point 4\n", 2);//
 	//ft_putstr_fd(cmd->tab_cmd[cmd->cmd_step].tab_args[0], 2);//
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args) == 0)
 	{
+		//ft_putstr_fd("CHILD Point 5\n", 2);//
 		if (execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
 			== -1)
 			cmd->exit_code = msg_error(ERM_EXECVE, ERN_EXECVE);
 	}
 	else
 	{
+		//ft_putstr_fd("CHILD Point 6\n", 2);//
 		free(path);
 		exec_builtin_c(is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args),
 			cmd);
