@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 17:47:58 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/24 14:29:54 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ static int	is_exec_able(t_cmd_line *cmd, int i)
 	if (cmd->tab_cmd[i].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0)
 		path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0], cmd);
+	
+	if (path == NULL && cmd->err_nb == ERN_ISDIR) //reglage pb / double message
+		return (ERN_ISDIR);
 	
 	// if (path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
 	// 		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0

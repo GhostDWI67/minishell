@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 15:35:29 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/24 14:25:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,16 +180,26 @@ int	main(int argc, char **argv, char **environ)
 		cmd->tab_env = ft_lst_to_arr(cmd->env);
 		cmd->err_nb = 0;
 		main_input_mgt(cmd);
+		//ft_putstr_fd("Point 1\n", 2);
 		if (cmd->err_nb == 0)
 		{
+			//ft_putstr_fd("Point 2\n", 2);
 			main_init(cmd);
 			g_signal = 1;
+			//ft_putstr_fd("Point 2-bis\n", 2);
 			main_exec_mgt(cmd, cmd->tab_env);
+			//ft_putstr_fd("Point 3\n", 3);
 			g_signal = 0;
 			main_free_mgt(cmd);
+			//ft_putstr_fd("Point 4\n", 2);
 		}
 		else
+		{
+			//ft_putstr_fd("Point 5\n", 2);
+			if (cmd->token)					//pb avec redir seule
+				token_clear(&cmd->token);	//pb avec redir seule
 			free(cmd->tab_env);
+		}
 	}
 	return (0);
 }

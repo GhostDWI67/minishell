@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 17:45:40 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/24 14:26:05 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ char	*get_path(char **tab_path, char *fexec, t_cmd_line *cmd)
 		if (stream != NULL)
 		{
 			closedir(stream);
-			return (cmd->exit_code = msg_inf(ERM_ISDIR, ERN_ISDIR), NULL);
+			cmd->exit_code = msg_inf(ERM_ISDIR, ERN_ISDIR); //pb avec / deux messages genere
+			cmd->err_nb = ERN_ISDIR;
+			return (NULL);
 		}
 		else if (access(fexec, F_OK) == 0 && access(fexec, X_OK) != 0)
 			return (cmd->exit_code = msg_inf(ERM_PERM, ERN_PERM), NULL);
