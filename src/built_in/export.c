@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/17 17:42:23 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:00:31 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,10 @@ Return 0 si ok sinon 1;
 int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 {
 	int	i;
+	int	exit_status;
 
 	i = 1;
+	exit_status = 0;
 	if (!args || !args[i])
 	{
 		if ((*env) && !no_args((*env)))
@@ -152,9 +154,8 @@ int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 	{
 		if (!check_name(args[i]))
 		{
-			if (in_child == 1)
-				free_cmd_line_exit(cmd);
-			return (msg_inf(ERM_EXPORT, ERN_EXPORT));
+			exit_status = 1;
+			mod_error("bash: export: `", args[i], "': not a valid identifier");
 		}
 		else if (!export_core(args[i], env))
 		{
@@ -166,5 +167,5 @@ int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 	}
 	if (in_child == 1)
 		free_cmd_line_exit(cmd);
-	return (0);
+	return (exit_status);
 }

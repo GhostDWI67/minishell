@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 13:46:15 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:58:26 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,7 @@ void		close_tab_pipe(t_cmd_line *cmd);
 int			msg_error(char *err_msg, int err_nb);
 int			msg_inf(char *err_msg, int err_nb);
 void		ft_perror(char *str);
+void		mod_error(char *str1, char *str2, char *str3);
 
 /* expand.c */
 char		*s_expand(char *str, t_list *env, t_cmd_line *cmd);

@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:28:24 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/17 17:43:01 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:01:50 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static bool	unset_core(char *arg, t_list **env)
 		return (true);
 	if (!check_name(arg))
 	{
-		write(2, "unset: invalid identifier\n", 26);
+		mod_error("bash: unset: `", arg, "': not a valid identifier");
 		return (false);
 	}
 	pos = declared(arg, (*env));

@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 10:28:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/10 17:24:17 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/24 12:10:12 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	free_exit(t_cmd_line *cmd, bool err, int exit_status)
 	if (err == false)
 		ft_putstr_fd("exit\n", 1);
 	free_cmd_line_exit(cmd);
-	//cmd->exit_code = exit_status;
 	exit(exit_status);
 }
 
@@ -71,9 +70,7 @@ int	ft_exit(t_cmd_line *cmd, char **args)
 		exit_status = check_arg(args[1], &error);
 		if (error)
 		{
-			ft_perror("exit: ");
-			ft_perror(args[1]);
-			ft_perror(": numeric argument required\n");
+			mod_error("bash: exit: ", args[1], ": numeric argument required");
 			free_exit(cmd, error, 2);
 		}
 	}

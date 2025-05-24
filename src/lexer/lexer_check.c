@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:21:11 by admin             #+#    #+#             */
-/*   Updated: 2025/05/17 16:38:13 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/24 13:44:39 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ Return : 0 if no pb/OK, other if not OK
 ******************************************************************************/
 static int	check_token_msg(t_token *tmp)
 {
+	char	*msg;
+
 	while (tmp != NULL)
 	{
 		
@@ -25,19 +27,22 @@ static int	check_token_msg(t_token *tmp)
 		{
 			if (tmp->type < 5 && tmp->next->type < 6)
 			{
-				return (msg_inf(ft_strjoin(ERM_TOKEN, tmp->next->content),
-					ERN_TOKEN));
+				msg = ft_strjoin(ERM_TOKEN, tmp->next->content);
+				msg_inf(msg, ERN_TOKEN);
+				free(msg);
+				return (ERN_TOKEN);
 			}
 			if (tmp->type == 5 && tmp->next->type == 5)
 			{
-				return (msg_inf(ft_strjoin(ERM_TOKEN, tmp->next->content), 
-					ERN_TOKEN));
+				msg = ft_strjoin(ERM_TOKEN, tmp->next->content);
+				msg_inf(msg, ERN_TOKEN);
+				free(msg);
+				return (ERN_TOKEN);
 			}
 		}
 		if (tmp->type < 5 && tmp->next == NULL)
 		{
-			return (msg_inf(ft_strjoin(ERM_TOKEN, "newline"),
-				ERN_TOKEN));
+			return (msg_inf("unexpected token : newline", ERN_TOKEN));
 		}
 		tmp = tmp->next;
 	}
@@ -55,7 +60,7 @@ int	check_token(t_token *token)
 	tmp = token;
 	if (tmp->type == 5)
 	{
-		return (msg_inf(ft_strjoin(ERM_TOKEN, tmp->content), ERN_TOKEN));
+		return (msg_inf("unexpected token : |", ERN_TOKEN)); //ft_strjoin(ERM_TOKEN, tmp->content)
 	}
 	return (check_token_msg(tmp));
 }

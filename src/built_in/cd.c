@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/10 19:05:59 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/22 11:43:20 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,20 @@ static int	cd_no_args(t_list *env, t_cmd_line *cmd, int in_child)
 	int		ret;
 	char	*arg;
 
-	arg = ft_strdup(ft_getenv("HOME", env));
-	ret = chdir(arg);
+	arg = ft_getenv("HOME", env);
+	if (arg != NULL)
+	{
+		arg = ft_strdup(arg);
+		ret = chdir(arg);
+	}
+	else
+		ret = 1;
 	if (ret == 0)
 		cd_core(arg, env);
 	if (ret == -1)
 		ret = 1;
 	if (ret == 1)
-		perror(arg);
+		ft_perror("bash: cd: HOME not set\n");
 	free(arg);
 	if (in_child == 1)
 		free_cmd_line_exit(cmd);
@@ -97,6 +103,11 @@ static int	cd_args(char *arg, t_list *env, t_cmd_line *cmd, int in_child)
 {
 	int	ret;
 
+	if (arg[0] == '-' && arg[1] == '\0')
+	{
+		pwd(cmd, in_child);
+		return (0);
+	}
 	ret = chdir(arg);
 	if (ret == 0)
 		cd_core(arg, env);
