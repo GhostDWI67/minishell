@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/17 12:05:18 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:23:29 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	increase_shlvl(t_list *env)
 	lvl_char = NULL;
 	while (tmp != NULL)
 	{
-		if (!ft_strncmp((char *)tmp->content, "SHLVL", INT_MAX) && \
+		if (!ft_strncmp((char *)tmp->content, "SHLVL", 5) && \
 		((char *)tmp->content)[5] == '=')
 		{
 			lvl = ft_atoi((char *)tmp->content + 6);

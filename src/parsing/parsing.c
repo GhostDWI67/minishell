@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/24 15:15:27 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/25 16:00:46 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ Sort the token in the ARG list and redirection list
 static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 {
 	t_token *temp;
+	char	*tmp_exp;
 
 	temp = cmd->token;
 	while (cmd->token != NULL)
@@ -49,9 +50,12 @@ static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 			if ((cmd->token->content)[0] == '<' 
 				&& (cmd->token->content)[1] == '<')
 				tmp = ft_strjoin(cmd->token->content, cmd->token->next->content);
-			else	
-				tmp = ft_strjoin(cmd->token->content, 
-					s_expand(cmd->token->next->content, cmd->env, cmd));
+			else
+			{
+				tmp_exp = s_expand(cmd->token->next->content, cmd->env, cmd);
+				tmp = ft_strjoin(cmd->token->content, tmp_exp);
+				free(tmp_exp);
+			}
 			if (tmp != NULL)
 			{
 				ft_lstadd_back(&cmd->tab_cmd[i].redirection, ft_lstnew(tmp));

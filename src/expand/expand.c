@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/24 17:33:31 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/25 15:30:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ echo $USER"$USER"'$USER'		dwiannidwianni$USER		OK
 echo $USER$/"$USER"'$USER'		dwianni$/dwianni$USER	OK		
 echo "$USER$'$USER'"			dwianni$'dwianni'		OK
 echo "$USER$"					dwianni$				OK		
-echo $"salut"					salut					NOK		
+echo $"salut"					salut					OK		
 echo $+salut					$+salut					OK		
 echo $123						23						OK		
 echo $USER$/"$USER"'$USER' "$USER$'$USER''$USER'" $"salut" $+salut $123

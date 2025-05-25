@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/24 15:08:05 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/25 18:26:19 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ A DEBUG
 	- verifier les fd qui reste ouvert => SAMEDI PROCHAIN
 
 ft_putstr_fd("TOTO passe ici\n", 2);
-	
+
+valgrind --track-origins=yes --track-fds=yes --trace-children=yes ./minishell
+valgrind --leak-check=full --show-leak-kinds=all --suppressions=leaks.supp
+
 ******************************************************************************/
 
 int	g_signal;
@@ -115,29 +118,21 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 
 	if (cmd->input != NULL)
 	{
-		//ft_putstr_fd("MAIN EXEC Point 1\n", 2);//
 		cmd->nb_simple_cmd = check_token_nb_cmd(cmd->token);
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 		if (cmd->tab_cmd == NULL)
 			return (1);
 		parsing(cmd);
-		//ft_putstr_fd("MAIN EXEC Point 2\n", 2);//
 		parsing_args(cmd);
-		//ft_putstr_fd("MAIN EXEC Point 3\n", 2);//
 		cmd_arg_to_tab(cmd);
-		//ft_putstr_fd("MAIN EXEC Point 4\n", 2);//
 		path = ft_getenv("PATH", cmd->env);
 		if (path != NULL)
 			cmd->tab_path = ft_split(path, ':');
 		else
 			cmd->tab_path = NULL;
-		//ft_putstr_fd("MAIN EXEC Point 5\n", 2);//
 		build_hd_pipe(cmd);
-		//ft_putstr_fd("MAIN EXEC Point 6\n", 2);//
 		redir_mgt(cmd);
-		//ft_putstr_fd("MAIN EXEC Point 7\n", 2);//
 		f_exec(cmd, environ);
-		//ft_putstr_fd("MAIN EXEC Point 8\n", 2);//
 	}
 	return (0);
 }
