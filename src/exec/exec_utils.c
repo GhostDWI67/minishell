@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/25 17:05:37 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:18:12 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ char	*get_path(char **tab_path, char *fexec, t_cmd_line *cmd)
 	stream = opendir(fexec);
 	if (stream == NULL && access(fexec, X_OK) == 0)
 		return (fexec);
-	if (ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "./", 2) == 0 ||
-		ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "../", 3) == 0 ||
+	if (ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "./", 2) == 0 || \
+		ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "../", 3) == 0 || \
 		ft_strncmp(cmd->tab_cmd[cmd->cmd_step].tab_args[0], "/", 1) == 0)
 	{
 		if (stream != NULL)

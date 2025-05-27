@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:15:15 by admin             #+#    #+#             */
-/*   Updated: 2025/05/07 11:25:03 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:44:46 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	skip_quote(int i, char *s)
 		{
 			i++;
 		}
-		i++;
+		if (s[i] != '\0')
+			i++;
 	}
 	else if (s[i] == 39)
 	{
@@ -34,7 +35,8 @@ int	skip_quote(int i, char *s)
 		{
 			i++;
 		}
-		i++;
+		if (s[i] != '\0')
+			i++;
 	}
 	return (i);
 }

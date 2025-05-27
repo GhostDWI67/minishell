@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/22 11:43:20 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:24:33 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,20 @@ static void	cd_oldpwd(t_list *env)
 lance cd_oldpwd puis update PWD dans l'env en copiant le retour de getcwd
 Return void;
 ******************************************************************************/
-static void	cd_core(char *arg, t_list *env)
+static int	cd_core(t_list *env)
 {
 	char	*pwd;
 	char	cwd[PATH_MAX];
 
 	cd_oldpwd(env);
 	if (!getcwd(cwd, PATH_MAX))
-	{
-		perror(arg);
-		return ;
-	}
+		return (1);
 	pwd = ft_strjoin("PWD=", cwd);
 	if (!pwd)
-		return ;
+		return (1);
 	export_core(pwd, &env);
 	free(pwd);
+	return (0);
 }
 
 /******************************************************************************
@@ -84,7 +82,7 @@ static int	cd_no_args(t_list *env, t_cmd_line *cmd, int in_child)
 	else
 		ret = 1;
 	if (ret == 0)
-		cd_core(arg, env);
+		ret = cd_core(env);
 	if (ret == -1)
 		ret = 1;
 	if (ret == 1)
@@ -101,16 +99,18 @@ Return exit status en int;
 ******************************************************************************/
 static int	cd_args(char *arg, t_list *env, t_cmd_line *cmd, int in_child)
 {
-	int	ret;
+	int		ret;
 
-	if (arg[0] == '-' && arg[1] == '\0')
-	{
-		pwd(cmd, in_child);
+	if (arg[0] == '\0')
 		return (0);
-	}
-	ret = chdir(arg);
+	if (arg[0] == '-' && arg[1] == '\0')
+		return (pwd(cmd, in_child));
+	if (arg[0] == '~' && arg[1] == '\0')
+		ret = cd_no_args(env, cmd, in_child);
+	else
+		ret = chdir(arg);
 	if (ret == 0)
-		cd_core(arg, env);
+		ret = cd_core(env);
 	if (ret == -1)
 		ret = 1;
 	if (ret == 1)

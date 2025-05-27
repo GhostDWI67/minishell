@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/22 11:58:26 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:30:23 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <readline/history.h>
 # include <linux/limits.h>
 # include <dirent.h>
+# include <signal.h>
 //# include <asm/signal.h>
 # include "../lib/libft/include/libft.h"
 # include "../lib/printf/include/ft_printf.h"
@@ -66,7 +67,7 @@
 # define ERN_STD		16
 # define ERM_QUOTE		"opened single and/or double quote"	
 # define ERN_QUOTE		17
-# define ERM_INPUT_NULL	"NULL input ?!?"	
+# define ERM_INPUT_NULL	"bash: syntax error: unexpected EOF"	
 # define ERN_INPUT_NULL	18
 # define ERM_MALLOC		"malloc failed"	
 # define ERN_MALLOC		19
@@ -81,11 +82,11 @@
 # define ERN_CD			1
 # define ERM_EXIT		"exit: too many arguments"
 # define ERN_EXIT		1
-# define ERM_ISDIR		" Is a directory"
+# define ERM_ISDIR		"Is a directory"
 # define ERN_ISDIR		126
-# define ERM_PERM		" Permission denied"
+# define ERM_PERM		"Permission denied"
 # define ERN_PERM		126
-# define ERM_NOTFD		" No such file or directory"
+# define ERM_NOTFD		"No such file or directory"
 # define ERN_NOTFD		127
 
 extern int g_signal;
@@ -161,7 +162,7 @@ void		display_simple_cmd(t_cmd_line *cmd);
 void		display_token(t_cmd_line *cmd);
 
 /* env.c */
-int			init_env(t_cmd_line *cmd, char **env);
+int			init_env(t_cmd_line *cmd, char **env, char **argv);
 char		*ft_getenv(const char *var, t_list *env);
 
 /* exec.c */
@@ -257,8 +258,13 @@ int			redir_outfile(t_cmd_line *cmd, char *s, int i);
 int			redir_appfile(t_cmd_line *cmd, char *s, int i);
 
 /* signals.c */
-void		signals_handler(void);
-void		signalquit(void);
+void		setup_sigs_handler(void);
+void		setup_sigs_exec(void);
+void		setup_sigs_hd(void);
+void		sigint_handler(int sig);
+void		sig_exec(int signal);
+void		sig_heredoc(int signal);
+void		sig_exit_status(t_cmd_line *cmd);
 
 /* utils.c */
 char		*ft_strndup(char const *src, int first, int last);

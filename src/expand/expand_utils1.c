@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/24 17:24:18 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:22:48 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	get_env_var_name(t_expand *s)
 	if (ft_isalnum(s->input[s->i]) == 0 && s->input[s->i] != '_')
 	{
 		if (s->input[s->i] == '"' || s->input[s->i] == '\'')
-			return;
+			return ;
 		tmp = s->output;
 		s->output = ft_strjoin(tmp, "$");
 		free(tmp);
@@ -101,7 +101,6 @@ void	mod_dollar(t_expand *s, t_list *env, t_cmd_line *cmd)
 				return ;
 		}
 		free_null(&s->env_name);
-		//free_null(&s->tmp_env_var);
 	}
 }
 

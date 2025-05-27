@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/25 18:26:19 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:16:16 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,26 @@ valgrind --leak-check=full --show-leak-kinds=all --suppressions=leaks.supp
 
 int	g_signal;
 
+static void	init_cmd(t_cmd_line *cmd)
+{
+	cmd->input = NULL;
+	cmd->token = NULL;
+	cmd->tab_env = NULL;
+	cmd->env = NULL;
+	cmd->nb_simple_cmd = 0;
+	cmd->tab_cmd = NULL;
+	cmd->tab_path = NULL;
+	cmd->tab_fd = NULL;
+	cmd->tab_pid = NULL;
+	cmd->cmd_step = 0;
+	cmd->fd_saved_stdin = 0;
+	cmd->fd_saved_stdout = 0;
+	cmd->err_nb = 0;
+	cmd->exit_code = 0;
+	g_signal = 0;
+	setup_sigs_handler();
+}
+
 static void	main_init(t_cmd_line *cmd)
 {
 	cmd->fd_saved_stdout = dup(STDOUT_FILENO);
@@ -170,14 +190,12 @@ int	main(int argc, char **argv, char **environ)
 	t_cmd_line	*cmd;
 
 	(void)argc;
-	(void)argv;
-	g_signal = 0;
-	signals_handler();
 	cmd = malloc(sizeof(t_cmd_line) * 1);
 	if (cmd == NULL)
 		return (1);
-	init_env(cmd, environ);
-	cmd->exit_code = 0;
+	init_cmd(cmd);
+	if (init_env(cmd, environ, argv) == 1)
+		free_exit(cmd, false, 1);
 	while (1)
 	{
 		cmd->tab_env = ft_lst_to_arr(cmd->env);
@@ -188,11 +206,11 @@ int	main(int argc, char **argv, char **environ)
 		{
 			//ft_putstr_fd("Point 2\n", 2);//
 			main_init(cmd);
-			g_signal = 1;
 			//ft_putstr_fd("Point 2-bis\n", 2);//
+			setup_sigs_exec();
 			main_exec_mgt(cmd, cmd->tab_env);
+			setup_sigs_handler();
 			//ft_putstr_fd("Point 3\n", 3);//
-			g_signal = 0;
 			main_free_mgt(cmd);
 			//ft_putstr_fd("Point 4\n", 2);//
 		}

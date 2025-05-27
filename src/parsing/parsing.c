@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/25 16:00:46 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:21:26 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ Sort the token in the ARG list and redirection list
 ******************************************************************************/
 static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 {
-	t_token *temp;
+	t_token	*temp;
 	char	*tmp_exp;
 
 	temp = cmd->token;
@@ -47,9 +47,10 @@ static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 		if ((cmd->token->content)[0] == '>' ||
 			(cmd->token->content)[0] == '<')
 		{
-			if ((cmd->token->content)[0] == '<' 
+			if ((cmd->token->content)[0] == '<' \
 				&& (cmd->token->content)[1] == '<')
-				tmp = ft_strjoin(cmd->token->content, cmd->token->next->content);
+				tmp = ft_strjoin(cmd->token->content, \
+					cmd->token->next->content);
 			else
 			{
 				tmp_exp = s_expand(cmd->token->next->content, cmd->env, cmd);

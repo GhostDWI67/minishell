@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_mgt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/05/24 16:03:57 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/26 10:44:18 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static void	input_last_pipe(t_cmd_line *cmd, char *tmp, char *input)
 	while (check_token_last_pipe(cmd->token) != 0)
 	{
 		input = readline("pipe> ");
+		sig_exit_status(cmd);
 		if (input == NULL)
 		{
 			cmd->err_nb = msg_inf(ERM_INPUT_NULL, ERN_INPUT_NULL);
@@ -95,6 +96,7 @@ void	main_input_mgt(t_cmd_line *cmd)
 	tmp = NULL;
 	input = NULL;
 	cmd->input = readline("minishell$ ");
+	sig_exit_status(cmd);
 	if (empty_line(cmd->input))
 	{
 		cmd->err_nb = 25;

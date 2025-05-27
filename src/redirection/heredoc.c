@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/17 14:34:23 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/26 10:45:13 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,6 @@ char	*build_heredoc_input(char *eof)
 	tmp = NULL;
 	read = NULL;
 	input_hd = ft_strdup("");
+	setup_sigs_hd();
 	return (build_heredoc_input_int(eof, read, tmp, input_hd));
 }

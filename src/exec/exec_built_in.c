@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:49:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/15 13:15:32 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:15:38 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int	exec_builtin_p(int bi, t_cmd_line *cmd)
 	else if (bi == BUILTIN_PWD)
 		return (pwd(cmd, 0));
 	else if (bi == BUILTIN_EXPORT)
-		return (export(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env, cmd, 0));
+		return (export(cmd->tab_cmd[cmd->cmd_step].tab_args, \
+			&cmd->env, cmd, 0));
 	else if (bi == BUILTIN_UNSET)
 		return (unset(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env, cmd, 0));
 	else if (bi == BUILTIN_ENV)

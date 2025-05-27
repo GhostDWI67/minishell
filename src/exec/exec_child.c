@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/25 18:42:47 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:17:43 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static int	is_exec_able(t_cmd_line *cmd, int i)
 	char	*path;
 
 	path = NULL;
-	
 	if (cmd->tab_cmd[i].tab_args == NULL)
 		return (cmd->exit_code = 0, cmd->exit_code);
 	if (cmd->tab_cmd[i].tab_args[0] != NULL
@@ -31,8 +30,8 @@ static int	is_exec_able(t_cmd_line *cmd, int i)
 		return (ERN_ISDIR);
 	if (path == NULL && cmd->err_nb == ERN_NOTFD)
 		return (ERN_NOTFD);
-	if ((path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
-		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0)
+	if ((path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL \
+		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0) \
 		|| cmd->tab_cmd[i].tab_args[0][0] == 0)
 	{
 		if (path != NULL)
@@ -117,7 +116,7 @@ static void	child_prepare(t_cmd_line *cmd)
 int	child(t_cmd_line *cmd, char **environ)
 {
 	char	*path;
-	
+
 	path = NULL;
 	child_prepare(cmd);
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args == NULL)
@@ -125,14 +124,14 @@ int	child(t_cmd_line *cmd, char **environ)
 		free_cmd_line_exit(cmd);
 		exit(0);
 	}
-	path = get_path(cmd->tab_path, cmd->tab_cmd[cmd->cmd_step].tab_args[0], cmd);
+	path = get_path(cmd->tab_path, \
+		cmd->tab_cmd[cmd->cmd_step].tab_args[0], cmd);
 	if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
 	if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 2)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
 	close(cmd->fd_saved_stdin);
 	close(cmd->fd_saved_stdout);
-	signalquit();
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args) == 0)
 	{

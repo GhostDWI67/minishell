@@ -6,7 +6,7 @@
 #    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/05/15 11:40:55 by mpalisse         ###   ########.fr        #
+#    Updated: 2025/05/26 10:46:00 by mpalisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/parsing2/rebuilt_arg.c \
 		$(SRC_DIR)/parsing2/parsing2.c \
 		$(SRC_DIR)/signals/signals.c \
+		$(SRC_DIR)/signals/handlers.c \
 		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

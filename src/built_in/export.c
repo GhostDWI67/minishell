@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/22 12:00:31 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:44:48 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 		if (!check_name(args[i]))
 		{
 			exit_status = 1;
-			mod_error("bash: export: `", args[i], "': not a valid identifier");
+			mod_error("export: `", args[i], "': not a valid identifier");
 		}
 		else if (!export_core(args[i], env))
 		{
