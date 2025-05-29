@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/29 16:21:40 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/29 17:39:13 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,9 @@ int			is_exec_able(t_cmd_line *cmd, int i);
 
 /* exec_utils2.c */
 char		*get_path(char **tab_path, char *fexec, t_cmd_line *cmd);
+
+/* exec_utils3.c */
+void		close_all_fd(t_cmd_line *cmd);
 
 /* error_mgt */
 int			msg_error(char *err_msg, int err_nb);

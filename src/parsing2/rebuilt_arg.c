@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rebuilt_arg.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:08:52 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/10 17:01:13 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:15:12 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ static char	*d_expand(char *str, t_list *env, t_cmd_line *cmd)
 	t_expand	*s;
 
 	s = malloc(sizeof(t_expand) * 1);
+	if (s == NULL)
+		return (NULL);
 	s->input = str;
 	s->output = NULL;
 	s->env_name = NULL;

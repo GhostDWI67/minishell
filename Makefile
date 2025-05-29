@@ -6,7 +6,7 @@
 #    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/05/29 15:57:02 by dwianni          ###   ########.fr        #
+#    Updated: 2025/05/29 17:39:31 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/exec/exec_child.c \
 		$(SRC_DIR)/exec/exec_utils.c \
 		$(SRC_DIR)/exec/exec_utils2.c \
+		$(SRC_DIR)/exec/exec_utils3.c \
 		$(SRC_DIR)/exec/exec_built_in.c \
 		$(SRC_DIR)/error/error_mgt.c \
 		$(SRC_DIR)/utils/free_utils.c \

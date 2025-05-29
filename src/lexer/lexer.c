@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/27 15:13:13 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:14:14 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 /******************************************************************************
 Generate a list of token
 Return : pointer to the start of the token list
-
-To do : en cas de strdup, free la liste ?? // protection malloc strdup ??
 ******************************************************************************/
 static t_token	*parse_token_add_arg(t_token *res, char *s, int start, int end)
 {

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/25 15:30:18 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/29 17:13:09 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ char	*s_expand(char *str, t_list *env, t_cmd_line *cmd)
 	t_expand	*s;
 
 	s = malloc(sizeof(t_expand) * 1);
+	if (s == NULL)
+		return (NULL);
 	s->input = str;
 	s->output = NULL;
 	s->env_name = NULL;

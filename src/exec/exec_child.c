@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/29 16:27:56 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/29 18:00:17 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,18 @@ static void	child_prepare(t_cmd_line *cmd)
 {
 	if (cmd->tab_cmd[cmd->cmd_step].redir_test == 0)
 	{
-		close(cmd->fd_saved_stdin);
-		close(cmd->fd_saved_stdout);
-		close_tab_pipe(cmd);
-		close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[0]);
-		close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
+		close_all_fd(cmd);
 		free_cmd_line_exit(cmd);
 		exit (ERN_FILE);
 	}
 	if (is_exec_able(cmd, cmd->cmd_step) != 0)
 	{
-		close(cmd->fd_saved_stdin);
-		close(cmd->fd_saved_stdout);
-		close_tab_pipe(cmd);
-		close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[0]);
-		close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
+		close_all_fd(cmd);
 		free_exit(cmd, true, cmd->exit_code);
 	}
 	child_redir_mgt_in(cmd);
 	child_redir_mgt_out(cmd);
-	close_tab_pipe(cmd);
-	close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[0]);
-	close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
+	close_all_fd(cmd);
 }
 
 static void	child_closefd(t_cmd_line *cmd)

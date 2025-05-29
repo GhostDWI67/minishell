@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/29 14:53:23 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/29 17:27:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 	{
 		cmd->nb_simple_cmd = check_token_nb_cmd(cmd->token);
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
+		//cmd->tab_cmd = NULL;//
 		if (cmd->tab_cmd == NULL)
 			return (1);
 		parsing(cmd);
@@ -148,7 +149,7 @@ int	main(int argc, char **argv, char **environ)
 	(void)argc;
 	cmd = malloc(sizeof(t_cmd_line) * 1);
 	if (cmd == NULL)
-		return (1);
+		return (msg_inf(ERM_MALLOC, ERN_MALLOC));
 	init_cmd(cmd);
 	if (init_env(cmd, environ, argv) == 1)
 		free_exit(cmd, false, 1);
