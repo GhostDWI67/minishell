@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:21:11 by admin             #+#    #+#             */
-/*   Updated: 2025/05/27 16:20:19 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:13:33 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,8 @@ static int	check_token_msg(t_token *tmp)
 	{
 		if (tmp->next != NULL)
 		{
-			if (tmp->type < 5 && tmp->next->type < 6)
-			{
-				msg = ft_strjoin(ERM_TOKEN, tmp->next->content);
-				msg_inf(msg, ERN_TOKEN);
-				free(msg);
-				return (ERN_TOKEN);
-			}
-			if (tmp->type == 5 && tmp->next->type == 5)
+			if ((tmp->type < 5 && tmp->next->type < 6)
+				|| (tmp->type == 5 && tmp->next->type == 5))
 			{
 				msg = ft_strjoin(ERM_TOKEN, tmp->next->content);
 				msg_inf(msg, ERN_TOKEN);

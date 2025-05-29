@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/27 14:30:23 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:50:37 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,10 @@ void		display_simple_cmd(t_cmd_line *cmd);
 void		display_token(t_cmd_line *cmd);
 
 /* env.c */
+int			make_env(t_cmd_line *cmd, char **argv);
+void		increase_shlvl(t_list *env);
+
+/* env2.c */
 int			init_env(t_cmd_line *cmd, char **env, char **argv);
 char		*ft_getenv(const char *var, t_list *env);
 
@@ -178,10 +182,12 @@ void		parent_redir_mgt_in_out(t_cmd_line *cmd);
 int			child(t_cmd_line *cmd, char **environ);
 
 /* exec_utils.c */
-char		*get_path(char **tab_path, char *fexec, t_cmd_line *cmd);
 void		close_fd(int *fd, int nb_fd);
 void		build_pipe(t_cmd_line *cmd);
 void		close_tab_pipe(t_cmd_line *cmd);
+
+/* exec_utils2.c */
+char		*get_path(char **tab_path, char *fexec, t_cmd_line *cmd);
 
 /* error_mgt */
 int			msg_error(char *err_msg, int err_nb);
@@ -197,19 +203,25 @@ void		free_expand(t_expand *s);
 void		mod_no_case(t_expand *s);
 void		get_env_var_name(t_expand *s);
 void		mod_dollar(t_expand *s, t_list *env, t_cmd_line *cmd);
-void		mode_squote(t_expand *s);
 void		shorten_envvar_outq(t_expand *s);
 
 /* expand_utils2.c */
 void		mode_dquote(t_expand *s, t_list *env, t_cmd_line *cmd);
+void		mode_squote(t_expand *s);
 
 /* free_utils.c */
 void		free_null(char **s);
 int			free_tab_char(char	**tab);
 int			free_command(t_command cmd);
+
+/* free_utils2.c */
+void		free_exit_ctrld(t_cmd_line *cmd, bool err, int exit_status);
+void		main_free_mgt(t_cmd_line *cmd);
+
+/* free_utils3.c */
 int			free_cmd_line(t_cmd_line *cmd);
 int			free_cmd_line_exit(t_cmd_line *cmd);
-void		free_exit_ctrld(t_cmd_line *cmd, bool err, int exit_status);
+
 
 /* heredoc.c */
 int			redir_heredoc(t_cmd_line *cmd, char *s, int i);
@@ -240,13 +252,13 @@ void		sort_tab(char **arr, int len);
 
 /* parsing.c */
 void		parsing(t_cmd_line *cmd);
-void		cmd_arg_to_tab(t_cmd_line *cmd);
 
 /* parsing2.c */
 void		parsing_args(t_cmd_line *cmd);
 
 /* parsing_utils.c */
 int			skip_quote(int i, char *s);
+void		cmd_arg_to_tab(t_cmd_line *cmd);
 
 /* rebuilt_arg.c */
 char		*rebuilt_args(t_cmd_line *cmd, int i);

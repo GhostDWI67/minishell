@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:35:21 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/17 12:27:34 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:56:32 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/******************************************************************************
+Free the cmd structure and clear history
+Return 0
+******************************************************************************/
 static int	free_cmd(t_cmd_line *cmd)
 {
 	if (cmd->input != NULL)
@@ -28,10 +32,46 @@ static int	free_cmd(t_cmd_line *cmd)
 	return (0);
 }
 
+/******************************************************************************
+Free the cmd structure and clear history
+In "ctrl + d" case
+******************************************************************************/
 void	free_exit_ctrld(t_cmd_line *cmd, bool err, int exit_status)
 {
 	if (err == false)
 		ft_putstr_fd("exit\n", 1);
 	free_cmd(cmd);
 	exit(exit_status);
+}
+
+/******************************************************************************
+Free the cmd structure and manage fd's
+In the main programme after each loop
+******************************************************************************/
+void	main_free_mgt(t_cmd_line *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd->nb_simple_cmd)
+	{
+		ft_close(cmd->tab_cmd[i].fd_infile);
+		ft_close(cmd->tab_cmd[i].fd_outfile);
+		ft_close(cmd->tab_cmd[i].hd_pipe[0]);
+		ft_close(cmd->tab_cmd[i].hd_pipe[1]);
+		i++;
+	}
+	if (dup2(cmd->fd_saved_stdout, STDOUT_FILENO) == -1)
+		cmd->exit_code = msg_error(ERM_STD, ERN_STD);
+	else
+		close(cmd->fd_saved_stdout);
+	if (dup2(cmd->fd_saved_stdin, STDIN_FILENO) == -1)
+		cmd->exit_code = msg_error(ERM_STD, ERN_STD);
+	else
+		close(cmd->fd_saved_stdin);
+	if (cmd->input != NULL)
+	{
+		free_cmd_line(cmd);
+		cmd = NULL;
+	}
 }

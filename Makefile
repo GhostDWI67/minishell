@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/05/26 10:46:00 by mpalisse         ###   ########.fr        #
+#    Updated: 2025/05/29 15:57:02 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,10 +34,12 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/exec/exec.c \
 		$(SRC_DIR)/exec/exec_child.c \
 		$(SRC_DIR)/exec/exec_utils.c \
+		$(SRC_DIR)/exec/exec_utils2.c \
 		$(SRC_DIR)/exec/exec_built_in.c \
 		$(SRC_DIR)/error/error_mgt.c \
 		$(SRC_DIR)/utils/free_utils.c \
 		$(SRC_DIR)/utils/free_utils2.c \
+		$(SRC_DIR)/utils/free_utils3.c \
 		$(SRC_DIR)/utils/list_utils.c \
 		$(SRC_DIR)/redirection/redirection.c \
 		$(SRC_DIR)/redirection/heredoc.c \
@@ -58,6 +60,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/built_in/unset.c \
 		$(SRC_DIR)/built_in/exit.c \
 		$(SRC_DIR)/env/env.c \
+		$(SRC_DIR)/env/env2.c \
 		$(SRC_DIR)/parsing2/rebuilt_arg.c \
 		$(SRC_DIR)/parsing2/parsing2.c \
 		$(SRC_DIR)/signals/signals.c \

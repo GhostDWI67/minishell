@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/27 16:13:32 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:35:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	make_underscore(t_list **list, char *path, char *arg)
 creer l'env s'il n'existe pas
 Return 0 si ok sinon 1;
 ******************************************************************************/
-static int	make_env(t_cmd_line *cmd, char **argv)
+int	make_env(t_cmd_line *cmd, char **argv)
 {
 	t_list	*list;
 	char	path[PATH_MAX];
@@ -103,7 +103,7 @@ static char	*check_shlvl(int lvl)
 augmente la variable SHLVL apres l'init de l'env
 Return void;
 ******************************************************************************/
-static void	increase_shlvl(t_list *env)
+void	increase_shlvl(t_list *env)
 {
 	t_list	*tmp;
 	int		lvl;
@@ -129,62 +129,4 @@ static void	increase_shlvl(t_list *env)
 		free(lvl_char);
 	else
 		export_core(ft_strdup("SHLVL=1"), &env);
-}
-
-/******************************************************************************
-init_env prend l'env de base et le copie en t_list dans t_cmd_line 
-Return 0 si ok sinon 1;
-******************************************************************************/
-int	init_env(t_cmd_line *cmd, char **env, char **argv)
-{
-	int		i;
-	char	*tmp;
-	t_list	*list;
-
-	if (!(*env))
-		return (make_env(cmd, argv));
-	i = 0;
-	list = NULL;
-	while (env[i])
-	{
-		tmp = ft_strdup(env[i]);
-		if (!tmp)
-		{
-			ft_lstclear(&list, free);
-			return (1);
-		}
-		ft_lstaddback_content(&list, tmp);
-		i++;
-	}
-	cmd->env = list;
-	increase_shlvl(cmd->env);
-	return (0);
-}
-
-/******************************************************************************
-cherche dans l'env le nom de la variable donné et elle doit etre exact pour
-etre trouvé:
-ft_getenv("HOME", env) renvoi /home/USER
-ft_getenv("HOM", env) renvoi NULL
-Return la valeur de la variable sinon NULL;
-******************************************************************************/
-char	*ft_getenv(const char *var, t_list *env)
-{
-	t_list	*tmp;
-	int		i;
-
-	if (!env || !var)
-		return (NULL);
-	i = 0;
-	tmp = env;
-	while (var[i])
-		i++;
-	while (tmp != NULL)
-	{
-		if (!ft_strncmp((char *)tmp->content, var, i) && \
-		((char *)tmp->content)[i] == '=')
-			return ((char *)tmp->content + (i + 1));
-		tmp = tmp->next;
-	}
-	return (NULL);
 }

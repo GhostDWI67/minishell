@@ -1,62 +1,74 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   free_utils3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/29 15:51:43 by dwianni          ###   ########.fr       */
+/*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
+/*   Updated: 2025/05/29 15:24:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-Function closing fd
+Free element of a comd structure
 ******************************************************************************/
-void	close_fd(int *fd, int nb_fd)
+static void	free_cmd(t_cmd_line *cmd)
 {
 	int	i;
 
+	if (cmd->input != NULL)
+		free(cmd->input);
+	if (cmd->tab_fd)
+		free(cmd->tab_fd);
+	if (cmd->tab_pid)
+		free(cmd->tab_pid);
 	i = 0;
-	while (i < nb_fd)
+	while (i < cmd->nb_simple_cmd)
 	{
-		close(fd[i]);
+		free_command(cmd->tab_cmd[i]);
 		i++;
 	}
+	if (cmd->tab_cmd)
+		free(cmd->tab_cmd);
+	if (cmd->token)
+		token_clear(&cmd->token);
+	if (cmd->tab_path != NULL)
+		free_tab_char(cmd->tab_path);
 }
 
 /******************************************************************************
-Function generating pipes
+Free a command line
+Return ; 0 if OK, else 1
 ******************************************************************************/
-void	build_pipe(t_cmd_line *cmd)
+int	free_cmd_line(t_cmd_line *cmd)
 {
-	int	i;
-
-	cmd->tab_fd = malloc(sizeof(int) * (cmd->nb_simple_cmd - 1) * 2);
-	if (cmd->tab_fd == NULL)
-		cmd->exit_code = msg_error(ERM_MALLOC, ERN_MALLOC);
-	i = 0;
-	while (i < cmd->nb_simple_cmd - 1)
-	{
-		if (pipe(cmd->tab_fd + 2 * i) == -1)
-			cmd->exit_code = msg_error(ERM_PIPE, ERN_PIPE);
-		i++;
-	}
+	free_cmd(cmd);
+	if (cmd->tab_env)
+		free(cmd->tab_env);
+	return (0);
 }
 
 /******************************************************************************
-Function generating pipes
+Free a command line at the exit
+Return ; 0 if OK, else 1
 ******************************************************************************/
-void	close_tab_pipe(t_cmd_line *cmd)
+int	free_cmd_line_exit(t_cmd_line *cmd)
 {
-	int	i;
-
-	i = 0;
-	while (i < (cmd->nb_simple_cmd - 1) * 2)
+	free_cmd(cmd);
+	if (cmd->env)
 	{
-		close(cmd->tab_fd[i]);
-		i++;
+		ft_lstclear(&cmd->env, free);
+		free(cmd->env);
 	}
+	if (cmd->tab_env)
+		free(cmd->tab_env);
+	close(cmd->fd_saved_stdout);
+	close(cmd->fd_saved_stdin);
+	if (cmd)
+		free(cmd);
+	rl_clear_history();
+	return (0);
 }

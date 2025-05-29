@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/27 16:21:26 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:06:38 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,34 @@ static void	parsing_init(t_cmd_line *cmd)
 }
 
 /******************************************************************************
+Parsing sort manage the HEREDOC and redirection
+******************************************************************************/
+static void	parsing_sort_redir(t_cmd_line *cmd, int i, char *tmp)
+{
+	char	*tmp_exp;
+
+	if ((cmd->token->content)[0] == '<' && (cmd->token->content)[1] == '<')
+		tmp = ft_strjoin(cmd->token->content, cmd->token->next->content);
+	else
+	{
+		tmp_exp = s_expand(cmd->token->next->content, cmd->env, cmd);
+		tmp = ft_strjoin(cmd->token->content, tmp_exp);
+		free(tmp_exp);
+	}
+	if (tmp != NULL)
+	{
+		ft_lstadd_back(&cmd->tab_cmd[i].redirection, ft_lstnew(tmp));
+		cmd->token = cmd->token->next;
+	}
+}
+
+/******************************************************************************
 Additionnal function of parsing
 Sort the token in the ARG list and redirection list
 ******************************************************************************/
 static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 {
 	t_token	*temp;
-	char	*tmp_exp;
 
 	temp = cmd->token;
 	while (cmd->token != NULL)
@@ -47,21 +68,7 @@ static void	parsing_sort(t_cmd_line *cmd, int i, char *tmp)
 		if ((cmd->token->content)[0] == '>' ||
 			(cmd->token->content)[0] == '<')
 		{
-			if ((cmd->token->content)[0] == '<' \
-				&& (cmd->token->content)[1] == '<')
-				tmp = ft_strjoin(cmd->token->content, \
-					cmd->token->next->content);
-			else
-			{
-				tmp_exp = s_expand(cmd->token->next->content, cmd->env, cmd);
-				tmp = ft_strjoin(cmd->token->content, tmp_exp);
-				free(tmp_exp);
-			}
-			if (tmp != NULL)
-			{
-				ft_lstadd_back(&cmd->tab_cmd[i].redirection, ft_lstnew(tmp));
-				cmd->token = cmd->token->next;
-			}
+			parsing_sort_redir(cmd, i, tmp);
 		}
 		else if ((cmd->token->content)[0] == '|')
 			i++;
@@ -88,52 +95,4 @@ void	parsing(t_cmd_line *cmd)
 	i = 0;
 	tmp = NULL;
 	parsing_sort(cmd, i, tmp);
-}
-
-/******************************************************************************
-Transform a list into a tab of string
-Return : pointer to a tab
-******************************************************************************/
-static char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
-{
-	char	**res;
-	t_list	*tmp;
-	int		lst_size;
-	int		i;
-
-	tmp = args;
-	lst_size = ft_lstsize(tmp);
-	res = (char **)malloc(sizeof(char *) * (lst_size + 1));
-	if (res == NULL || lst_size == 0)
-	{
-		if (lst_size == 0)
-			free(res);
-		return (NULL);
-	}
-	tmp = args;
-	i = 0;
-	while (tmp != NULL)
-	{
-		res[i] = s_expand((char *)tmp-> content, env, cmd);
-		i++;
-		tmp = tmp->next;
-		res[i] = NULL;
-	}
-	return (res);
-}
-
-/******************************************************************************
-Transform the list ARG into a tab of string for ALL the simple command
-******************************************************************************/
-void	cmd_arg_to_tab(t_cmd_line *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (i < cmd->nb_simple_cmd)
-	{
-		cmd->tab_cmd[i].tab_args = args_to_tab(cmd->tab_cmd[i].args,
-				cmd->env, cmd);
-		i++;
-	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:12:29 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/27 16:22:48 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:46:39 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,26 @@ void	get_env_var_name(t_expand *s)
 /******************************************************************************
 Improve the output parameter with the contains of the env parameter
 ******************************************************************************/
-void	mod_dollar(t_expand *s, t_list *env, t_cmd_line *cmd)
+static void	mod_dollar_pi(t_expand *s, t_cmd_line *cmd)
 {
 	char	*tmp;
 	char	*tmp2;
 
+	tmp = s->output;
+	tmp2 = ft_itoa(cmd->exit_code);
+	s->output = ft_strjoin(tmp, tmp2);
+	s->i = s-> i + 2;
+	free(tmp2);
+	free(tmp);
+}
+
+void	mod_dollar(t_expand *s, t_list *env, t_cmd_line *cmd)
+{
+	char	*tmp;
+
 	if (s->input[s->i + 1] == '?')
 	{
-		tmp = s->output;
-		tmp2 = ft_itoa(cmd->exit_code);
-		s->output = ft_strjoin(tmp, tmp2);
-		s->i = s-> i + 2;
-		free(tmp2);
-		free(tmp);
+		mod_dollar_pi(s, cmd);
 	}
 	else
 	{
@@ -102,27 +109,4 @@ void	mod_dollar(t_expand *s, t_list *env, t_cmd_line *cmd)
 		}
 		free_null(&s->env_name);
 	}
-}
-
-/******************************************************************************
-Improve the output parameter with the contains inside simple quote
-******************************************************************************/
-void	mode_squote(t_expand *s)
-{
-	int		start;
-	char	*tmp;
-	char	*tmp_env;
-
-	s->i++;
-	start = s->i;
-	while (s->input[s->i] != '\'')
-		s->i++;
-	tmp = s->output;
-	tmp_env = ft_strndup(s->input, start, s->i - 1);
-	if (tmp_env == NULL)
-		return ;
-	s->output = ft_strjoin(tmp, tmp_env);
-	free_null(&tmp);
-	free_null(&tmp_env);
-	s->i++;
 }
