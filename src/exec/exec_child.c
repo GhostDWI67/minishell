@@ -3,47 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/27 16:17:43 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:27:56 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-/******************************************************************************
-Function test if all the simple command are executable
-Return : 0 if OK else NOK (nb functions doesn't exist)
-******************************************************************************/
-static int	is_exec_able(t_cmd_line *cmd, int i)
-{
-	char	*path;
-
-	path = NULL;
-	if (cmd->tab_cmd[i].tab_args == NULL)
-		return (cmd->exit_code = 0, cmd->exit_code);
-	if (cmd->tab_cmd[i].tab_args[0] != NULL
-		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0)
-		path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0], cmd);
-	if (path == NULL && cmd->err_nb == ERN_ISDIR)
-		return (ERN_ISDIR);
-	if (path == NULL && cmd->err_nb == ERN_NOTFD)
-		return (ERN_NOTFD);
-	if ((path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL \
-		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0) \
-		|| cmd->tab_cmd[i].tab_args[0][0] == 0)
-	{
-		if (path != NULL)
-			free(path);
-		ft_putstr_fd("Command '", 2);
-		ft_putstr_fd(cmd->tab_cmd[i].tab_args[0], 2);
-		ft_putstr_fd("' not found\n", 2);
-		cmd->exit_code = ERN_NOTEXEC;
-		return (ERN_NOTEXEC);
-	}
-	return (0);
-}
 
 /******************************************************************************
 Function manage the child redirection + execution of the command
@@ -113,11 +80,20 @@ static void	child_prepare(t_cmd_line *cmd)
 	close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
 }
 
+static void	child_closefd(t_cmd_line *cmd)
+{
+	if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
+		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
+	if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 2)
+		close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
+	close(cmd->fd_saved_stdin);
+	close(cmd->fd_saved_stdout);
+}
+
 int	child(t_cmd_line *cmd, char **environ)
 {
 	char	*path;
 
-	path = NULL;
 	child_prepare(cmd);
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args == NULL)
 	{
@@ -126,12 +102,7 @@ int	child(t_cmd_line *cmd, char **environ)
 	}
 	path = get_path(cmd->tab_path, \
 		cmd->tab_cmd[cmd->cmd_step].tab_args[0], cmd);
-	if (cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
-		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
-	if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 2)
-		close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
-	close(cmd->fd_saved_stdin);
-	close(cmd->fd_saved_stdout);
+	child_closefd(cmd);
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args) == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/29 15:50:37 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:21:40 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ int			child(t_cmd_line *cmd, char **environ);
 void		close_fd(int *fd, int nb_fd);
 void		build_pipe(t_cmd_line *cmd);
 void		close_tab_pipe(t_cmd_line *cmd);
+int			is_exec_able(t_cmd_line *cmd, int i);
 
 /* exec_utils2.c */
 char		*get_path(char **tab_path, char *fexec, t_cmd_line *cmd);
