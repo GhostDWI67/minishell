@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:21:11 by admin             #+#    #+#             */
-/*   Updated: 2025/05/29 18:07:15 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 15:08:47 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	check_token(t_token *token)
 	t_token	*tmp;
 
 	tmp = token;
+	if (!tmp)
+		return (1);
 	if (tmp->type == 5)
 	{
 		return (msg_inf("unexpected token : |", ERN_TOKEN));
