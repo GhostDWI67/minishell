@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 14:32:42 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 14:22:22 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ void		free_exit(t_cmd_line *cmd, bool err, int exit_status);
 /* check.c */
 int			check_quote(char *s);
 int			ws_check(char *s);
-void		check_malloc(t_cmd_line *cmd, char *s, char *err_m, int err_n);
 
 /* display.c */
 void		display_simple_cmd(t_cmd_line *cmd);

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 15:52:31 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 18:45:29 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,16 @@ int	is_exec_able(t_cmd_line *cmd, int i)
 	char	*path;
 
 	path = NULL;
+	// if (cmd->tab_cmd[i].tab_args[0] == NULL)
+	// 	return (cmd->exit_code = ERN_NOTEXEC, cmd->exit_code);
+	if (cmd->tab_cmd[i].tab_args == NULL)
+	{
+		ft_putstr_fd("POINT TOTO\n", 2);//
+		token_clear(&cmd->token);
+		return (cmd->exit_code = 0, cmd->exit_code);
+	}
 	if (cmd->tab_cmd[i].tab_args[0] == NULL)
 		return (cmd->exit_code = ERN_NOTEXEC, cmd->exit_code);
-	if (cmd->tab_cmd[i].tab_args == NULL)
-		return (cmd->exit_code = 0, cmd->exit_code);
 	if (cmd->tab_cmd[i].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0)
 		path = get_path(cmd->tab_path, cmd->tab_cmd[i].tab_args[0], cmd);

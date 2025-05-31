@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_mgt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/05/31 16:29:54 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/26 10:44:18 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,12 @@ void	main_input_mgt(t_cmd_line *cmd)
 	}
 	if (cmd->input != NULL && cmd->input[0] != '\0')
 	{
-		ft_putstr_fd("INPUT 1\n",2);//
 		if (input_first_check(cmd) == 0)
 			input_last_pipe(cmd, tmp, input);
 		if (ws_check(cmd->input) != 0 && cmd->input[0] != '\0')
 			add_history(cmd->input);
 		else
-		{
-			ft_putstr_fd("INPUT 2\n",2);//
 			cmd->err_nb = 1;
-		}
-		ft_putnbr_fd(cmd->err_nb, 2);//
-		ft_putstr_fd("INPUT 3\n",2);//
 	}
 	else
 	{

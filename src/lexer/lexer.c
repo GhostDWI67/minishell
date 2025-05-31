@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 16:09:18 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 18:13:26 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,19 @@ Return : pointer to the start of the token list
 static t_token	*parse_token_add_arg(t_token *res, char *s, int start, int end)
 {
 	char	*tmp;
+	t_token	*tmp_node;
 
 	tmp = ft_strndup(s, start, end);
 	if (tmp == NULL)
 		return (NULL);
-	if (res == NULL)
-	{
-		free(tmp);
-		return (NULL);
-	}
 	if (tmp[0] != 0)
-		token_add_back(&res, token_new(tmp, ARG));
+	{
+		tmp_node = token_new(tmp, ARG);
+		if (tmp_node != NULL)
+			token_add_back(&res, token_new(tmp, ARG));
+		else
+			free (tmp);
+	}
 	return (res);
 }
 
@@ -48,7 +50,15 @@ static int	parse_token_skip(char *s, int i)
 
 static int	parse_token_add(t_token **res, char *sep, int i, int type)
 {
-	token_add_back(res, token_new(ft_strdup(sep), type));
+	char	*tmp;
+	t_token	*tmp_node;
+
+	tmp = ft_strdup(sep);
+	tmp_node = token_new(tmp, type);
+	if (tmp_node != NULL)
+		token_add_back(res, tmp_node);
+	else
+		free (tmp);
 	i = i + ft_strlen(sep);
 	return (i);
 }

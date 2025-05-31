@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:58:08 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 16:21:23 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 18:12:55 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ t_token	*token_new(char *content, int type)
 
 	res = (t_token *)malloc(sizeof(t_token));
 	if (res == NULL)
-	{
-		msg_inf(ERM_MALLOC, ERN_MALLOC);
-		return (NULL);
-	}
+		return (msg_inf(ERM_MALLOC, ERN_MALLOC), NULL);
 	res->content = content;
 	res->type = type;
 	res->next = NULL;

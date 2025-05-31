@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:15:15 by admin             #+#    #+#             */
-/*   Updated: 2025/05/29 16:54:21 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 18:42:07 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,13 @@ static char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
 	tmp = args;
 	lst_size = ft_lstsize(tmp);
 	res = (char **)malloc(sizeof(char *) * (lst_size + 1));
+	//res = NULL;
 	if (res == NULL || lst_size == 0)
 	{
 		if (lst_size == 0)
 			free(res);
+		else
+			cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC);
 		return (NULL);
 	}
 	tmp = args;

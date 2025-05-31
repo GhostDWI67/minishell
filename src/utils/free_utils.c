@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 15:06:46 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/29 15:23:40 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ int	free_tab_char(char	**tab)
 	int	i;
 
 	if (tab == NULL)
-	{
 		return (1);
-	}
 	i = 0;
 	while (tab [i] != NULL)
 	{

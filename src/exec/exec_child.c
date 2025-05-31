@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 15:49:19 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 17:25:13 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	child_prepare(t_cmd_line *cmd)
 		free_cmd_line_exit(cmd);
 		exit (ERN_FILE);
 	}
-	if (is_exec_able(cmd, cmd->cmd_step) != 0)
+	if (cmd->tab_fd == NULL || is_exec_able(cmd, cmd->cmd_step) != 0)
 	{
 		close_all_fd(cmd);
 		free_exit(cmd, true, cmd->exit_code);
