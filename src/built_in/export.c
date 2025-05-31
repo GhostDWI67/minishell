@@ -6,40 +6,11 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/27 11:44:48 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/31 14:22:34 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-/******************************************************************************
-traverse l'env et check si la variable existe deja
-Return -1 si non déclaré sinon l'index ou elle est déclaré;
-******************************************************************************/
-static int	declared(char *arg, t_list *env)
-{
-	t_list	*tmp;
-	int		i;
-	int		j;
-
-	if (!env)
-		return (-1);
-	i = 0;
-	j = 0;
-	tmp = env;
-	while (arg[i] && arg[i] != '=')
-		i++;
-	while (tmp != NULL)
-	{
-		if (!ft_strncmp((char *)tmp->content, arg, i) && \
-		(((char *)tmp->content)[i] == '\0' || \
-		((char *)tmp->content)[i] == '='))
-			return (j);
-		tmp = tmp->next;
-		j++;
-	}
-	return (-1);
-}
 
 /******************************************************************************
 check si le nom de la variable est valide
@@ -92,37 +63,25 @@ static bool	no_args(t_list *env)
 	return (true);
 }
 
-/******************************************************************************
-ajoute ou update la valeur de la variable passé en arg
-Return true si ok sinon false;
-******************************************************************************/
-bool	export_core(char *arg, t_list **env)
+static int	export_norm(char **args, t_cmd_line *cmd)
 {
-	int		i;
-	int		index;
-	char	*var;
-	t_list	*temp;
+	int	i;
+	int	exit_status;
 
-	temp = (*env);
-	index = declared(arg, (*env));
-	var = ft_strdup(arg);
-	if (!var)
-		return (false);
-	if (index == -1)
+	i = 1;
+	exit_status = 0;
+	while (args[i])
 	{
-		if (!ft_lstaddback_content(env, var))
-			return (true);
+		if (!check_name(args[i]))
+		{
+			exit_status = 1;
+			mod_error("export: `", args[i], "': not a valid identifier");
+		}
+		else if (!export_core(args[i], &cmd->env))
+			return (1);
+		i++;
 	}
-	else if (index >= 0)
-	{
-		i = 0;
-		while (i++ < index)
-			(*env) = (*env)->next;
-		free((*env)->content);
-		(*env)->content = var;
-	}
-	(*env) = temp;
-	return (true);
+	return (exit_status);
 }
 
 /******************************************************************************
@@ -137,7 +96,6 @@ int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 	int	exit_status;
 
 	i = 1;
-	exit_status = 0;
 	if (!args || !args[i])
 	{
 		if ((*env) && !no_args((*env)))
@@ -150,21 +108,7 @@ int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 			free_cmd_line_exit(cmd);
 		return (0);
 	}
-	while (args[i])
-	{
-		if (!check_name(args[i]))
-		{
-			exit_status = 1;
-			mod_error("export: `", args[i], "': not a valid identifier");
-		}
-		else if (!export_core(args[i], env))
-		{
-			if (in_child == 1)
-				free_cmd_line_exit(cmd);
-			return (0);
-		}
-		i++;
-	}
+	exit_status = export_norm(args, cmd);
 	if (in_child == 1)
 		free_cmd_line_exit(cmd);
 	return (exit_status);
