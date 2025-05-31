@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_in.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:49:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/27 16:15:38 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/31 15:35:48 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Return : BUILTIN_NOT if not or the BUILTIN number
 ******************************************************************************/
 int	is_built_in(char **s)
 {
-	if (s == NULL)
+	if (s == NULL || *s == NULL)
 		return (BUILTIN_NOT);
 	if (ft_strncmp(s[0], "echo", INT_MAX) == 0)
 		return (BUILTIN_ECHO);

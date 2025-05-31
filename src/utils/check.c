@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:05:48 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:32:28 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/31 15:52:56 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,16 @@ int	ws_check(char *s)
 		i++;
 	}
 	return (res);
+}
+
+/******************************************************************************
+Check if a malloc is OK
+If not, send a message and ctrl+C
+******************************************************************************/
+void	check_malloc(t_cmd_line *cmd, char *s, char *err_m, int err_n)//
+{
+	if (s == NULL)
+	{
+		cmd->exit_code = msg_inf(err_m, err_n);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/29 18:00:17 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 15:49:19 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,37 +17,44 @@ Function manage the child redirection + execution of the command
 ******************************************************************************/
 static void	child_redir_mgt_in(t_cmd_line *cmd)
 {
-	if (cmd->cmd_step == 0)
+	if (cmd->tab_cmd != NULL && cmd->tab_fd != NULL)
 	{
-		if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_infile, STDIN_FILENO) == -1)
-			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
-	}
-	else if (cmd->cmd_step > 0 && cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
-	{
-		if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_infile, STDIN_FILENO) == -1)
-			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
-		close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
-	}
-	else if (cmd->cmd_step > 0)
-	{
-		if (dup2(cmd->tab_fd[2 * cmd->cmd_step - 2], STDIN_FILENO) == -1)
-			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+		if (cmd->cmd_step == 0)
+		{
+			if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_infile, STDIN_FILENO) == -1)
+				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+		}
+		else if (cmd->cmd_step > 0 && cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
+		{
+			if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_infile, STDIN_FILENO) == -1)
+				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+			close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
+		}
+		else if (cmd->cmd_step > 0)
+		{
+			if (dup2(cmd->tab_fd[2 * cmd->cmd_step - 2], STDIN_FILENO) == -1)
+				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+		}
 	}
 }
 
 static void	child_redir_mgt_out(t_cmd_line *cmd)
 {
-	if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 1)
+	if (cmd->tab_cmd != NULL && cmd->tab_fd != NULL)
 	{
-		if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_outfile, STDOUT_FILENO) == -1)
-			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
-		close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
-	}
-	else if (cmd->cmd_step < cmd->nb_simple_cmd - 1)
-	{
-		if (dup2(cmd->tab_fd[2 * cmd->cmd_step + 1], STDOUT_FILENO) == -1)
+		if (cmd->tab_cmd[cmd->cmd_step].fd_outfile > 1)
 		{
-			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+			if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_outfile, \
+				STDOUT_FILENO) == -1)
+				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+			close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
+		}
+		else if (cmd->cmd_step < cmd->nb_simple_cmd - 1)
+		{
+			if (dup2(cmd->tab_fd[2 * cmd->cmd_step + 1], STDOUT_FILENO) == -1)
+			{
+				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+			}
 		}
 	}
 }

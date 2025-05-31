@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 15:09:33 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/31 16:09:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ static t_token	*parse_token_add_arg(t_token *res, char *s, int start, int end)
 	tmp = ft_strndup(s, start, end);
 	if (tmp == NULL)
 		return (NULL);
+	if (res == NULL)
+	{
+		free(tmp);
+		return (NULL);
+	}
 	if (tmp[0] != 0)
 		token_add_back(&res, token_new(tmp, ARG));
 	return (res);

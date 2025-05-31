@@ -6,20 +6,11 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 10:28:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/31 14:48:50 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:04:38 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	sign(char *s)
-{
-	if (s[0] == '+' && s[1] == '\0')
-		return (1);
-	if (s[0] == '-' && s[1] == '\0')
-		return (1);
-	return (0);
-}
 
 static int	check_ull(char *s)
 {
@@ -67,8 +58,8 @@ static int	check_arg(char *s, bool *error)
 		exit = exit * 10 + (s[i++] - '0');
 	while ((9 <= s[i] && s[i] <= 13) || s[i] == 32)
 		i++;
-	if (s[i] || check_ull(s) || !i || ((neg == 1 && (exit > LONG_MAX)) || \
-	(neg == -1 && exit != 0 && (exit - 1) > LONG_MAX)) || i == space || sign(s))
+	if (s[i] || ((neg == -1 && (exit - 1) > LONG_MAX) || check_ull(s) == 1 || \
+		(neg == 1 && (exit > LONG_MAX))) || i == 0 || i == space)
 		*error = true;
 	return ((int)((exit * neg) % 256));
 }

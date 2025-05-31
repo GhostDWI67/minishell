@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:35:55 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/29 17:13:09 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 16:14:08 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	*s_expand(char *str, t_list *env, t_cmd_line *cmd)
 
 	s = malloc(sizeof(t_expand) * 1);
 	if (s == NULL)
-		return (NULL);
+		return (msg_inf(ERM_MALLOC, ERN_MALLOC), NULL);
 	s->input = str;
 	s->output = NULL;
 	s->env_name = NULL;

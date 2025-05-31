@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/29 17:27:18 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/05/31 16:18:03 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,11 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 	{
 		cmd->nb_simple_cmd = check_token_nb_cmd(cmd->token);
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
-		//cmd->tab_cmd = NULL;//
 		if (cmd->tab_cmd == NULL)
+		{
+			cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC);
 			return (1);
+		}
 		parsing(cmd);
 		parsing_args(cmd);
 		cmd_arg_to_tab(cmd);
@@ -122,14 +124,21 @@ static void	main_loop(t_cmd_line *cmd)
 {
 	cmd->tab_env = ft_lst_to_arr(cmd->env);
 	cmd->err_nb = 0;
+	ft_putstr_fd("POINT -2\n",2);//
 	main_input_mgt(cmd);
+	ft_putstr_fd("POINT -1\n",2);//
 	if (cmd->err_nb == 0)
 	{
+		ft_putstr_fd("POINT 0\n",2);//
 		main_init(cmd);
 		setup_sigs_exec();
+		ft_putstr_fd("POINT 1\n",2);//
 		main_exec_mgt(cmd, cmd->tab_env);
+		ft_putstr_fd("POINT 2\n",2);//
 		setup_sigs_handler();
+		ft_putstr_fd("POINT 3\n",2);//
 		main_free_mgt(cmd);
+		ft_putstr_fd("POINT 4\n",2);//
 	}
 	else
 	{
