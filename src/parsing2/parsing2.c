@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:08:52 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/01 11:13:53 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/01 13:04:39 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ static t_list	*parse_arg(char *s)
 	int		i;
 	int		start;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	res = NULL;
 	start = 0;
@@ -91,8 +93,6 @@ void	parsing_args(t_cmd_line *cmd)
 	while (i < cmd->nb_simple_cmd)
 	{
 		tmp = rebuilt_args(cmd, i);
-		if (!tmp)
-			free_exit(cmd, false, 19);
 		if (cmd->tab_cmd[i].args != NULL)
 			ft_lstclear(&cmd->tab_cmd[i].args, free);
 		cmd->tab_cmd[i].args = parse_arg(tmp);
