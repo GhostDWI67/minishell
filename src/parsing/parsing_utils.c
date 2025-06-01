@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:15:15 by admin             #+#    #+#             */
-/*   Updated: 2025/06/01 14:20:29 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/01 15:16:09 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ static char	**args_to_tab(t_list *args, t_list *env, t_cmd_line *cmd)
 	while (tmp != NULL)
 	{
 		res[i] = s_expand((char *)tmp-> content, env, cmd);
+		if (res[i] == NULL)
+			cmd->exit_code = msg_inf (ERM_MALLOC, ERN_MALLOC);
 		i++;
 		tmp = tmp->next;
 		res[i] = NULL;

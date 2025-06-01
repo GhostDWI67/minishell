@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:08:52 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/01 13:04:39 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/01 15:03:18 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static t_list	*parse_arg_add_arg(t_list *res, char *s, int start, int end)
 
 	tmp = ft_strndup(s, start, end);
 	if (tmp == NULL)
-		return (NULL);
+		return (msg_inf(ERM_MALLOC, ERN_MALLOC), NULL);
 	if (tmp[0] != 0)
 		ft_lstadd_back(&res, ft_lstnew(tmp));
 	return (res);

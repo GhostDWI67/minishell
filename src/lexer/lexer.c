@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/01 13:00:16 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:36:29 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_token	*parse_token_add_arg(t_token *res, char *s, int start, int end)
 
 	tmp = ft_strndup(s, start, end);
 	if (tmp == NULL)
-		return (NULL);
+		return (msg_inf(ERM_MALLOC, ERN_MALLOC), NULL);
 	if (tmp[0] != 0)
 	{
 		tmp_node = token_new(tmp, ARG);
@@ -58,7 +58,10 @@ static int	parse_token_add(t_token **res, char *sep, int i, int type)
 	if (tmp_node != NULL)
 		token_add_back(res, tmp_node);
 	else
+	{
+		msg_inf(ERM_MALLOC, ERN_MALLOC);
 		free (tmp);
+	}
 	i = i + ft_strlen(sep);
 	return (i);
 }

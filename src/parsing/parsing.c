@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 23:25:48 by admin             #+#    #+#             */
-/*   Updated: 2025/05/29 15:06:38 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/01 15:17:14 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ static void	parsing_sort_redir(t_cmd_line *cmd, int i, char *tmp)
 		ft_lstadd_back(&cmd->tab_cmd[i].redirection, ft_lstnew(tmp));
 		cmd->token = cmd->token->next;
 	}
+	else
+		cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC);
 }
 
 /******************************************************************************

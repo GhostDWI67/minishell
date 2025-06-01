@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:08:52 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/01 14:05:39 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/01 15:18:24 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ static char	*d_expand(char *str, t_list *env, t_cmd_line *cmd)
 	char		*res;
 	t_expand	*s;
 
+	if (str == NULL)
+		return (cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC), NULL);
 	s = malloc(sizeof(t_expand) * 1);
 	if (s == NULL)
 	{
@@ -135,5 +137,7 @@ char	*rebuilt_args(t_cmd_line *cmd, int i)
 		free(tmp_res);
 		tmp = tmp->next;
 	}
+	if (res == NULL)
+		cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC);
 	return (res);
 }
