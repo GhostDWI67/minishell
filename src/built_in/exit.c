@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 10:28:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/31 14:48:50 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/01 10:48:36 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static int	check_ull(char *s)
 	i = 0;
 	len = 0;
 	if (s[i] == '+' || s[i] == '-')
+		i++;
+	while (s[i] == '0')
 		i++;
 	while (s[i])
 	{

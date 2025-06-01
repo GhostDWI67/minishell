@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 18:49:10 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/01 11:14:56 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,29 +46,6 @@ valgrind --leak-check=full --show-leak-kinds=all --suppressions=leaks.supp
 int	g_signal;
 
 /******************************************************************************
-Init the cmd structure
-******************************************************************************/
-static void	init_cmd(t_cmd_line *cmd)
-{
-	cmd->input = NULL;
-	cmd->token = NULL;
-	cmd->tab_env = NULL;
-	cmd->env = NULL;
-	cmd->nb_simple_cmd = 0;
-	cmd->tab_cmd = NULL;
-	cmd->tab_path = NULL;
-	cmd->tab_fd = NULL;
-	cmd->tab_pid = NULL;
-	cmd->cmd_step = 0;
-	cmd->fd_saved_stdin = 0;
-	cmd->fd_saved_stdout = 0;
-	cmd->err_nb = 0;
-	cmd->exit_code = 0;
-	g_signal = 0;
-	setup_sigs_handler();
-}
-
-/******************************************************************************
 Init the fd IN/OUT
 ******************************************************************************/
 static void	main_init(t_cmd_line *cmd)
@@ -102,6 +79,7 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 			cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC);
 			return (1);
 		}
+		init_tab_cmd(cmd->tab_cmd);
 		parsing(cmd);
 		parsing_args(cmd);
 		cmd_arg_to_tab(cmd);

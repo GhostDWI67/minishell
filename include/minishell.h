@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 14:22:22 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/01 11:16:53 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,10 @@ void		sigint_handler(int sig);
 void		sig_exec(int signal);
 void		sig_heredoc(int signal);
 void		sig_exit_status(t_cmd_line *cmd);
+
+/* init.c */
+void		init_cmd(t_cmd_line *cmd);
+void		init_tab_cmd(t_command *tab_cmd);
 
 /* utils.c */
 char		*ft_strndup(char const *src, int first, int last);

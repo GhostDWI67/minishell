@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/29 15:29:09 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/01 10:20:14 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,8 @@ int	init_env(t_cmd_line *cmd, char **env, char **argv)
 	while (env[i])
 	{
 		tmp = ft_strdup(env[i]);
-		if (!tmp)
-		{
-			ft_lstclear(&list, free);
-			return (1);
-		}
-		ft_lstaddback_content(&list, tmp);
+		if (tmp)
+			ft_lstaddback_content(&list, tmp);
 		i++;
 	}
 	cmd->env = list;
