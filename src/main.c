@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/01 12:46:51 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:17:59 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,8 @@ static void	main_loop(t_cmd_line *cmd)
 		main_init(cmd);
 		setup_sigs_exec();
 		main_exec_mgt(cmd, cmd->tab_env);
-		//ft_putstr_fd("POINT 3\n", 2);//
 		setup_sigs_handler();
 		main_free_mgt(cmd);
-		//ft_putstr_fd("POINT 4\n", 2);//
 	}
 	else
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rebuilt_arg.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:08:52 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/01 11:08:23 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:05:39 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ static char	*d_expand(char *str, t_list *env, t_cmd_line *cmd)
 
 	s = malloc(sizeof(t_expand) * 1);
 	if (s == NULL)
+	{
+		cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC);
 		return (NULL);
+	}
 	s->input = str;
 	s->output = NULL;
 	s->env_name = NULL;
