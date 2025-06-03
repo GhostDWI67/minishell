@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/06/03 10:13:13 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:15:08 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ void	main_input_mgt(t_cmd_line *cmd)
 	{
 		if (input_first_check(cmd) == 0)
 			input_last_pipe(cmd, tmp, input);
-		if (cmd->input != NULL || ws_check(cmd->input) != 0 && \
-		cmd->input[0] != '\0')
+		if (cmd->input != NULL || (ws_check(cmd->input) != 0 && \
+		cmd->input[0] != '\0'))
 			add_history(cmd->input);
 		else
 			cmd->err_nb = 1;
