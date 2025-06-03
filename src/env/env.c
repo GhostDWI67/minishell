@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/29 15:35:00 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/03 10:06:24 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,5 @@ void	increase_shlvl(t_list *env)
 	if (lvl_char)
 		free(lvl_char);
 	else
-		export_core(ft_strdup("SHLVL=1"), &env);
+		export_core("SHLVL=1", &env);
 }

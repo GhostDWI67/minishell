@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:05:48 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/07 11:32:28 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:12:01 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	check_quote(char *s)
 {
 	int	count;
 
+	if (!s)
+		return (0);
 	count = 0;
 	return (int_check_quote(s, count));
 }
@@ -61,6 +63,8 @@ int	ws_check(char *s)
 	int	i;
 	int	res;
 
+	if (!s)
+		return (1);
 	i = 0;
 	res = 0;
 	while (s[i] != '\0')

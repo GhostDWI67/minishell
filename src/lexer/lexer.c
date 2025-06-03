@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/01 14:36:29 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/03 10:09:20 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ t_token	*parse_token(char *s)
 	int		i;
 	int		start;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	res = NULL;
 	start = 0;

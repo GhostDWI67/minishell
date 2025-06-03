@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/27 11:24:33 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:04:51 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ static int	cd_core(t_list *env)
 	pwd = ft_strjoin("PWD=", cwd);
 	if (!pwd)
 		return (1);
-	export_core(pwd, &env);
+	if (!export_core(pwd, &env))
+		return (1);
 	free(pwd);
 	return (0);
 }
@@ -73,11 +74,13 @@ static int	cd_no_args(t_list *env, t_cmd_line *cmd, int in_child)
 	int		ret;
 	char	*arg;
 
+	ret = 1;
 	arg = ft_getenv("HOME", env);
 	if (arg != NULL)
 	{
 		arg = ft_strdup(arg);
-		ret = chdir(arg);
+		if (arg)
+			ret = chdir(arg);
 	}
 	else
 		ret = 1;

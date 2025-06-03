@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:27:18 by admin             #+#    #+#             */
-/*   Updated: 2025/06/01 12:34:46 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:13:13 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ static void	input_last_pipe_prep(t_cmd_line *cmd, char *tmp, char *input)
 {
 	tmp = cmd->input;
 	cmd->input = ft_strjoin(tmp, input);
+	if (cmd->input == NULL)
+		cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC);
 	free(tmp);
 	token_clear(&cmd->token);
 	cmd->token = parse_token(cmd->input);
@@ -106,13 +108,12 @@ void	main_input_mgt(t_cmd_line *cmd)
 	{
 		if (input_first_check(cmd) == 0)
 			input_last_pipe(cmd, tmp, input);
-		if (ws_check(cmd->input) != 0 && cmd->input[0] != '\0')
+		if (cmd->input != NULL || ws_check(cmd->input) != 0 && \
+		cmd->input[0] != '\0')
 			add_history(cmd->input);
 		else
 			cmd->err_nb = 1;
 	}
 	else
-	{
 		free_exit_ctrld(cmd, false, 0);
-	}
 }
