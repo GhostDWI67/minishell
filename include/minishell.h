@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/01 14:08:29 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/20 15:48:45 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@
 # define ERM_NOTFD		"No such file or directory"
 # define ERN_NOTFD		127
 
-extern int g_signal;
+extern int	g_signal;
 
 typedef struct s_token
 {
@@ -182,6 +182,7 @@ void		parent_redir_mgt_in_out(t_cmd_line *cmd);
 int			child(t_cmd_line *cmd, char **environ);
 
 /* exec_utils.c */
+void		msg_write(t_cmd_line *cmd, int i);
 int			is_exec_able(t_cmd_line *cmd, int i);
 
 /* exec_utils2.c */
@@ -225,7 +226,6 @@ void		main_free_mgt(t_cmd_line *cmd);
 /* free_utils3.c */
 int			free_cmd_line(t_cmd_line *cmd);
 int			free_cmd_line_exit(t_cmd_line *cmd);
-
 
 /* heredoc.c */
 int			redir_heredoc(t_cmd_line *cmd, char *s, int i);

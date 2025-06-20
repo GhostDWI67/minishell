@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 17:25:13 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/20 16:50:24 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,11 @@ int	child(t_cmd_line *cmd, char **environ)
 	{
 		if (execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
 			== -1)
-			cmd->exit_code = msg_error(ERM_EXECVE, ERN_EXECVE);
+		{
+			msg_write(cmd, cmd->cmd_step);// changer le message
+			free_cmd_line_exit(cmd);//
+			exit (ERN_NOTEXEC);//toto
+		}
 	}
 	else
 	{
