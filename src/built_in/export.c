@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/31 14:22:34 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:55:24 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,17 @@ static bool	no_args(t_list *env)
 	int		j;
 	char	**tab;
 
-	i = 0;
+	i = -1;
 	tab = ft_lst_to_arr(env);
 	if (!tab)
 		return (false);
 	sort_tab(tab, ft_lstsize(env));
-	while (tab[i])
+	while (tab[++i])
 	{
-		printf("declare -x ");
 		j = 0;
+		if (tab[i][j] == '_')
+			continue ;
+		printf("declare -x ");
 		while (tab[i][j] && tab[i][j] != '=')
 			printf("%c", tab[i][j++]);
 		if (tab[i][j] && tab[i][j] == '=')

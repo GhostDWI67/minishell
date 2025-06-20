@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/26 10:45:13 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:56:20 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,14 @@ static char	*build_heredoc_input_int(char *eof, char *read, char *tmp,
 {
 	while (1)
 	{
-		ft_putstr_fd("> ", 1);
-		read = get_next_line(0);
+		read = readline("> ");
+		read = ft_strjoin(read, "\n");
 		if (read == NULL)
+		{
+			mod_error("warning: here-document delimited by " \
+				"end-of-file (wanted `", eof, "')");
 			break ;
+		}
 		if (ft_strncmp(read, eof, ft_strlen(eof)) == 0
 			&& read[ft_strlen(eof)] == '\n')
 		{
