@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 13:41:14 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 18:55:54 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	build_hd_pipe(t_cmd_line *cmd)
 		if (cmd->tab_cmd[i].hd_test != 0)
 		{
 			if (pipe(cmd->tab_cmd[i].hd_pipe) == -1)
-				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+				cmd->exit_code = msg_error(ERM_PIPE, ERN_PIPE);
 			cmd->tab_cmd[i].hd_input = NULL;
 		}
 		i++;
@@ -60,10 +60,14 @@ int	redir_heredoc(t_cmd_line *cmd, char *s, int i)
 		cmd->exit_code = msg_error(ERM_STRNDUP, ERN_STRNDUP);
 	cmd->tab_cmd[i].hd_input = build_heredoc_input(eof);
 	free(eof);
-	write(cmd->tab_cmd[i].hd_pipe[1], cmd->tab_cmd[i].hd_input,
-		ft_strlen(cmd->tab_cmd[i].hd_input));
-	close(cmd->tab_cmd[i].hd_pipe[1]);
-	cmd->tab_cmd[i].fd_infile = cmd->tab_cmd[i].hd_pipe[0];
+	if (cmd->tab_cmd[i].hd_test == 1)
+	{
+		write(cmd->tab_cmd[i].hd_pipe[1], cmd->tab_cmd[i].hd_input,
+			ft_strlen(cmd->tab_cmd[i].hd_input));
+		cmd->tab_cmd[i].fd_infile = cmd->tab_cmd[i].hd_pipe[0];
+	}
+	else
+		cmd->tab_cmd[i].hd_test--;
 	return (0);
 }
 

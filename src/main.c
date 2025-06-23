@@ -3,45 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 13:41:32 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 15:16:07 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-/******************************************************************************
-Comment fonctionne le minishell 
-
-1) initialise l'ENV et on cree une liste chainee de l'ENV
-2) on lit la ligne de commande => A FAIRE : free la ligne, 
-	utiliser GNL à la place ?
-3) check les quote et les tokens bizarre
-4) lexing pour creer les token
-5) verifie les suite de token non valide
-6) parsing : analyse les token pour creer les args et 
-	les redirections(avec expand)
-7) rebuild les list d'ARG de chaque commande pour expand les $VAR
-8) on reconstruit les list d'ARG expand
-9) on lance l'execution 
-	- tableau d'ARG de fonction
-	- creation des pipes
-	- lancememt des Built_In et des execve dans processus child
-		avec gestion des in/out file, cde qui n'existe pas, ...
-******************************************************************************/
-
-/******************************************************************************
-	- msg_error : rajouter exit_code ?? partout ?? 
-			=> partout on met le cmd->exit_code
-		dans lexer-check reste 2 msg_error / heredoc 1 msg_error/ 
-	- gestion des exit code si on a des NULL dans la structure ?? =>SAMEDI
-
-valgrind --track-origins=yes --track-fds=yes --trace-children=yes ./minishell
-valgrind --leak-check=full --show-leak-kinds=all --suppressions=leaks.supp
-
-******************************************************************************/
 
 int	g_signal;
 

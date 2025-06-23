@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 13:58:54 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 18:57:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	child_closefd(t_cmd_line *cmd)
 		close(cmd->tab_cmd[cmd->cmd_step].fd_outfile);
 	close(cmd->fd_saved_stdin);
 	close(cmd->fd_saved_stdout);
+	close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
 }
 
 static void	child_exec(t_cmd_line *cmd, char **environ, char *path)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 14:30:41 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:59:13 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # include <linux/limits.h>
 # include <dirent.h>
 # include <signal.h>
-//# include <asm/signal.h>
 # include "../lib/libft/include/libft.h"
 
 /* Standard Value Definition for token */
@@ -131,7 +130,6 @@ typedef struct s_cmd_line
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
 	char		**tab_path;
-	//int			*tab_fd;
 	int			pipe_fd[2];
 	int			prev_fd;
 	int			*tab_pid;
