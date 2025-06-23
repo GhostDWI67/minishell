@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/03 10:04:51 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:27:47 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,6 @@ static int	cd_args(char *arg, t_list *env, t_cmd_line *cmd, int in_child)
 
 	if (arg[0] == '\0')
 		return (0);
-	if (arg[0] == '-' && arg[1] == '\0')
-		return (pwd(cmd, in_child));
 	if (arg[0] == '~' && arg[1] == '\0')
 		ret = cd_no_args(env, cmd, in_child);
 	else

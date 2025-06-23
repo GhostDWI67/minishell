@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
+#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/06/23 14:00:18 by dwianni          ###   ########.fr        #
+#    Updated: 2025/06/23 14:29:52 by mpalisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,6 @@ CFLAGS = -Wall -Wextra -g3
 SRC_DIR = src
 OBJ_DIR = obj
 LIBFT_DIR = lib/libft
-PRINTF_DIR = lib/printf
 
 INC_DIR = include
 
@@ -74,13 +73,11 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Libraries
 LIBFT = $(LIBFT_DIR)/libft.a
-PRINTF = $(PRINTF_DIR)/libftprintf.a
-LIBS = -L$(LIBFT_DIR) -lft -L$(PRINTF_DIR) -lftprintf
+LIBS = -L$(LIBFT_DIR) -lft
 
 # Header files
 INC_LIBFT_DIR = $(LIBFT_DIR)/include
-INC_PRINTF_DIR = $(PRINTF_DIR)/include
-HEADERS = -I$(INC_DIR) -I$(INC_LIBFT_DIR) -I$(INC_PRINTF_DIR)
+HEADERS = -I$(INC_DIR) -I$(INC_LIBFT_DIR)
 
 # Rules
 all: $(NAME)
@@ -94,16 +91,13 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/minishell.h
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
-	$(MAKE) -C $(PRINTF_DIR)
 
 clean:
 	$(MAKE) -C $(LIBFT_DIR) clean
-	$(MAKE) -C $(PRINTF_DIR) clean
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	$(MAKE) -C $(LIBFT_DIR) fclean
-	$(MAKE) -C $(PRINTF_DIR) fclean
 	rm -f $(NAME)
 
 re: fclean all

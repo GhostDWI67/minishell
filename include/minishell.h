@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 14:13:42 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 14:30:41 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # include <signal.h>
 //# include <asm/signal.h>
 # include "../lib/libft/include/libft.h"
-# include "../lib/printf/include/ft_printf.h"
 
 /* Standard Value Definition for token */
 # define INPUT			1	//"<"
