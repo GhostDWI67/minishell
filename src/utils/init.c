@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:15:12 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/01 14:06:00 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 14:14:56 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	init_cmd(t_cmd_line *cmd)
 	cmd->nb_simple_cmd = 0;
 	cmd->tab_cmd = NULL;
 	cmd->tab_path = NULL;
-	cmd->tab_fd = NULL;
 	cmd->tab_pid = NULL;
 	cmd->cmd_step = 0;
 	cmd->fd_saved_stdin = 0;

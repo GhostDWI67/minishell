@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 14:40:57 by dwianni           #+#    #+#              #
-#    Updated: 2025/06/01 11:17:18 by mpalisse         ###   ########.fr        #
+#    Updated: 2025/06/23 14:00:18 by dwianni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRC =	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/parsing/parsing_utils.c \
 		$(SRC_DIR)/exec/exec.c \
 		$(SRC_DIR)/exec/exec_child.c \
+		$(SRC_DIR)/exec/exec_child_redir.c \
 		$(SRC_DIR)/exec/exec_utils.c \
 		$(SRC_DIR)/exec/exec_utils2.c \
 		$(SRC_DIR)/exec/exec_utils3.c \

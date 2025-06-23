@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/20 16:56:20 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:41:14 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,26 @@ Generate the pipe for HEREDOC
 ******************************************************************************/
 void	build_hd_pipe(t_cmd_line *cmd)
 {
-	int	i;
+	int		i;
+	t_list	*tmp;
 
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{
-		if (pipe(cmd->tab_cmd[i].hd_pipe) == -1)
-			cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
-		cmd->tab_cmd[i].hd_input = NULL;
+		cmd->tab_cmd[i].hd_test = 0;
+		tmp = cmd->tab_cmd[i].redirection;
+		while (tmp != NULL)
+		{
+			if (ft_strncmp(tmp->content, "<<", 2) == 0)
+				cmd->tab_cmd[i].hd_test++;
+			tmp = tmp->next;
+		}
+		if (cmd->tab_cmd[i].hd_test != 0)
+		{
+			if (pipe(cmd->tab_cmd[i].hd_pipe) == -1)
+				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
+			cmd->tab_cmd[i].hd_input = NULL;
+		}
 		i++;
 	}
 }

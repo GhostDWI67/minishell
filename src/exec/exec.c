@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/05/29 16:18:27 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 13:44:44 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void	f_exec_init(t_cmd_line *cmd)
 {
 	cmd->cmd_step = 0;
 	cmd->tab_pid = malloc(sizeof(int) * cmd->nb_simple_cmd);
-	build_pipe(cmd);
 	cmd->cmd_step = 0;
 }
 
@@ -44,6 +43,20 @@ static void	f_exec_wait(t_cmd_line *cmd)
 }
 
 /******************************************************************************
+Function parent
+******************************************************************************/
+static void	parent(t_cmd_line *cmd)
+{
+	if (cmd->cmd_step > 0)
+		close (cmd->prev_fd);
+	if (cmd->cmd_step < cmd->nb_simple_cmd - 1)
+	{
+		close(cmd->pipe_fd[1]);
+		cmd->prev_fd = cmd->pipe_fd[0];
+	}
+}
+
+/******************************************************************************
 Function manage the mutiple pipe command
 ******************************************************************************/
 static void	f_exec_bi_parent(t_cmd_line *cmd)
@@ -58,26 +71,28 @@ static void	f_exec_bi_parent(t_cmd_line *cmd)
 
 void	f_exec(t_cmd_line *cmd, char **environ)
 {
+	cmd->prev_fd = -1;
 	f_exec_init(cmd);
 	if (cmd->tab_pid != NULL)
 	{
 		if (cmd->nb_simple_cmd == 1
 			&& is_built_in(cmd->tab_cmd[cmd->cmd_step].tab_args) != 0)
-		{
 			f_exec_bi_parent(cmd);
-		}
 		else
 		{
 			while (cmd->cmd_step < cmd->nb_simple_cmd)
 			{
+				if (cmd->cmd_step < cmd->nb_simple_cmd - 1)
+					pipe(cmd->pipe_fd);
 				cmd->tab_pid[cmd->cmd_step] = fork();
 				if (cmd->tab_pid[cmd->cmd_step] == -1)
 					cmd->exit_code = msg_error(ERM_FORK, ERN_FORK);
 				else if (cmd->tab_pid[cmd->cmd_step] == 0)
 					child(cmd, environ);
+				else
+					parent(cmd);
 				cmd->cmd_step++;
 			}
-			close_tab_pipe(cmd);
 			f_exec_wait(cmd);
 		}
 	}

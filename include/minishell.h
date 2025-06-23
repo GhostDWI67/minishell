@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/20 15:48:45 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 14:13:42 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct s_command
 	char	*outfile;
 	int		hd_pipe[2];
 	char	*hd_input;
+	int		hd_test;
 	int		redir_test;
 }	t_command;
 
@@ -131,7 +132,9 @@ typedef struct s_cmd_line
 	int			nb_simple_cmd;
 	t_command	*tab_cmd;
 	char		**tab_path;
-	int			*tab_fd;
+	//int			*tab_fd;
+	int			pipe_fd[2];
+	int			prev_fd;
 	int			*tab_pid;
 	int			cmd_step;
 	int			fd_saved_stdin;
@@ -180,6 +183,10 @@ void		parent_redir_mgt_in_out(t_cmd_line *cmd);
 
 /* exec_child.c */
 int			child(t_cmd_line *cmd, char **environ);
+
+/* exec_child_redir.c */
+void		child_redir_mgt_in(t_cmd_line *cmd);
+void		child_redir_mgt_out(t_cmd_line *cmd);
 
 /* exec_utils.c */
 void		msg_write(t_cmd_line *cmd, int i);

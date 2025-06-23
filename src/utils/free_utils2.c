@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:35:21 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/31 17:10:45 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 13:33:11 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,11 @@ static void	close_fds(t_cmd_line *cmd, int i)
 {
 	ft_close(cmd->tab_cmd[i].fd_infile);
 	ft_close(cmd->tab_cmd[i].fd_outfile);
-	ft_close(cmd->tab_cmd[i].hd_pipe[0]);
-	ft_close(cmd->tab_cmd[i].hd_pipe[1]);
+	if (cmd->tab_cmd[i].hd_test != 0)
+	{
+		ft_close(cmd->tab_cmd[i].hd_pipe[0]);
+		ft_close(cmd->tab_cmd[i].hd_pipe[1]);
+	}
 }
 
 void	main_free_mgt(t_cmd_line *cmd)
