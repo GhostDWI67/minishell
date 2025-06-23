@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/20 16:55:24 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/23 10:19:24 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static bool	no_args(t_list *env)
 			printf("=\"%s\"\n", &tab[i][j + 1]);
 		else
 			printf("\n");
-		i++;
 	}
 	free(tab);
 	return (true);
