@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 13:58:12 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 18:58:27 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 19:33:30 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	child_redir_mgt_in(t_cmd_line *cmd)
 		{
 			if (dup2(cmd->prev_fd, STDIN_FILENO) == -1)
 				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
-			close(cmd->prev_fd);
+			if (cmd->prev_fd != -1)
+				close(cmd->prev_fd);
 		}
 	}
 }
