@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/23 10:19:24 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:01:47 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static bool	no_args(t_list *env)
 	while (tab[++i])
 	{
 		j = 0;
-		if (tab[i][j] == '_')
+		if (tab[i][j] == '_' && tab[i][j + 1] == '=')
 			continue ;
 		printf("declare -x ");
 		while (tab[i][j] && tab[i][j] != '=')
