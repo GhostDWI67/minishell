@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/27 10:13:50 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/27 10:28:18 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,13 @@ int	redir_heredoc(t_cmd_line *cmd, char *s, int i)
 	return (0);
 }
 
+static void	hd_error_norm(char *eof)
+{
+	if (g_signal != SIGINT)
+		mod_error("warning: here-document delimited by " \
+			"end-of-file (wanted `", eof, "')");
+}
+
 /******************************************************************************
 HEREDOC build the string
 Return : a string with the full message of the HEREDOC
@@ -80,12 +87,13 @@ static char	*build_heredoc_input_int(char *eof, char *read, char *tmp,
 {
 	while (1)
 	{
+		if (g_signal == SIGINT)
+			break ;
 		read = readline("> ");
 		read = ft_strjoin(read, "\n");
 		if (read == NULL)
 		{
-			mod_error("warning: here-document delimited by " \
-				"end-of-file (wanted `", eof, "')");
+			hd_error_norm(eof);
 			break ;
 		}
 		if (ft_strncmp(read, eof, ft_strlen(eof)) == 0
