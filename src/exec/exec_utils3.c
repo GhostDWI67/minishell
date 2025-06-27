@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 19:35:47 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 13:35:48 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,6 @@ void	close_all_fd(t_cmd_line *cmd)
 
 	close(cmd->fd_saved_stdin);
 	close(cmd->fd_saved_stdout);
-	if (cmd->nb_simple_cmd > 1)
-	{
-		close (cmd->pipe_fd[0]);
-		close (cmd->pipe_fd[1]);
-		if (cmd->prev_fd != -1)
-			close (cmd->prev_fd);
-	}
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{

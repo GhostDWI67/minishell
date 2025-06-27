@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/06/23 19:31:34 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/27 10:13:06 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static void	parent(t_cmd_line *cmd)
 		close(cmd->pipe_fd[1]);
 		cmd->prev_fd = cmd->pipe_fd[0];
 	}
+	if (cmd->tab_cmd[cmd->cmd_step].hd_test != 0)
+		close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
 }
 
 /******************************************************************************

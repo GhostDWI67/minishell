@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:49:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 19:08:25 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/27 10:13:50 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	redir_heredoc(t_cmd_line *cmd, char *s, int i)
 	free_null(&cmd->tab_cmd[i].infile);
 	cmd->tab_cmd[i].hd_input = NULL;
 	cmd->tab_cmd[i].infile = NULL;
-	if (cmd->tab_cmd[i].fd_infile != 0)
+	if (cmd->tab_cmd[i].fd_infile > 0)
 		close(cmd->tab_cmd[i].fd_infile);
 	eof = ft_strndup(s, 2, ft_strlen(s));
 	if (eof == NULL)
@@ -65,7 +65,6 @@ int	redir_heredoc(t_cmd_line *cmd, char *s, int i)
 		write(cmd->tab_cmd[i].hd_pipe[1], cmd->tab_cmd[i].hd_input,
 			ft_strlen(cmd->tab_cmd[i].hd_input));
 		cmd->tab_cmd[i].fd_infile = cmd->tab_cmd[i].hd_pipe[0];
-		close(cmd->tab_cmd[cmd->cmd_step].hd_pipe[1]);
 	}
 	else
 		cmd->tab_cmd[i].hd_test--;

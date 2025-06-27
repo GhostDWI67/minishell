@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 11:59:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/25 16:31:59 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/27 10:18:44 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,42 @@
 Manage redirections
 Return : 
 ******************************************************************************/
+static void	redir_mgt_int(t_cmd_line *cmd, int i, t_list *tmp)
+{
+	cmd->tab_cmd[i].redir_test = 1;
+	tmp = cmd->tab_cmd[i].redirection;
+	cmd->tab_cmd[i].fd_infile = 0;
+	cmd->tab_cmd[i].fd_outfile = 1;
+	while (tmp != NULL)
+	{
+		if (ft_strncmp((char *)tmp->content, "<<", 2) == 0)
+			redir_heredoc(cmd, (char *)tmp->content, i);
+		tmp = tmp->next;
+	}
+	tmp = cmd->tab_cmd[i].redirection;
+	while (tmp != NULL && cmd->tab_cmd[i].redir_test == 1)
+	{
+		if (ft_strncmp((char *)tmp->content, "<<", 2) != 0
+			&& ft_strncmp((char *)tmp->content, "<", 1) == 0)
+			redir_infile(cmd, (char *)tmp->content, i);
+		else if (ft_strncmp((char *)tmp->content, ">>", 2) == 0)
+			redir_appfile(cmd, (char *)tmp->content, i);
+		else if (ft_strncmp((char *)tmp->content, ">", 1) == 0)
+			redir_outfile(cmd, (char *)tmp->content, i);
+		tmp = tmp->next;
+	}
+}
+
 int	redir_mgt(t_cmd_line *cmd)
 {
 	t_list	*tmp;
 	int		i;
 
 	i = 0;
+	tmp = NULL;
 	while (i < cmd->nb_simple_cmd)
 	{
-		cmd->tab_cmd[i].redir_test = 1;
-		tmp = cmd->tab_cmd[i].redirection;
-		cmd->tab_cmd[i].fd_infile = 0;
-		cmd->tab_cmd[i].fd_outfile = 1;
-		while (tmp != NULL && cmd->tab_cmd[i].redir_test == 1)
-		{
-			if (ft_strncmp((char *)tmp->content, "<<", 2) == 0)
-				redir_heredoc(cmd, (char *)tmp->content, i);
-			else if (ft_strncmp((char *)tmp->content, "<", 1) == 0)
-				redir_infile(cmd, (char *)tmp->content, i);
-			else if (ft_strncmp((char *)tmp->content, ">>", 2) == 0)
-				redir_appfile(cmd, (char *)tmp->content, i);
-			else if (ft_strncmp((char *)tmp->content, ">", 1) == 0)
-				redir_outfile(cmd, (char *)tmp->content, i);
-			tmp = tmp->next;
-		}
+		redir_mgt_int(cmd, i, tmp);
 		i++;
 	}
 	return (0);
@@ -55,7 +67,7 @@ int	redir_infile(t_cmd_line *cmd, char *s, int i)
 
 	free_null(&cmd->tab_cmd[i].infile);
 	cmd->tab_cmd[i].infile = NULL;
-	if (cmd->tab_cmd[i].fd_infile != 0)
+	if (cmd->tab_cmd[i].fd_infile > 0)
 		close(cmd->tab_cmd[i].fd_infile);
 	cmd->tab_cmd[i].infile = ft_strndup(s, 1, ft_strlen(s));
 	if (cmd->tab_cmd[i].infile == NULL)
