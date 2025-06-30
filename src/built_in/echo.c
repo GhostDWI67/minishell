@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:55:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/10 18:30:02 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/30 18:00:48 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	check_n(char *str)
 		i++;
 		while (str[i] && str[i] == 'n')
 			i++;
-		if (i == (int)ft_strlen(str))
+		if (i != 1 && i == (int)ft_strlen(str))
 			return (1);
 	}
 	return (0);
@@ -44,8 +44,12 @@ static void	echo_core(char **args, bool n, int i, int count)
 		i++;
 		n = false;
 	}
+	//(void)count;
+	//printf("gkjerngjknrekjgn");
+	
 	while (i < count)
 	{
+		//printf("%s",args[i]);
 		write(1, args[i], ft_strlen(args[i]));
 		if (i != count - 1)
 			write(1, " ", 1);

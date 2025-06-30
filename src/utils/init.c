@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:15:12 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/23 14:14:56 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/30 14:09:12 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,3 +51,4 @@ void	init_tab_cmd(t_command *tab_cmd)
 	tab_cmd->hd_input = NULL;
 	tab_cmd->redir_test = 0;
 }
+	
