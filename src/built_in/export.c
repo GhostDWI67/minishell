@@ -6,15 +6,15 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:41:32 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/23 14:28:22 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:03:14 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-check si le nom de la variable est valide
-Return true si ok sinon false;
+check if var name is correct
+Return true if ok otherwise false;
 ******************************************************************************/
 static bool	check_name(char *arg)
 {
@@ -33,8 +33,8 @@ static bool	check_name(char *arg)
 }
 
 /******************************************************************************
-transforme l'env en array et range l'array puis l'affiche
-Return true si ok sinon false;
+transforms the env into an array to sort then display
+Return true if ok otherwise false;
 ******************************************************************************/
 static bool	no_args(t_list *env)
 {
@@ -50,7 +50,7 @@ static bool	no_args(t_list *env)
 	while (tab[++i])
 	{
 		j = 0;
-		if (tab[i][j] == '_')
+		if (tab[i][j] == '_' && tab[i][j + 1] == '=')
 			continue ;
 		printf("declare -x ");
 		while (tab[i][j] && tab[i][j] != '=')
@@ -86,10 +86,9 @@ static int	export_norm(char **args, t_cmd_line *cmd)
 }
 
 /******************************************************************************
-export ajoute la ou les variables passé en arg dans l'env si elles ont un nom
-valable, si aucun argument alors export affiche l'env trié par ordre
-alphabetique
-Return 0 si ok sinon 1;
+export adds the variable(s) passed as arg in the env if they have a valid name
+, if no argument then export displays the env sorted alphabetically
+Return 0 if ok otherwise 1;
 ******************************************************************************/
 int	export(char **args, t_list **env, t_cmd_line *cmd, int in_child)
 {

@@ -6,16 +6,12 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:00:02 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/27 16:22:13 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:07:31 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/******************************************************************************
-init les signaux et les fonctions a lancer en fonction du signal recu
-Return void;
-******************************************************************************/
 void	setup_sigs_handler(void)
 {
 	signal(SIGINT, &sigint_handler);

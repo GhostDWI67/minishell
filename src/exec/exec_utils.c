@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/30 18:49:21 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/06/23 13:49:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,6 @@ static int	is_exec_able_int(t_cmd_line *cmd, int i, char *path)
 		if (path != NULL)
 			free(path);
 		msg_write(cmd, i);
-		//usleep(1000000);//
-		//close (cmd->pipe_fd[0]);//2 cde
-		//close (cmd->pipe_fd[1]);// 2cde
-		//if (cmd->prev_fd > 2)
-		//	close (cmd->prev_fd);//2 cde
 		return (cmd->exit_code = ERN_NOTEXEC, cmd->exit_code);
 	}
 	return (0);

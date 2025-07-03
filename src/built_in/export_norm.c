@@ -6,15 +6,15 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 14:15:18 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/03 10:05:45 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:01:46 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-traverse l'env et check si la variable existe deja
-Return -1 si non déclaré sinon l'index ou elle est déclaré;
+goes through the env to check if the var already exists
+Return -1 if not declared otherwise returns the index
 ******************************************************************************/
 static int	declared(char *arg, t_list *env)
 {
@@ -42,8 +42,8 @@ static int	declared(char *arg, t_list *env)
 }
 
 /******************************************************************************
-ajoute ou update la valeur de la variable passé en arg
-Return true si ok sinon false;
+adds or updates in the env the variables passed to it
+Return true if ok otherwise false;
 ******************************************************************************/
 bool	export_core(char *arg, t_list **env)
 {

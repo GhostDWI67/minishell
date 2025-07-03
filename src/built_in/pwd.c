@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:25:22 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/10 18:32:01 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/03 15:03:32 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-pwd affiche le repertoire courant dans le terminal
+display the current working dir in the STDOUT
 Return 0 si reussis et 1 si erreur
 ******************************************************************************/
 int	pwd(t_cmd_line *cmd, int in_child)

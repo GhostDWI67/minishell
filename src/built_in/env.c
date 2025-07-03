@@ -6,14 +6,14 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 12:33:34 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/10 18:16:25 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:59:25 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-env traverse la variable d'env et affiche chaque node qui contient un "=" 
+goes through the env and displays all vars with a value
 Return 0;
 ******************************************************************************/
 int	env(t_list *env, t_cmd_line *cmd, int in_child)

@@ -6,15 +6,15 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:28:24 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/05/27 11:44:55 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:05:12 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-traverse l'env et check si la variable existe deja
-Return -1 si non déclaré sinon l'index ou elle est déclaré;
+goes through the env to check if the var already exists
+Return -1 if not declared otherwise returns the index
 ******************************************************************************/
 static int	declared(char *arg, t_list *env)
 {
@@ -42,8 +42,8 @@ static int	declared(char *arg, t_list *env)
 }
 
 /******************************************************************************
-check si le nom de la variable est valide
-Return true si ok sinon false;
+check if var name is correct
+Return true if ok otherwise false;
 ******************************************************************************/
 static bool	check_name(char *arg)
 {
@@ -62,8 +62,8 @@ static bool	check_name(char *arg)
 }
 
 /******************************************************************************
-check si c'est la head de l'env et l'unset
-Return true si head sinon false;
+check if the var is the head of the env and unsets it
+Return true if head otherwise false;
 ******************************************************************************/
 static bool	unset_head(t_list **env, t_list *tmp, int pos)
 {
@@ -75,8 +75,8 @@ static bool	unset_head(t_list **env, t_list *tmp, int pos)
 }
 
 /******************************************************************************
-check si le nom de la variable est bon, si elle existe et l'unset
-Return true si ok sinon false;
+checks var name and unsets it if it exists
+Return true if ok otherwise false;
 ******************************************************************************/
 static bool	unset_core(char *arg, t_list **env)
 {
@@ -107,7 +107,7 @@ static bool	unset_core(char *arg, t_list **env)
 }
 
 /******************************************************************************
-lance unset pour toute les variables dans args
+launches unset for all args passed to it
 Return 0;
 ******************************************************************************/
 int	unset(char **args, t_list **env, t_cmd_line *cmd, int in_child)

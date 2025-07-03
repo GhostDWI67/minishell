@@ -6,15 +6,15 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/01 10:20:14 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:07:05 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-init_env prend l'env de base et le copie en t_list dans t_cmd_line 
-Return 0 si ok sinon 1;
+copies the char **env into a t_list env for later use
+Return 0 if ok otherwise 1;
 ******************************************************************************/
 int	init_env(t_cmd_line *cmd, char **env, char **argv)
 {
@@ -39,11 +39,8 @@ int	init_env(t_cmd_line *cmd, char **env, char **argv)
 }
 
 /******************************************************************************
-cherche dans l'env le nom de la variable donné et elle doit etre exact pour
-etre trouvé:
-ft_getenv("HOME", env) renvoi /home/USER
-ft_getenv("HOM", env) renvoi NULL
-Return la valeur de la variable sinon NULL;
+gets the value of the variable given to it in the env
+Return var value or NULL if it doesnt exist;
 ******************************************************************************/
 char	*ft_getenv(const char *var, t_list *env)
 {

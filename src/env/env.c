@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:10:07 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/03 10:06:24 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:05:55 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ static int	make_underscore(t_list **list, char *path, char *arg)
 }
 
 /******************************************************************************
-creer l'env s'il n'existe pas
-Return 0 si ok sinon 1;
+creates the env if it doesnt exist
+Return 0 if ok otherwise 1;
 ******************************************************************************/
 int	make_env(t_cmd_line *cmd, char **argv)
 {
@@ -100,7 +100,7 @@ static char	*check_shlvl(int lvl)
 }
 
 /******************************************************************************
-augmente la variable SHLVL apres l'init de l'env
+increases SHLVL after env creation
 Return void;
 ******************************************************************************/
 void	increase_shlvl(t_list *env)

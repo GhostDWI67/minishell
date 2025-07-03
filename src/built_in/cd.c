@@ -6,15 +6,15 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:22:39 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/23 14:27:47 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:57:13 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-update oldpwd dans l'env en copiant PWD si PWD n'existe pas alors OLDPWD est
-créé
+update oldpwd in the env by copying PWD, if PWD doesnt exist then OLDPWD is
+created
 Return void;
 ******************************************************************************/
 static void	cd_oldpwd(t_list *env)
@@ -45,7 +45,8 @@ static void	cd_oldpwd(t_list *env)
 }
 
 /******************************************************************************
-lance cd_oldpwd puis update PWD dans l'env en copiant le retour de getcwd
+launched cd_oldpwd to update OLDPWD first then updates PWD in the env with
+getcwd's return
 Return void;
 ******************************************************************************/
 static int	cd_core(t_list *env)
@@ -66,8 +67,8 @@ static int	cd_core(t_list *env)
 }
 
 /******************************************************************************
-execute l'equivalent de "cd ~"
-Return exit status en int;
+cd's to the home if the HOME env var is set
+Return exit status in int;
 ******************************************************************************/
 static int	cd_no_args(t_list *env, t_cmd_line *cmd, int in_child)
 {
@@ -97,8 +98,8 @@ static int	cd_no_args(t_list *env, t_cmd_line *cmd, int in_child)
 }
 
 /******************************************************************************
-lance cd avec l'argument donné
-Return exit status en int;
+cd's to the arguments location
+Return exit status in int;
 ******************************************************************************/
 static int	cd_args(char *arg, t_list *env, t_cmd_line *cmd, int in_child)
 {
@@ -106,8 +107,6 @@ static int	cd_args(char *arg, t_list *env, t_cmd_line *cmd, int in_child)
 
 	if (arg[0] == '\0')
 		return (0);
-	if (arg[0] == '~' && arg[1] == '\0')
-		ret = cd_no_args(env, cmd, in_child);
 	else
 		ret = chdir(arg);
 	if (ret == 0)
@@ -122,8 +121,8 @@ static int	cd_args(char *arg, t_list *env, t_cmd_line *cmd, int in_child)
 }
 
 /******************************************************************************
-check le bon nombre d'arg et lance cd_core si chdir a reussis
-Return 0 si ok sinon 1;
+check the number of args and launches cd_core if chdir worked
+Return 0 if ok otherwise 1;
 ******************************************************************************/
 int	cd(char **args, t_list *env, t_cmd_line *cmd, int in_child)
 {

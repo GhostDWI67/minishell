@@ -6,7 +6,7 @@
 /*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 10:28:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/01 10:48:36 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:00:20 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	check_ull(char *s)
 }
 
 /******************************************************************************
-check si les args sont bons
+checks if the arg is correct
 Return l'exit status;
 ******************************************************************************/
 static int	check_arg(char *s, bool *error)
@@ -76,7 +76,7 @@ static int	check_arg(char *s, bool *error)
 }
 
 /******************************************************************************
-lance la fonction pour clear la memoire puis exit avec le bon status
+frees memory and exits the program
 Return void;
 ******************************************************************************/
 void	free_exit(t_cmd_line *cmd, bool err, int exit_status)
@@ -88,7 +88,7 @@ void	free_exit(t_cmd_line *cmd, bool err, int exit_status)
 }
 
 /******************************************************************************
-lance exit avec le bon retour en fonction des args
+exits shell with the return value passed to it
 Return void;
 ******************************************************************************/
 int	ft_exit(t_cmd_line *cmd, char **args)

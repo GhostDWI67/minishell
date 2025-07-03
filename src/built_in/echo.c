@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:55:23 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/06/30 18:00:48 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/03 14:59:04 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /******************************************************************************
-check l'option n et normalement toute les variations du type:
--n, ---n, -nn, -nnnnnnnn, - n, -, n 
-Return 0 sans l'option et 1 avec l'option; 
+checks for the -n option
+Return 0 without the option and 1 with the option; 
 ******************************************************************************/
 static int	check_n(char *str)
 {
@@ -34,7 +33,7 @@ static int	check_n(char *str)
 }
 
 /******************************************************************************
-la fonction qui ecrit dans le terminal
+writes the args in the STDOUT
 Aucun return 
 ******************************************************************************/
 static void	echo_core(char **args, bool n, int i, int count)
@@ -44,12 +43,8 @@ static void	echo_core(char **args, bool n, int i, int count)
 		i++;
 		n = false;
 	}
-	//(void)count;
-	//printf("gkjerngjknrekjgn");
-	
 	while (i < count)
 	{
-		//printf("%s",args[i]);
 		write(1, args[i], ft_strlen(args[i]));
 		if (i != count - 1)
 			write(1, " ", 1);
@@ -60,9 +55,8 @@ static void	echo_core(char **args, bool n, int i, int count)
 }
 
 /******************************************************************************
-la fonction echo avec l'option -n ou non qui affiche le text passé en arg 
-dans le terminal.
-si -n alors il n'y a pas de "\n" a la fin, sans -n alors il y a un "\n" a la fin
+does the echo built-in, writing the args passed to it with the option -n or
+not
 Return 0; 
 ******************************************************************************/
 int	echo(char **args, t_cmd_line *cmd, int in_child)
