@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 18:59:13 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/04 15:20:09 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@
 # define ERN_CD			1
 # define ERM_EXIT		"exit: too many arguments"
 # define ERN_EXIT		1
-# define ERM_ISDIR		"Is a directory"
+# define ERM_ISDIR		" Is a directory"
 # define ERN_ISDIR		126
-# define ERM_PERM		"Permission denied"
+# define ERM_PERM		" Permission denied"
 # define ERN_PERM		126
 # define ERM_NOTFD		"No such file or directory"
 # define ERN_NOTFD		127

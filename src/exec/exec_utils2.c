@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/04 13:29:32 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:18:58 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,16 @@ char	*get_path(char **tab_path, char *fexec, t_cmd_line *cmd)
 	{
 		if (stream == NULL && access(fexec, X_OK) == 0)
 		{
-			ft_putstr_fd("GET PATH 01\n", 2);
 			return (fexec);
 		}
-		ft_putstr_fd("GET PATH 02\n", 2);
 		return (get_path_mf(fexec, cmd, stream));
 	}
 	else if (tab_path != NULL)
 	{
-		ft_putstr_fd("GET PATH 03\n", 2);
 		return (get_path_test(tab_path, fexec, stream));
 	}
 	if (stream == NULL && access(fexec, X_OK) == 0)
 	{
-		ft_putstr_fd("GET PATH 04\n", 2);
 		return (fexec);
 	}
 	return (NULL);

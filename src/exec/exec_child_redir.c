@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 13:58:12 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/27 08:51:03 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/04 16:27:55 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	child_redir_mgt_in(t_cmd_line *cmd)
 		}
 		else if (cmd->cmd_step > 0 && cmd->tab_cmd[cmd->cmd_step].fd_infile > 0)
 		{
+			if (cmd->prev_fd != -1)
+				close(cmd->prev_fd);
 			if (dup2(cmd->tab_cmd[cmd->cmd_step].fd_infile, STDIN_FILENO) == -1)
 				cmd->exit_code = msg_error(ERM_DUP2, ERN_DUP2);
 			close(cmd->tab_cmd[cmd->cmd_step].fd_infile);
