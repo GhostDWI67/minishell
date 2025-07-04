@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/04 12:45:01 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/04 13:51:07 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,11 @@ static void	child_closefd(t_cmd_line *cmd)
 
 static void	child_exec(t_cmd_line *cmd, char **environ, char *path)
 {
-	if (path == NULL || execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
-		== -1)
+	printf("%s\n", cmd->tab_cmd[cmd->cmd_step].tab_args[0]);
+	if (path == NULL || execve(path, \
+		cmd->tab_cmd[cmd->cmd_step].tab_args, environ) == -1)
 	{
+		ft_putstr_fd("exec child\n", 2);
 		if (path == NULL && cmd->err_nb == ERN_ISDIR)
 		{
 			free_cmd_line_exit(cmd);
