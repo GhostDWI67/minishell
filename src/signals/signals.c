@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:00:02 by mpalisse          #+#    #+#             */
-/*   Updated: 2025/07/03 15:07:31 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:32:11 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ void	setup_sigs_handler(void)
 
 void	setup_sigs_exec(void)
 {
-	signal(SIGINT, &sig_exec);
-	signal(SIGQUIT, &sig_exec);
+	//signal(SIGINT, &sig_exec);
+	//signal(SIGQUIT, &sig_exec);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 void	setup_sigs_hd(void)

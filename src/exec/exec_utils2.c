@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/04 15:18:58 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/04 17:14:50 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ static char	*get_path_test(char **tab_path, char *fexec, DIR *stream)
 	int		i;
 
 	i = 0;
+	if (ft_strncmp(fexec, "", 2) == 0)
+		return (NULL);
 	if (stream != NULL)
 		return (closedir(stream), NULL);
 	while (tab_path[i] != NULL)
@@ -50,7 +52,9 @@ static char	*get_path_test(char **tab_path, char *fexec, DIR *stream)
 		path = ft_strjoin(tab_path[i], "/");
 		p_to_test = ft_strjoin(path, fexec);
 		if (access(p_to_test, X_OK) == 0)
+		{
 			return (free(path), p_to_test);
+		}
 		else
 		{
 			free(path);
