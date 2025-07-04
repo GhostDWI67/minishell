@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 11:47:14 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 13:49:00 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/04 12:21:56 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	is_exec_able_int(t_cmd_line *cmd, int i, char *path)
 		return (ERN_ISDIR);
 	if (path == NULL && cmd->err_nb == ERN_NOTFD)
 		return (ERN_NOTFD);
-	if ((path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL \
+	if ((path == NULL && cmd->tab_cmd[i].tab_args[0] != NULL
 		&& is_built_in(cmd->tab_cmd[i].tab_args) == 0) \
 		|| cmd->tab_cmd[i].tab_args[0][0] == 0)
 	{

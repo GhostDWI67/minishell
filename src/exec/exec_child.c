@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/03 14:50:36 by mpalisse         ###   ########.fr       */
+/*   Updated: 2025/07/04 12:45:01 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,30 @@ static void	child_prepare(t_cmd_line *cmd)
 {
 	if (cmd->tab_cmd[cmd->cmd_step].redir_test == 0)
 	{
+		close(cmd->pipe_fd[0]);
+		close(cmd->pipe_fd[1]);
+		if (cmd->prev_fd != -1)
+			close(cmd->prev_fd);
 		close_all_fd(cmd);
 		free_cmd_line_exit(cmd);
 		exit (ERN_FILE);
 	}
+	/*
 	if (is_exec_able(cmd, cmd->cmd_step) != 0)
 	{
-		close(cmd->pipe_fd[0]);
-		close(cmd->pipe_fd[1]);
-		// close(103); herite du parent
-		// close(37); herite du parent
-		if (cmd->prev_fd != -1)
-			close(cmd->prev_fd);
+		if (cmd->nb_simple_cmd >1)
+		{
+			close(cmd->pipe_fd[0]);
+			close(cmd->pipe_fd[1]);
+			// close(103); herite du parent
+			// close(37); herite du parent
+			if (cmd->prev_fd != -1)
+				close(cmd->prev_fd);
+		}
 		close_all_fd(cmd);
 		free_exit(cmd, true, cmd->exit_code);
 	}
+	*/
 	child_redir_mgt_in(cmd);
 	child_redir_mgt_out(cmd);
 	close_all_fd(cmd);
@@ -53,9 +62,24 @@ static void	child_closefd(t_cmd_line *cmd)
 
 static void	child_exec(t_cmd_line *cmd, char **environ, char *path)
 {
-	if (execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
+	if (path == NULL || execve(path, cmd->tab_cmd[cmd->cmd_step].tab_args, environ)
 		== -1)
 	{
+		if (path == NULL && cmd->err_nb == ERN_ISDIR)
+		{
+			free_cmd_line_exit(cmd);
+			exit (ERN_ISDIR);
+		}
+		else if (path == NULL && cmd->err_nb == ERN_NOTFD)
+		{
+			free_cmd_line_exit(cmd);
+			exit (ERN_NOTFD);
+		}
+		else if (path == NULL && cmd->err_nb == ERN_PERM)
+		{
+			free_cmd_line_exit(cmd);
+			exit (ERN_PERM);
+		}
 		msg_write(cmd, cmd->cmd_step);
 		free_cmd_line_exit(cmd);
 		exit (ERN_NOTEXEC);
