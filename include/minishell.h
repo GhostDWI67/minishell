@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/14 12:38:16 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/14 13:08:12 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,10 +239,9 @@ void		build_hd_pipe(t_cmd_line *cmd);
 /* handlers.c */
 void		sigint_handler(int sig);
 void		sig_exec(int signal);
-//void		sigint_handler(int sig, siginfo_t *info, void *context);
-//void		sig_exec(int sig, siginfo_t *info, void *context);
 void		sig_heredoc(int signal);
 void		sig_exit_status(t_cmd_line *cmd);
+void		signal_msg(void);
 
 /* input_mgt.c*/
 void		main_input_mgt(t_cmd_line *cmd);
@@ -289,7 +288,6 @@ int			redir_appfile(t_cmd_line *cmd, char *s, int i);
 void		setup_sigs_handler(void);
 void		setup_sigs_exec(void);
 void		setup_sigs_hd(void);
-void		setup_sigs_dfl(void);
 void		setup_sigs_ign(void);
 
 /* init.c */

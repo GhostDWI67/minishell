@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/13 16:02:12 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/14 13:42:17 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		cmd->nb_simple_cmd = check_token_nb_cmd(cmd->token);
 		cmd->tab_cmd = malloc(sizeof(t_command) * cmd->nb_simple_cmd);
 		if (cmd->tab_cmd == NULL)
-		{
-			cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC);
-			return (1);
-		}
+			return (cmd->exit_code = msg_inf(ERM_MALLOC, ERN_MALLOC), 1);
 		init_tab_cmd(cmd->tab_cmd);
 		parsing(cmd);
 		parsing_args(cmd);
@@ -59,9 +56,8 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 			cmd->tab_path = NULL;
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
-		//setup_sigs_exec();//toto
-		//setup_sigs_dfl();//toto
-		f_exec(cmd, environ);
+		if (g_signal != SIGINT)
+			f_exec(cmd, environ);
 	}
 	return (0);
 }
@@ -73,15 +69,14 @@ static void	main_loop(t_cmd_line *cmd)
 {
 	cmd->tab_env = ft_lst_to_arr(cmd->env);
 	cmd->err_nb = 0;
-	setup_sigs_handler();//toto
+	setup_sigs_handler();
 	main_input_mgt(cmd);
 	if (cmd->err_nb == 0)
 	{
 		main_init(cmd);
-		setup_sigs_exec();//toto
-		//setup_sigs_ign();//toto
+		setup_sigs_exec();
 		main_exec_mgt(cmd, cmd->tab_env);
-		setup_sigs_handler();//toto
+		setup_sigs_handler();
 		main_free_mgt(cmd);
 	}
 	else
