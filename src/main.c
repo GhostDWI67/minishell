@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/04 18:32:43 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/13 16:02:12 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 			cmd->tab_path = NULL;
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
+		//setup_sigs_exec();//toto
+		//setup_sigs_dfl();//toto
 		f_exec(cmd, environ);
 	}
 	return (0);
@@ -71,13 +73,15 @@ static void	main_loop(t_cmd_line *cmd)
 {
 	cmd->tab_env = ft_lst_to_arr(cmd->env);
 	cmd->err_nb = 0;
+	setup_sigs_handler();//toto
 	main_input_mgt(cmd);
 	if (cmd->err_nb == 0)
 	{
 		main_init(cmd);
-		//setup_sigs_exec();//toto
+		setup_sigs_exec();//toto
+		//setup_sigs_ign();//toto
 		main_exec_mgt(cmd, cmd->tab_env);
-		setup_sigs_handler();
+		setup_sigs_handler();//toto
 		main_free_mgt(cmd);
 	}
 	else

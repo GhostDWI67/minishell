@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:39:34 by admin             #+#    #+#             */
-/*   Updated: 2025/06/27 10:13:06 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/14 12:56:39 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,26 @@ static void	f_exec_wait(t_cmd_line *cmd)
 	while (i < cmd->nb_simple_cmd)
 	{
 		if (waitpid(cmd->tab_pid[i], &status, WUNTRACED) == -1)
+		{
+			//ft_putnbr_fd(status, 2);
+			//ft_putstr_fd("EXEC WAIT 01\n", 2);
 			cmd->exit_code = msg_error(ERM_WAITPID, ERN_WAITPID);
-		if (WIFEXITED(status))
-			cmd->exit_code = WEXITSTATUS(status);
+		}
+		else
+		{
+			if (WIFEXITED(status))
+			{
+				//ft_putnbr_fd(status, 2);
+				//ft_putstr_fd("EXEC WAIT 02\n", 2);
+				cmd->exit_code = WEXITSTATUS(status);
+			}
+		}
+		if (status == 2)
+			g_signal = SIGINT;
+		else if (status ==3)
+			g_signal = SIGQUIT;
+		//ft_putnbr_fd(status, 2);
+		//ft_putstr_fd("EXEC WAIT 03\n", 2);
 		i++;
 	}
 }
@@ -47,6 +64,7 @@ Function parent
 ******************************************************************************/
 static void	parent(t_cmd_line *cmd)
 {
+	setup_sigs_ign();//toto
 	if (cmd->cmd_step > 0 && cmd->prev_fd != -1)
 		close (cmd->prev_fd);
 	if (cmd->cmd_step < cmd->nb_simple_cmd - 1)
@@ -90,12 +108,29 @@ void	f_exec(t_cmd_line *cmd, char **environ)
 				if (cmd->tab_pid[cmd->cmd_step] == -1)
 					cmd->exit_code = msg_error(ERM_FORK, ERN_FORK);
 				else if (cmd->tab_pid[cmd->cmd_step] == 0)
+				{
+					//setup_sigs_exec();//toto
 					child(cmd, environ);
+				}
 				else
 					parent(cmd);
 				cmd->cmd_step++;
 			}
 			f_exec_wait(cmd);
+			//setup_sigs_exec();//toto
+			//setup_sigs_handler();//toto
 		}
+	if (g_signal == SIGINT)
+	{
+		ft_putstr_fd("SIGINT\n", 2);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+	}
+	else if (g_signal == SIGQUIT)
+	{
+		ft_putstr_fd("SIGQUITQuit\n", 2);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+	}
 	}
 }

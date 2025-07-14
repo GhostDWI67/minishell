@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/04 18:31:57 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/07/13 18:00:47 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	child_closefd(t_cmd_line *cmd)
 
 static void	child_exec(t_cmd_line *cmd, char **environ, char *path)
 {
-	setup_sigs_exec();//toto
+	//setup_sigs_exec();//toto
 	if (path == NULL || execve(path, \
 		cmd->tab_cmd[cmd->cmd_step].tab_args, environ) == -1)
 	{
@@ -78,6 +78,7 @@ int	child(t_cmd_line *cmd, char **environ)
 {
 	char	*path;
 
+	//setup_sigs_exec();//toto
 	child_prepare(cmd);
 	if (cmd->tab_cmd[cmd->cmd_step].tab_args == NULL)
 	{
