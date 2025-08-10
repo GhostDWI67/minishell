@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:18:41 by dwianni           #+#    #+#             */
-/*   Updated: 2025/06/23 14:14:39 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/08/10 14:23:00 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ static void	free_cmd(t_cmd_line *cmd)
 	if (cmd->input != NULL)
 		free(cmd->input);
 	if (cmd->tab_pid)
+	{
 		free(cmd->tab_pid);
+		cmd->tab_pid = NULL;
+	}
 	i = 0;
 	while (i < cmd->nb_simple_cmd)
 	{

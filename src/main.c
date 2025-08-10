@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:30 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/14 13:42:17 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/08/10 17:35:02 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ static int	main_exec_mgt(t_cmd_line *cmd, char **environ)
 		build_hd_pipe(cmd);
 		redir_mgt(cmd);
 		if (g_signal != SIGINT)
+		{
 			f_exec(cmd, environ);
+		}
 	}
 	return (0);
 }

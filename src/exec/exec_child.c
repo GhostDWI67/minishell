@@ -6,7 +6,7 @@
 /*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:35:37 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/14 13:04:46 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/08/10 17:35:55 by dwianni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	child_exec(t_cmd_line *cmd, char **environ, char *path)
 		}
 		msg_write(cmd, cmd->cmd_step);
 		free_cmd_line_exit(cmd);
-		exit (ERN_NOTEXEC);
+		exit(ERN_NOTEXEC);
 	}
 }
 
