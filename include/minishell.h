@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:45:20 by dwianni           #+#    #+#             */
-/*   Updated: 2025/07/14 13:08:12 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/08/21 10:18:01 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int			export(char **args, t_list **env, t_cmd_line *cmd, int in_child);
 bool		export_core(char *arg, t_list **env);
 int			pwd(t_cmd_line *cmd, int in_child);
 int			unset(char **args, t_list **env, t_cmd_line *cmd, int in_child);
-int			cd(char **args, t_list *env, t_cmd_line *cmd, int in_child);
+int			cd(char **args, t_list **env, t_cmd_line *cmd, int in_child);
 int			ft_exit(t_cmd_line *cmd, char **args);
 void		free_exit(t_cmd_line *cmd, bool err, int exit_status);
 
