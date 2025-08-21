@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_in.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwianni <dwianni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpalisse <mpalisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:49:26 by dwianni           #+#    #+#             */
-/*   Updated: 2025/05/31 17:44:50 by dwianni          ###   ########.fr       */
+/*   Updated: 2025/08/21 09:06:07 by mpalisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	exec_builtin_c(int bi, t_cmd_line *cmd)
 	if (bi == BUILTIN_ECHO)
 		exit(echo(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd, 1));
 	else if (bi == BUILTIN_CD)
-		exit(cd(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd->env, cmd, 1));
+		exit(cd(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env, cmd, 1));
 	else if (bi == BUILTIN_PWD)
 		exit(pwd(cmd, 1));
 	else if (bi == BUILTIN_EXPORT)
@@ -67,7 +67,7 @@ int	exec_builtin_p(int bi, t_cmd_line *cmd)
 	if (bi == BUILTIN_ECHO)
 		return (echo(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd, 0));
 	else if (bi == BUILTIN_CD)
-		return (cd(cmd->tab_cmd[cmd->cmd_step].tab_args, cmd->env, cmd, 0));
+		return (cd(cmd->tab_cmd[cmd->cmd_step].tab_args, &cmd->env, cmd, 0));
 	else if (bi == BUILTIN_PWD)
 		return (pwd(cmd, 0));
 	else if (bi == BUILTIN_EXPORT)
